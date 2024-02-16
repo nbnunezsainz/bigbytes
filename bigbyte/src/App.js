@@ -1,5 +1,6 @@
 import './App.css';
 import Login from './Login.js';
+import BackendTesting from './Backend/backendTesting';
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
     // </div>
     <div className="Login">
       <Login />
+      <BackendTesting />
 
     </div>
   );
