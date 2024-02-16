@@ -21,7 +21,8 @@ function Navbar() {
                 <li><a href="#">About</a></li>
                 <li><a href="#">Contact</a></li>
                 <li>
-                <Link to="/Login">Login/Sign Up</Link>
+                <Link to="/Login">Login</Link>
+                <Link to="/SignUp">Sign Up</Link>
                 </li>
                    
             </ul>
