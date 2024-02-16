@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import "./Login.css"
+import "../Login.css"
 
 export default function Login() {
     const [username, setUsername] = useState('');
@@ -24,7 +24,10 @@ export default function Login() {
     }
 
     return (
-        <div>
+        <div className="Login">
+      
+
+        
             <h2>Login</h2>
             <div>
                 <label htmlFor="username">Username:</label>
