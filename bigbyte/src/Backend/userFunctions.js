@@ -18,11 +18,12 @@ const firebaseConfig = {
 initializeApp(firebaseConfig)
 const db = getFirestore()
 
-
-//Initialize a query
-//const userRef = collection(db, 'User')
-//const q = query(userRef, where("Organizations", "array-contains", "Swimming"));
-
+//query all Users based on a specific field, filtering technique, and target value
+export async function queryUsers(field, filter, target)
+{
+  let userRef = collection(db, "User");
+  let q = query(userRef, where(field, filter, target));
+}
 
 //add a User --> takes userData in json format (FirstName: John, LastName: Smith)
 export async function addUser(userData) {
