@@ -7,6 +7,7 @@ const app = express();
 
 // Then, define the CORS middleware
 
+app.use(express.json());
 
 app.use((req, res, next) => {
   console.log("Inside custom missleware");
@@ -30,7 +31,7 @@ const userRouter = require('./routes/UserRoutes');
 const StudentRouter = require('./routes/StudentRoutes');
 const MentorRouter = require('./routes/MentorRoutes');
 
-// app.use('/api/v1/user',userRouter);
+ app.use('/api/v1/user',userRouter);
 // app.use('/api/v1/student',StudentRouter);
 // app.use('/api/v1/mentor',MentorRouter);
 
