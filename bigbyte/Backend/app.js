@@ -26,4 +26,15 @@ app.get('/', (req, res) => {
 }); //when data sent ehre then it will follow to other middlewear
 
 
+const userRouter = require('./routes/UserRoutes');
+const StudentRouter = require('./routes/StudentRoutes');
+const MentorRouter = require('./routes/MentorRoutes');
+
+// app.use('/api/v1/user',userRouter);
+// app.use('/api/v1/student',StudentRouter);
+// app.use('/api/v1/mentor',MentorRouter);
+
+
+
+
 module.exports = app;
