@@ -1,12 +1,15 @@
 
 const admin = require('firebase-admin');
 
-admin.initializeApp({
-    credential: admin.credential.applicationDefault()
-  });
+// admin.initializeApp({
+//     credential: admin.credential.cert(),
+//     // Replace 'path/to/serviceAccountKey.json' with the actual path to your service account key file
+//     // Or directly pass the credentials object if it's stored as a variable
+// });
 
   exports.SignUp = async (req,res,next) =>
 {
+    console.log(req.body,"body");
     try {
         const { email, password } = req.body;
 
