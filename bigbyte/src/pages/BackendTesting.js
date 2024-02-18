@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import { addUser, deleteUser, getUser } from '../Backend/userFunctions.js';
-
+import {addUser, deleteUser, getUser} from './data_manipulation_testing/collectionFunctions/userFunctions.js'
 
 function BackendTesting() {
     // State for input fields
@@ -8,6 +7,7 @@ function BackendTesting() {
     const [lastName, setLastName] = useState('');
     const [major, setMajor] = useState('');
     const [year, setYear] = useState('');
+    const [bio, setBio] = useState('');
     const [organizations, setOrganizations] = useState('');
     const [linkedIn, setLinkedIn] = useState('');
     const [resume, setResume] = useState('');
@@ -73,6 +73,9 @@ function BackendTesting() {
             <br />
             <label>Year*:</label>
             <input type="text" value={year} onChange={(e) => setYear(e.target.value)} />
+            <br />
+            <label>Bio:</label>
+            <input type="text" value={bio} onChange={(e) => setBio(e.target.value)} />
             <br />
             <label>Organizations (comma-separated):</label>
             <input type="text" value={organizations} onChange={(e) => setOrganizations(e.target.value)} />
