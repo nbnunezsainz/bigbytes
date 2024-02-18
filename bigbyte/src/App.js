@@ -7,6 +7,11 @@ import ReactDOM from "react-dom/client";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import BackendTesting from './pages/BackendTesting';
 
+//ADDED
+
+//ADDED**
+
+
 function App() {
   return (
 
@@ -32,10 +37,14 @@ function App() {
         <Route index element={<Home />} />
         <Route path="Login" element= {<Login /> }/>
         <Route path="SignUp" element= {<Signup /> }/>
+        //ADDED
+        <Route path="/Chrisitan" element= {</> }/>
+
+        //ADDED**
 
 
         //FOR TESTING
-        <Route path="BackendTesting" element= {<BackendTesting />}/>
+        //<Route path="BackendTesting" element= {<BackendTesting />}/>
         
      
     </Routes>
