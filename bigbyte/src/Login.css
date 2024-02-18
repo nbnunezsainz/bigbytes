@@ -1,54 +1,24 @@
-.container {
+.Login {
+    height: 100vh;
+    margin: 0;
+    padding: 0;
     display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.form-elements {
+    padding: 15px;
+    margin: auto;
+    border-radius: 20px;
+
+    /* for testing below */
+    /* background: rgb(50,50,50) */
+}
+
+.form-elements * {
+    display: flex;
+    margin: 5px;
     justify-content: center;
     align-items: center;
-    height: 100vh;
-}
-
-.signup-form {
-    background-color: #fff;
-    padding: 40px;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    width: 400px; /* Increased width */
-    max-width: 90%; /* Added max-width for responsiveness */
-    text-align: center; /* Center content horizontally */
-}
-
-.signup-form h2 {
-    margin-bottom: 20px;
-}
-
-.form-group {
-    margin-bottom: 20px;
-    text-align: left; /* Align form elements to the left */
-}
-
-.form-group label {
-    display: block;
-    font-weight: bold;
-    margin-bottom: 5px;
-}
-
-.form-group input {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    box-sizing: border-box;
-}
-
-button[type="submit"] {
-    background-color: #007bff;
-    color: #fff;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 5px;
-    cursor: pointer;
-    width: 100%;
-    transition: background-color 0.3s ease;
-}
-
-button[type="submit"]:hover {
-    background-color: #0056b3;
 }
