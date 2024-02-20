@@ -6,10 +6,9 @@ import Home from './pages/Home.js';
 import ReactDOM from "react-dom/client";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import BackendTesting from './pages/BackendTesting';
+import {SignUp2} from "./pages/signup-alternative"
 
-//ADDED
 
-//ADDED**
 
 
 function App() {
@@ -36,11 +35,9 @@ function App() {
       
         <Route index element={<Home />} />
         <Route path="Login" element= {<Login /> }/>
-        <Route path="SignUp" element= {<Signup /> }/>
-        //ADDED
-        <Route path="/Chrisitan" element= {</> }/>
+        {/* replaced SignUp with SignUp2 */}
+        <Route path="SignUp" element= {<SignUp2 /> }/>
 
-        //ADDED**
 
 
         //FOR TESTING
