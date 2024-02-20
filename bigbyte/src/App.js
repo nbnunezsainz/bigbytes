@@ -7,6 +7,7 @@ import ReactDOM from "react-dom/client";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import BackendTesting from './pages/BackendTesting';
 import {SignUp2} from "./pages/signup-alternative"
+import {LogIn2} from "./pages/login-alternative";
 
 
 
@@ -34,7 +35,8 @@ function App() {
     <Routes>
       
         <Route index element={<Home />} />
-        <Route path="Login" element= {<Login /> }/>
+        {/* replaced LogIn with LogIn2 */}
+        <Route path="Login" element= {<LogIn2 /> }/>
         {/* replaced SignUp with SignUp2 */}
         <Route path="SignUp" element= {<SignUp2 /> }/>
 
