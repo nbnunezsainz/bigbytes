@@ -56,13 +56,13 @@ const SignUserUp = () =>
 
     return (
         <div>
-        <label htmlFor="username">Username/Email:</label>
+        <label htmlFor="username">Email:</label>
         <input 
             type="text" 
             id="username" 
             value={username} 
             onChange={handleUsernameChange} 
-            placeholder="Enter your username or email" 
+            placeholder="Place your email here" 
         />
         <label htmlFor="password">Password:</label>
         <input 
