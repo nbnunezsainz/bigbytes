@@ -50,8 +50,8 @@ export async function getInternship(internshipID) {
   try {
     const internshipData = await getDocument("Internship", internshipID);
 
-    if (internshipData.exists()) {
-      return internshipData.data();
+    if (internshipData) {
+      return internshipData;
     } else {
       console.log("INTERNSHIP NOT FOUND");
       return null;
@@ -60,15 +60,3 @@ export async function getInternship(internshipID) {
     console.log("RAN INTO PROBLEM LOOKING FOR INTERNSHIP");
   }
 }
-
-
-//allows to review User data in realtime
-/*onSnapshot(userRef, (snapshot) => {
-let users = [];
-snapshot.docs.forEach((user) => {
-users.push({...user.data(), id: doc.id});
-});
-console.log(users);
-});*/
-
-
