@@ -1,7 +1,8 @@
-import { getFirebaseConfig } from "../firebaseConfiguration.js";
+import { useDeferredValue } from "react";
+import { auth, getFirebaseConfig } from "../firebaseConfiguration.js";
 import { queryCollection, deleteDocument, getDocument } from "../generalDataFunctions.js";
 const { initializeApp } = require("firebase/app");
-const { getFirestore, collection, getDocs, getDoc, addDoc, doc, deleteDoc, onSnapshot, query, where } = require("firebase/firestore");
+const { getFirestore, collection, getDocs, setDoc, getDoc, addDoc, doc, deleteDoc, onSnapshot, query, where } = require("firebase/firestore");
 
 //Initialize Firebase
 const firebaseConfig = getFirebaseConfig();
@@ -10,10 +11,10 @@ initializeApp(firebaseConfig)
 const db = getFirestore()
 
 //add a User --> takes userData in json format (FirstName: John, LastName: Smith)
-export async function addUser(userData, authUserID) {
+export async function addUser(userData, userAuthID) {
   try {
-    let userRef = collection(db, "User", authUserID);
-    addDoc(userRef, {
+    let userRef = doc(db, "User", userAuthID);
+    const data = {
       //input all data from userData json object
       FirstName: userData.firstName,
       LastName: userData.lastName,
@@ -26,10 +27,13 @@ export async function addUser(userData, authUserID) {
 
       //not provided by entered data
       RefferalCount: 20,
-    });
+    }
+    //addDoc(userRef, data, "TESTING");
+    await setDoc(userRef, data);
     console.log("Success- a new user has been added!");
   } catch (error) {
     console.log("There was some error when adding user");
+    console.log(error);
   }
 }
 

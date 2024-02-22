@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import {addUser, deleteUser, getUser} from './data_manipulation_testing/collectionFunctions/userFunctions.js'
+import {addUser, deleteUser, getUser} from './dataManipulation/collectionFunctions/userFunctions.js'
 
 function BackendTesting() {
     // State for input fields
@@ -29,7 +29,7 @@ function BackendTesting() {
 
 
         // Call the addUser function from your test.js
-        await addUser(userData, 1234);
+        await addUser(userData, "TEST_REPLACE WITH REAL USER_AUTH_ID");
         console.log('User added successfully!');
     };
 

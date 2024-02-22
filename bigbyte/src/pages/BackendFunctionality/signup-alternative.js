@@ -1,8 +1,8 @@
-import {auth, googleProvider} from "./data_manipulation_testing/firebaseConfiguration"
-import {getAuth,onAuthStateChanged,createUserWithEmailAndPassword, signInWithEmailAndPassword,signInWithPopup, signOut} from "firebase/auth";
+import {auth, googleProvider} from "./dataManipulation/firebaseConfiguration"
+import {getAuth,onAuthStateChanged,createUserWithEmailAndPassword, signInWithPopup, signOut} from "firebase/auth";
 import { useState, useEffect} from "react";
 
-export const LogIn2 = () => {
+export const SignUp2 = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState(null);
@@ -13,11 +13,11 @@ export const LogIn2 = () => {
 
 
 
-    const LogIn = async () => {
+    const signIn = async () => {
         try {
             setLoading(true);
-            await signInWithEmailAndPassword(auth, email, password);
-            setUserCreated("Logged in Successfully");
+            await createUserWithEmailAndPassword(auth, email, password);
+            setUserCreated("User created");
             setError(null);
             setEmail(""); // Clear email input field
             setPassword(""); // Clear password input field
@@ -32,7 +32,7 @@ export const LogIn2 = () => {
     const signInWithGoogle = async () => {
         try {
             setLoading(true);
-            await signInWithPopup(auth, googleProvider);
+            await
             setError(null);
         } catch (err) {
             console.error(err);
@@ -69,8 +69,8 @@ export const LogIn2 = () => {
                 onChange={(e) => setPassword(e.target.value)}
                 value={password}
             />
-            <button onClick={LogIn} disabled={loading}>
-                {loading ? 'Logging In...' : 'Log In'}
+            <button onClick={signIn} disabled={loading}>
+                {loading ? 'Signing Up...' : 'Sign Up'}
             </button>
 
             <button onClick={signInWithGoogle} disabled={loading}>
