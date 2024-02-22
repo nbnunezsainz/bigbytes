@@ -1,5 +1,4 @@
-import { useDeferredValue } from "react";
-import { auth, getFirebaseConfig } from "../firebaseConfiguration.js";
+import { auth, getFirebaseConfig } from "../../firebaseConfiguration.js";
 import { queryCollection, deleteDocument, getDocument } from "../generalDataFunctions.js";
 const { initializeApp } = require("firebase/app");
 const { getFirestore, collection, getDocs, setDoc, getDoc, addDoc, doc, deleteDoc, onSnapshot, query, where } = require("firebase/firestore");
@@ -12,7 +11,8 @@ const db = getFirestore()
 
 //add a User --> takes userData in json format (FirstName: John, LastName: Smith)
 export async function addUser(userData, userAuthID) {
-  try {
+  try 
+  {
     let userRef = doc(db, "User", userAuthID);
     const data = {
       //input all data from userData json object
@@ -31,7 +31,8 @@ export async function addUser(userData, userAuthID) {
     //addDoc(userRef, data, "TESTING");
     await setDoc(userRef, data);
     console.log("Success- a new user has been added!");
-  } catch (error) {
+  } catch (error) 
+  {
     console.log("There was some error when adding user");
     console.log(error);
   }

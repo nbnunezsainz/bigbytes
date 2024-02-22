@@ -10,7 +10,8 @@ const db = getFirestore()
 
 //add a Internship --> takes internshipData in json format (Title: Developer, Company: Google)
 export async function addInternship(internshipData) {
-  try {
+  try 
+  {
     let internshipRef = doc(db, "Internship" /*add ID here if needed*/);
     data = {
       //input all data from userData json object
@@ -32,7 +33,8 @@ export async function addInternship(internshipData) {
     await setDoc(internshipRef, data);
 
     console.log("Success- a new internship has been added!");
-  } catch (error) {
+  } catch (error) 
+  {
     console.log("There was some error when adding internship");
   }
 }
