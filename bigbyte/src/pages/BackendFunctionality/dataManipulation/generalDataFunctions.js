@@ -1,4 +1,4 @@
-import { getFirebaseConfig } from "./firebaseConfiguration.js";
+import { getFirebaseConfig } from "../firebaseConfiguration.js";
 const { initializeApp } = require("firebase/app");
 const { getFirestore, collection, getDocs, getDoc, addDoc, doc, deleteDoc, onSnapshot, query, where } = require("firebase/firestore");
 

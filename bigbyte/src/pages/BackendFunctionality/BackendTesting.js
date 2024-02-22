@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import {addUser, deleteUser, getUser} from './dataManipulation/collectionFunctions/userFunctions.js'
+import { addUser, deleteUser, getUser } from './dataManipulation/collectionFunctions/userFunctions.js'
+import { addResume } from './handleFiles/fileFunctions.js';
 
 function BackendTesting() {
-    // State for input fields
+    // State for user input fields
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
     const [major, setMajor] = useState('');
@@ -13,6 +14,9 @@ function BackendTesting() {
     const [resume, setResume] = useState('');
     const [userIDToDelete, setUserIDToDelete] = useState('');
     const [userIDToGet, setUserIDToGet] = useState('');
+
+    // State for resume fields
+    const [imageUpload, setImageUpload] = useState(null);
 
 
     // Function to handle adding a user
@@ -54,6 +58,13 @@ function BackendTesting() {
             console.log('User not found.');
         }
     };
+
+
+    // Function to handle resume uploads
+    const uploadResume = async () => {
+        addResume(imageUpload, "TEST_REPLACE WITH REAL USER_AUTH_ID");
+        console.log("Resume added succesfully in front-end");
+    }
 
 
     //Display fields and buttons to receive/manipulate data
@@ -99,6 +110,11 @@ function BackendTesting() {
             <label>User ID to Delete:</label>
             <input type="text" value={userIDToDelete} onChange={(e) => setUserIDToDelete(e.target.value)} />
             <button onClick={handleDeleteUser}>Delete User</button>
+
+            <h2>Resume Testing</h2>
+            <input type="file" onChange={(event) => {setImageUpload(event.target.files[0]);}}/>
+            <button onClick={uploadResume}> Upload Image</button>
+
         </div>
     );
 }
