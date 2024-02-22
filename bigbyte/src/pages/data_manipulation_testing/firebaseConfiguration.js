@@ -1,4 +1,8 @@
 //this function returns the firebase configuration key
+import { initializeApp } from "firebase/app";
+import { getAuth, GoogleAuthProvider } from "firebase/auth";
+import { getFirestore } from "firebase/firestore";
+import { getStorage } from "firebase/storage";
 export function getFirebaseConfig()
 {
     const firebaseConfig = {
@@ -13,3 +17,8 @@ export function getFirebaseConfig()
       };
       return firebaseConfig;
 }
+const app = initializeApp(getFirebaseConfig());
+export const auth = getAuth(app);
+export const googleProvider = new GoogleAuthProvider();
+
+export const db = getFirestore(app); //may not need
