@@ -5,9 +5,9 @@ import Home from './pages/Home.js';
 
 import ReactDOM from "react-dom/client";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import BackendTesting from './pages/BackendTesting';
-import {SignUp2} from "./pages/signup-alternative"
-import {LogIn2} from "./pages/login-alternative";
+import BackendTesting from './pages/BackendFunctionality/BackendTesting';
+import {SignUp2} from "./pages/BackendFunctionality/signup-alternative"
+import {LogIn2} from "./pages/BackendFunctionality/login-alternative";
 
 
 

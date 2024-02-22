@@ -11,8 +11,8 @@ const db = getFirestore()
 //add a Mentr --> takes mentorData in json format (FirstName: John, LastName: Smith)
 export async function addMentor(mentorData, authMentorID) {
   try {
-    let mentorRef = collection(db, "Mentor", authMentorID);
-    addDoc(mentorRef, {
+    let mentorRef = doc(db, "Mentor", authMentorID);
+    const data = {
       //input all data from userData json object
       FirstName: mentorData.firstName,
       LastName: mentorData.lastName,
@@ -20,10 +20,14 @@ export async function addMentor(mentorData, authMentorID) {
       Bio: mentorData.bio || null,
       MentorStatus: mentorData.mentorStatus || false,
       LinkedIn: mentorData.linkedIn || null,
-    });
+    };
+
+    await setDoc(mentorRef, data);
+
     console.log("Success- a new mentor has been added!");
   } catch (error) {
     console.log("There was some error when adding mentor");
+    console.log(error);
   }
 }
 
