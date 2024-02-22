@@ -32,7 +32,7 @@ export const SignUp2 = () => {
     const signInWithGoogle = async () => {
         try {
             setLoading(true);
-            await signInWithPopup(auth, googleProvider);
+            await
             setError(null);
         } catch (err) {
             console.error(err);
