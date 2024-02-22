@@ -29,7 +29,7 @@ function BackendTesting() {
 
 
         // Call the addUser function from your test.js
-        await addUser(userData);
+        await addUser(userData, 1234);
         console.log('User added successfully!');
     };
 

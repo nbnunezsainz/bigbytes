@@ -26,18 +26,6 @@ export async function deleteDocument(collectionName, docID) {
 export async function getDocument(collectionName, docID) {
     let docRef = doc(db, collectionName, docID);
     const docData = await getDoc(docRef);
-    return docData;
-   
+    return { ID: docID, ...docData.data() };
 }
-
-
-//allows to review User data in realtime
-/*onSnapshot(userRef, (snapshot) => {
-let users = [];
-snapshot.docs.forEach((user) => {
-users.push({...user.data(), id: doc.id});
-});
-console.log(users);
-});*/
-
 

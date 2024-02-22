@@ -9,9 +9,9 @@ initializeApp(firebaseConfig)
 const db = getFirestore()
 
 //add a Mentr --> takes mentorData in json format (FirstName: John, LastName: Smith)
-export async function addMentor(mentorData) {
+export async function addMentor(mentorData, authMentorID) {
   try {
-    let mentorRef = collection(db, "Mentor");
+    let mentorRef = collection(db, "Mentor", authMentorID);
     addDoc(mentorRef, {
       //input all data from userData json object
       FirstName: mentorData.firstName,
@@ -43,8 +43,8 @@ export async function getMentor(mentorID) {
   try {
     const mentorData = await getDocument("Mentor", mentorID);
 
-    if (mentorData.exists()) {
-      return mentorData.data();
+    if (mentorData) {
+      return mentorData;
     } else {
       console.log("MENTOR NOT FOUND");
       return null;
@@ -53,15 +53,3 @@ export async function getMentor(mentorID) {
     console.log("RAN INTO PROBLEM LOOKING FOR MENTOR");
   }
 }
-
-
-//allows to review User data in realtime
-/*onSnapshot(userRef, (snapshot) => {
-let users = [];
-snapshot.docs.forEach((user) => {
-users.push({...user.data(), id: doc.id});
-});
-console.log(users);
-});*/
-
-

@@ -1,31 +1,45 @@
-import { getFirebaseConfig } from "../firebaseConfiguration.js";
-import { queryCollection, deleteDocument, getDocument } from "../generalDataFunctions.js";
 const { initializeApp } = require("firebase/app");
 const { getFirestore, collection, getDocs, getDoc, addDoc, doc, deleteDoc, onSnapshot, query, where } = require("firebase/firestore");
 
+
+const firebaseConfig = {
+  apiKey: "AIzaSyCcrfzBruA31ybVPHoqb_n8DnSiyS08tM0",
+  authDomain: "lbackend-7a432.firebaseapp.com",
+  databaseURL: "https://lbackend-7a432-default-rtdb.firebaseio.com",
+  projectId: "lbackend-7a432",
+  storageBucket: "lbackend-7a432.appspot.com",
+  messagingSenderId: "46064267649",
+  appId: "1:46064267649:web:c6dfc9c6287669806ff880",
+  measurementId: "G-WRYZ44FDPG"
+};
+
+
 //Initialize Firebase
-const firebaseConfig = getFirebaseConfig();
 initializeApp(firebaseConfig)
+
 
 const db = getFirestore()
 
+//query all Users based on a specific field, filtering technique, and target value
+export async function queryUsers(field, filter, target)
+{
+  let userRef = collection(db, "User");
+  let q = query(userRef, where(field, filter, target));
+}
+
 //add a User --> takes userData in json format (FirstName: John, LastName: Smith)
-export async function addUser(userData, authUserID) {
+export async function addUser(userData) {
   try {
-    let userRef = collection(db, "User", authUserID);
-    addDoc(userRef, {
+    let colRef = collection(db, "User");
+    addDoc(colRef, {
       //input all data from userData json object
       FirstName: userData.firstName,
       LastName: userData.lastName,
       Major: userData.major,
       Year: userData.year,
-      Bio: userData.bio || null,
       Organizations: userData.organizations || [],
       LinkedIn: userData.linkedIn || null,
       Resume: userData.resume || null,
-
-      //not provided by entered data
-      RefferalCount: 20,
     });
     console.log("Success- a new user has been added!");
   } catch (error) {
@@ -33,29 +47,40 @@ export async function addUser(userData, authUserID) {
   }
 }
 
-//query all Users based on a specific field, filtering technique, and target value
-export async function queryUsers(field, filter, target)
-{
-  return queryCollection("User", field, filter, target);
-}
 
 //delete a User --> takes user ID
 export async function deleteUser(userID) {
-  deleteDocument("User", userID);
+  let docRef = doc(db, "User", userID);
+  deleteDoc(docRef);
 }
+
 
 //find a user --> takes user ID and returns user data in json format (FirstName: John, LastName: Smith)
 export async function getUser(userID) {
   try {
-    const userData = await getDocument("User", userID);
+    let docRef = doc(db, "User", userID);
+    const userData = await getDoc(docRef);
 
-    if (userData) {
-      return userData;
+
+    if (userData.exists()) {
+      return userData.data();
     } else {
       console.log("USER NOT FOUND");
-      return null;
+      return null
     }
   } catch (error) {
     console.log("RAN INTO PROBLEM LOOKING FOR USER");
   }
 }
+
+
+//allows to review User data in realtime
+/*onSnapshot(userRef, (snapshot) => {
+let users = [];
+snapshot.docs.forEach((user) => {
+users.push({...user.data(), id: doc.id});
+});
+console.log(users);
+});*/
+
+
