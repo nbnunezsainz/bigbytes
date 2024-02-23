@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { addUser, deleteUser, getUser } from './dataManipulation/collectionFunctions/userFunctions.js'
-import { addResume } from './handleFiles/fileFunctions.js';
+import { addResume, viewResume } from './handleFiles/fileFunctions.js';
 
 function BackendTesting() {
     // State for user input fields
@@ -61,9 +61,15 @@ function BackendTesting() {
 
 
     // Function to handle resume uploads
-    const uploadResume = async () => {
+    const handleUploadResume = async () => {
         addResume(imageUpload, "TEST_REPLACE WITH REAL USER_AUTH_ID");
         console.log("Resume added succesfully in front-end");
+    }
+
+    const handleViewResume = async () => {
+        const resumeURL = await viewResume(userIDToGet);
+        window.open(resumeURL, '_blank');
+        console.log("Succesfully opened tab to view resume");
     }
 
 
@@ -111,9 +117,20 @@ function BackendTesting() {
             <input type="text" value={userIDToDelete} onChange={(e) => setUserIDToDelete(e.target.value)} />
             <button onClick={handleDeleteUser}>Delete User</button>
 
+
             <h2>Resume Testing</h2>
+
+            <h3>Resume to Upload:</h3>
+            <label>File Name to Uplaod</label>
             <input type="file" onChange={(event) => {setImageUpload(event.target.files[0]);}}/>
-            <button onClick={uploadResume}> Upload Image</button>
+            <button onClick={handleUploadResume}>Upload Resume</button>
+
+            <h3>View Resume:</h3>
+            <label>User ID to View Resume::</label>
+            <input type="text" value={userIDToGet} onChange={(e) => setUserIDToGet(e.target.value)} />
+            <button onClick={handleViewResume}>View Resume</button>
+
+
 
         </div>
     );

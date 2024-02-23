@@ -1,7 +1,7 @@
 import { auth, getFirebaseConfig } from "../firebaseConfiguration.js";
 const { initializeApp } = require("firebase/app");
 const { getFirestore } = require("firebase/firestore");
-const {  getStorage, ref, uploadBytes} = require("firebase/storage");
+const {  getStorage, ref, uploadBytes, getDownloadURL} = require("firebase/storage");
 
 
 //Initialize Firebase and storage
@@ -29,6 +29,23 @@ export async function addResume(resumeFile, userAuthID)
     } catch(error)
     {
         console.log("ERROR WHEN PROCESSING FILE");
+        console.log(error);
+    }
+}
+
+export async function viewResume(userAuthID)
+{
+    try {
+        let pathName = "resumes/" + userAuthID;
+        const URL = getDownloadURL(ref(storage, pathName)).catch((error) => {
+
+            console.log("ERROR IN BACKEND TO FIND FILE");
+            return;
+        });
+        return URL;
+    } catch(error)
+    {
+        console.log("ERROR IN BACKEND TO FIND FILE");
         console.log(error);
     }
 }
