@@ -1,6 +1,8 @@
 const express = require('express');
 const cors = require('cors');
 
+
+
 const app = express();
 
 // Define your custom middleware first
@@ -28,7 +30,7 @@ app.get('/', (req, res) => {
 
 
 const userRouter = require('./routes/UserRoutes');
-const StudentRouter = require('./routes/StudentRoutes');
+const StudentRouter = require('./routes/InternShipRoutes');
 const MentorRouter = require('./routes/MentorRoutes');
 
  app.use('/api/v1/user',userRouter);
