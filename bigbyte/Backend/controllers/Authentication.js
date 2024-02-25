@@ -28,7 +28,42 @@ admin.initializeApp({
       next();
 
 }
+exports.createCustomToken = async (req, res) => { //send token on signup/login
+    try {
+      // Create custom token with additional claims
+      const customToken = await admin.auth().createCustomToken(req.userRecord.uid);
+      res.status(200).json({ success: true, customToken });
+    } catch (error) {
+      console.error('Error creating custom token:', error);
+      res.status(500).json({ success: false, message: 'Error creating custom token' });
+    }
+  };
 
+  exports.verifyToken = async (req, res, next) => {
+    try {
+      // Get the ID token from the request headers or query parameters
+      const idToken = req.headers.authorization;
+  
+      if (!idToken) {
+        return res.status(403).json({ success: false, message: 'No token provided' });
+      }
+  
+      // Verify the ID token
+      const decodedToken = await admin.auth().verifyIdToken(idToken);
+      req.user = decodedToken; //this now holds data about user we can query/find out 
+  
+      // Optionally, you can access custom claims from the decoded token
+     // const { premiumAccount } = decodedToken;
+  
+      // If the verification is successful, proceed to the next middleware
+      //req.user = decodedToken;
+      next();
+    } catch (error) {
+      console.error('Error verifying token:', error);
+      return res.status(401).json({ success: false, message: 'Unauthorized' });
+    }
+  };
+  
 exports.CreateDetailsAboutUser = async (req,res) =>
 {
     const db = admin.firestore();
@@ -42,7 +77,10 @@ exports.CreateDetailsAboutUser = async (req,res) =>
         LinkedIn: req.body.linkedIn || null,
         Resume: req.body.resume || null,
         RefferalCount: 20,
-        uid:req.body.uid
+        uid:req.body.uid,
+        student:req.body.student, //bool
+        menntor:req.body.mentor, //bool
+        
     };
     console.log(userDetails.uid);
     //const userRecord = req; //userRecord.uid
