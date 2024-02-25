@@ -1,15 +1,10 @@
 var admin = require("firebase-admin");
 
-var serviceAccount = require("../lbackend-7a432-firebase-adminsdk-33j4d-8f2d1af191.json");
 
-admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount),
-  databaseURL: "https://lbackend-7a432-default-rtdb.firebaseio.com"
-});
 const db = admin.firestore();
 
 //add a Mentr --> takes mentorData in json format (FirstName: John, LastName: Smith)
-exports.addMentorv= async (req,res, UserUID) =>{
+exports.addMentor = async (req,res, UserUID) =>{
   try 
   {
 
@@ -40,7 +35,7 @@ exports.queryMentors = async(field, filter, target) =>
 }
 
 //delete a Mentor --> takes user ID
-export async function deleteMentor(mentorID) {
+exports.deleteMentor = async(mentorID)  =>{
   deleteDocument("Mentor", mentorID);
 }
 

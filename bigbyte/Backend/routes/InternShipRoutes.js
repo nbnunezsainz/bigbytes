@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 //const AuthenticationController = require('../controllers/Authentication');
-const InternShipController = require('../controllers/Internship');
+const InternShipController = require('../controllers/Internships');
 
 router.route('/Internship').post(InternShipController.addInternship).delete(InternShipController.deleteInternship);
 router.route('/Internship/:?').post(InternShipController.getInternship );
