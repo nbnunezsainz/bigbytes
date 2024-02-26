@@ -62,14 +62,20 @@ function BackendTesting() {
 
     // Function to handle resume uploads
     const handleUploadResume = async () => {
-        addResume(imageUpload, "TEST_REPLACE WITH REAL USER_AUTH_ID");
+        addResume(imageUpload, "some dummy ID");
         console.log("Resume added succesfully in front-end");
     }
 
     const handleViewResume = async () => {
-        const resumeURL = await viewResume(userIDToGet);
-        window.open(resumeURL, '_blank');
-        console.log("Succesfully opened tab to view resume");
+        try {
+            const resumeURL = await viewResume(userIDToGet);
+            window.open(resumeURL, '_blank');
+            console.log("Succesfully opened tab to view resume");
+        } catch(error)
+        {
+            console.log("ERROR WHEN VIEWING RESUME");
+            console.log(error);
+        }
     }
 
 
@@ -105,17 +111,16 @@ function BackendTesting() {
             <br />
             <button onClick={handleAddUser}>Add User</button>
 
-
             <h3>Get User:</h3>
             <label>User ID to Get:</label>
             <input type="text" value={userIDToGet} onChange={(e) => setUserIDToGet(e.target.value)} />
             <button onClick={handleGetUser}>Get User</button>
 
-
             <h3>Delete User:</h3>
             <label>User ID to Delete:</label>
             <input type="text" value={userIDToDelete} onChange={(e) => setUserIDToDelete(e.target.value)} />
             <button onClick={handleDeleteUser}>Delete User</button>
+
 
 
             <h2>Resume Testing</h2>
