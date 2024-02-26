@@ -1,6 +1,8 @@
-import { getFirebaseConfig } from "../firebaseConfiguration.js";
+import * as Constants from "../../databaseConstants.js"
+import { getFirebaseConfig } from "../../firebaseConfiguration.js";
+import { queryCollection, deleteDocument, getDocument } from "../generalDataFunctions.js";
 const { initializeApp } = require("firebase/app");
-const { getFirestore, collection, getDocs, getDoc, addDoc, doc, deleteDoc, onSnapshot, query, where } = require("firebase/firestore");
+const { getFirestore, collection, getDocs, getDoc, setDoc, addDoc, doc, deleteDoc, onSnapshot, query, where } = require("firebase/firestore");
 
 //Initialize Firebase
 const firebaseConfig = getFirebaseConfig();
@@ -9,11 +11,11 @@ initializeApp(firebaseConfig)
 const db = getFirestore()
 
 //add a Internship --> takes internshipData in json format (Title: Developer, Company: Google)
-export async function addInternship(internshipData) {
+export async function addInternship(internshipData, mentorID /*add ID here if needed*/) {
   try 
   {
-    let internshipRef = doc(db, "Internship" /*add ID here if needed*/);
-    data = {
+    let internshipRef = doc(db, Constants.COLLECTION_INTERNSHIP /*add ID here if needed*/);
+    const data = {
       //input all data from userData json object
       Title: internshipData.title,
       Company: internshipData.company,
@@ -24,10 +26,12 @@ export async function addInternship(internshipData) {
       Qualifications: internshipData.tags,
       URL: internshipData.url,
       RefferalLimit: internshipData.refferalLimit,
+      MentorID: mentorID,
 
       //not provided by entered data
       ApplicationCounter: 0,
       Display: true,
+      Status: Constants.INTERNSHIP_STATUS_OPEN,
     };
 
     await setDoc(internshipRef, data);
@@ -42,18 +46,18 @@ export async function addInternship(internshipData) {
 //query all Internships based on a specific field, filtering technique, and target value
 export async function queryInternships(field, filter, target)
 {
-  return queryCollection("Internship", field, filter, target);
+  return queryCollection(Constants.COLLECTION_INTERNSHIP, field, filter, target);
 }
 
 //delete a Internship --> takes internship ID
 export async function deleteInternship(internshipID) {
-  deleteDocument("Internship", internshipID);
+  deleteDocument(Constants.COLLECTION_INTERNSHIP, internshipID);
 }
 
 //find a Mentor --> takes mentor ID and returns mentor data in json format (FirstName: John, LastName: Smith)
 export async function getInternship(internshipID) {
   try {
-    const internshipData = await getDocument("Internship", internshipID);
+    const internshipData = await getDocument(Constants.COLLECTION_INTERNSHIP, internshipID);
 
     if (internshipData) {
       return internshipData;

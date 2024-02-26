@@ -1,4 +1,7 @@
-import { getFirebaseConfig } from "../firebaseConfiguration.js";
+import { Collapse } from "bootstrap";
+import * as Constants from "../../databaseConstants.js"
+import { auth, getFirebaseConfig } from "../../firebaseConfiguration.js";
+import { queryCollection, deleteDocument, getDocument } from "../generalDataFunctions.js";
 const { initializeApp } = require("firebase/app");
 const { getFirestore, collection, getDocs, getDoc, addDoc, doc, deleteDoc, onSnapshot, query, where } = require("firebase/firestore");
 
@@ -12,7 +15,7 @@ const db = getFirestore()
 export async function addMentor(mentorData, authMentorID) {
   try 
   {
-    let mentorRef = doc(db, "Mentor", authMentorID);
+    let mentorRef = doc(db, Constants.COLLECTION_MENTORS, authMentorID);
     const data = {
       //input all data from userData json object
       FirstName: mentorData.firstName,
@@ -36,18 +39,18 @@ export async function addMentor(mentorData, authMentorID) {
 //query all Mentors based on a specific field, filtering technique, and target value
 export async function queryMentors(field, filter, target)
 {
-  return queryCollection("Mentor", field, filter, target);
+  return queryCollection(Constants.COLLECTION_MENTORS, field, filter, target);
 }
 
 //delete a Mentor --> takes user ID
 export async function deleteMentor(mentorID) {
-  deleteDocument("Mentor", mentorID);
+  deleteDocument(Constants.COLLECTION_MENTORS, mentorID);
 }
 
 //find a Mentor --> takes mentor ID and returns mentor data in json format (FirstName: John, LastName: Smith)
 export async function getMentor(mentorID) {
   try {
-    const mentorData = await getDocument("Mentor", mentorID);
+    const mentorData = await getDocument(Constants.COLLECTION_MENTORS, mentorID);
 
     if (mentorData) {
       return mentorData;
