@@ -6,10 +6,18 @@
 //     // Replace 'path/to/serviceAccountKey.json' with the actual path to your service account key file
 //     // Or directly pass the credentials object if it's stored as a variable
 // });
+//
+//const db = fb.firestore()
 
 var admin = require("firebase-admin");
+//const firebaseApp = require('../server.js'); //default sdk
 
 var serviceAccount = require("../lbackend-7a432-firebase-adminsdk-33j4d-8f2d1af191.json");
+
+const { getAuth, signInWithEmailAndPassword } = require('firebase/auth');
+
+const fb = require('../fb');
+const auth = getAuth(fb);
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
@@ -23,26 +31,33 @@ admin.initializeApp({
         email: email,
         password: password
       });
-      req.userRecord = userRecord; // Pass userRecord to the next middleware
+      const frontendRedirectUrl='/UserData';
+      const customToken = await admin.auth().createCustomToken(userRecord.uid);
+      res.status(200).json({ success: true, customToken, redirectUrl: frontendRedirectUrl});
+      // Pass userRecord to the next middleware
       //res.status(200).json({ success: true, uid: userRecord.uid });
       next();
 
 }
-exports.createCustomToken = async (req, res) => { //send token on signup/login
+exports.createCustomToken = async (req, res,next) => { //send token on signup/login
     try {
       // Create custom token with additional claims
       const customToken = await admin.auth().createCustomToken(req.userRecord.uid);
       res.status(200).json({ success: true, customToken });
+      next();
     } catch (error) {
       console.error('Error creating custom token:', error);
       res.status(500).json({ success: false, message: 'Error creating custom token' });
+      
     }
   };
 
   exports.verifyToken = async (req, res, next) => {
     try {
       // Get the ID token from the request headers or query parameters
-      const idToken = req.headers.authorization;
+
+      console.log(req.header,"header");
+      const idToken = req.header('Authorization'); //.replace('Bearer', '').trim();
   
       if (!idToken) {
         return res.status(403).json({ success: false, message: 'No token provided' });
@@ -76,13 +91,13 @@ exports.CreateDetailsAboutUser = async (req,res) =>
         Organizations: req.body.organizations || [],
         LinkedIn: req.body.linkedIn || null,
         Resume: req.body.resume || null,
-        RefferalCount: 20,
-        uid:req.body.uid,
+        //RefferalCount: 20, This is for internships
+        //uid:req.body.uid,
         student:req.body.student, //bool
-        menntor:req.body.mentor, //bool
+        mentor:req.body.mentor, //bool
         
     };
-    console.log(userDetails.uid);
+    //console.log(userDetails.uid);
     //const userRecord = req; //userRecord.uid
 
     try{
@@ -100,12 +115,34 @@ exports.CreateDetailsAboutUser = async (req,res) =>
 
 exports.Login = async (req,res,next) =>
 {
-   
+  const { email, password } = req.body;
+
+  console.log(req.body);
+
+  try {
+    // Sign in the user with Firebase Authentication
+     const userCredential = await signInWithEmailAndPassword(auth, email, password);
+    const user = userCredential.user;
+
+
+    
+    const customToken = await admin.auth().createCustomToken(user.uid);
+
+    console.log(user);
+    
+    // If login is successful, return user data
+  res.json({ token: customToken });
+  
+  } catch (error) {
+    // If there's an error, return an error message
+    console.log(error);
+    res.status(401).json({ message: 'Authentication failed. Please check your credentials.' });
+  }
 
 }
 
 exports.RedirectToStore =(req,res) =>
 {
-    const frontendRedirectUrl='store';
-    res.json({ redirectUrl: frontendRedirectUrl});
+    const frontendRedirectUrl='/store';
+    res.json({ data: "SingUp successful", redirectUrl: frontendRedirectUrl});
 }
