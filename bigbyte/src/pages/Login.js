@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import '../Login.css';
+import { Navigate } from 'react-router-dom';
 
 export default function Login() {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [loggedIn, setLoggedIn] = useState(false);
+    const [redirectToUserData, setRedirectToUserData] = useState(false);
 
     const handleLogout = () => {
         setLoggedIn(false);
@@ -35,9 +37,9 @@ export default function Login() {
         .then(data => {
             console.log('Response from server:', data);
             // Check if the login was successful
-            if (data.message === 'Login successful') {
+            if (data.success) {
                 // Redirect to the next page
-                window.location.href = '/nextpage.html'; // Replace with your next page URL
+                setRedirectToUserData(truee);
             } else {
                 console.error('Login failed:', data.message);
                 // Handle login failure
@@ -47,15 +49,12 @@ export default function Login() {
             console.error('There was a problem with your fetch operation:', error);
         });
     };
+ 
 
-    if (loggedIn) {
-        return (
-            <div className="Welcome">
-                <h2>Welcome, {username}!</h2>
-                <button onClick={handleLogout}>Logout</button>
-            </div>
-        );
-    }
+    //uncoment this once we have a page created 
+    // if (redirectToUserData) {
+    //     return <Navigate to="/MainPage" />;
+    //   }
 
     return (
         <div className="Login">
