@@ -6,7 +6,6 @@
 .pnp.js
 
 .env
-
 FBAdmin.json
 # testing
 /coverage

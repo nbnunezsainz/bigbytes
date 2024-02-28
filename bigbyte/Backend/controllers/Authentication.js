@@ -24,115 +24,112 @@ admin.initializeApp({
   databaseURL: "https://lbackend-7a432-default-rtdb.firebaseio.com"
 });
 
-  exports.SignUp = async (req,res,next) =>
-{
-    const {email,password } = req.body;
-    const userRecord = await admin.auth().createUser({
-        email: email,
-        password: password
-      });
-      const frontendRedirectUrl='/UserData';
-      const customToken = await admin.auth().createCustomToken(userRecord.uid);
-      res.status(200).json({ success: true, customToken, redirectUrl: frontendRedirectUrl});
-      // Pass userRecord to the next middleware
-      //res.status(200).json({ success: true, uid: userRecord.uid });
-      next();
+exports.SignUp = async (req, res, next) => {
+  const { email, password } = req.body;
+  const userRecord = await admin.auth().createUser({
+    email: email,
+    password: password
+  });
+  const frontendRedirectUrl = '/UserData';
+  const customToken = await admin.auth().createCustomToken(userRecord.uid);
+  res.status(200).json({ success: true, customToken, redirectUrl: frontendRedirectUrl });
+  // Pass userRecord to the next middleware
+  //res.status(200).json({ success: true, uid: userRecord.uid });
+  next();
 
 }
-exports.createCustomToken = async (req, res,next) => { //send token on signup/login
-    try {
-      // Create custom token with additional claims
-      const customToken = await admin.auth().createCustomToken(req.userRecord.uid);
-      res.status(200).json({ success: true, customToken });
-      next();
-    } catch (error) {
-      console.error('Error creating custom token:', error);
-      res.status(500).json({ success: false, message: 'Error creating custom token' });
-      
+exports.createCustomToken = async (req, res, next) => { //send token on signup/login
+  try {
+    // Create custom token with additional claims
+    const customToken = await admin.auth().createCustomToken(req.userRecord.uid);
+    res.status(200).json({ success: true, customToken });
+    next();
+  } catch (error) {
+    console.error('Error creating custom token:', error);
+    res.status(500).json({ success: false, message: 'Error creating custom token' });
+
+  }
+};
+
+exports.verifyToken = async (req, res, next) => {
+  try {
+    // Get the ID token from the request headers or query parameters
+
+    console.log(req.header, "header");
+    const idToken = req.header('Authorization'); //.replace('Bearer', '').trim();
+
+    if (!idToken) {
+      return res.status(403).json({ success: false, message: 'No token provided' });
     }
+
+    // Verify the ID token
+    const decodedToken = await admin.auth().verifyIdToken(idToken);
+    req.user = decodedToken; //this now holds data about user we can query/find out 
+
+    // Optionally, you can access custom claims from the decoded token
+    // const { premiumAccount } = decodedToken;
+
+    // If the verification is successful, proceed to the next middleware
+    //req.user = decodedToken;
+    next();
+  } catch (error) {
+    console.error('Error verifying token:', error);
+    return res.status(401).json({ success: false, message: 'Unauthorized' });
+  }
+};
+
+exports.CreateDetailsAboutUser = async (req, res) => {
+  const db = admin.firestore();
+  const userDetails = {
+    FirstName: req.body.firstName,
+    LastName: req.body.lastName,
+    Major: req.body.major,
+    Year: req.body.year,
+    Bio: req.body.bio || null,
+    Organizations: req.body.organizations || [],
+    LinkedIn: req.body.linkedIn || null,
+    Resume: req.body.resume || null,
+    //RefferalCount: 20, This is for internships
+    //uid:req.body.uid,
+    student: req.body.student, //bool
+    mentor: req.body.mentor, //bool
+
   };
+  //console.log(userDetails.uid);
+  //const userRecord = req; //userRecord.uid
 
-  exports.verifyToken = async (req, res, next) => {
-    try {
-      // Get the ID token from the request headers or query parameters
+  try {
 
-      console.log(req.header,"header");
-      const idToken = req.header('Authorization'); //.replace('Bearer', '').trim();
-  
-      if (!idToken) {
-        return res.status(403).json({ success: false, message: 'No token provided' });
-      }
-  
-      // Verify the ID token
-      const decodedToken = await admin.auth().verifyIdToken(idToken);
-      req.user = decodedToken; //this now holds data about user we can query/find out 
-  
-      // Optionally, you can access custom claims from the decoded token
-     // const { premiumAccount } = decodedToken;
-  
-      // If the verification is successful, proceed to the next middleware
-      //req.user = decodedToken;
-      next();
-    } catch (error) {
-      console.error('Error verifying token:', error);
-      return res.status(401).json({ success: false, message: 'Unauthorized' });
-    }
-  };
-  
-exports.CreateDetailsAboutUser = async (req,res) =>
-{
-    const db = admin.firestore();
-    const userDetails = {
-        FirstName: req.body.firstName,
-        LastName: req.body.lastName,
-        Major: req.body.major,
-        Year: req.body.year,
-        Bio: req.body.bio || null,
-        Organizations: req.body.organizations || [],
-        LinkedIn: req.body.linkedIn || null,
-        Resume: req.body.resume || null,
-        //RefferalCount: 20, This is for internships
-        //uid:req.body.uid,
-        student:req.body.student, //bool
-        mentor:req.body.mentor, //bool
-        
-    };
-    //console.log(userDetails.uid);
-    //const userRecord = req; //userRecord.uid
+    // Add a new document in collection "USER" with ID Corresponding to UID
+    await db.collection('User').doc(userDetails.uid).set(userDetails);
 
-    try{
-        
-        // Add a new document in collection "USER" with ID Corresponding to UID
-        await db.collection('User').doc(userDetails.uid).set(userDetails);
-       
-        res.status(200).json({ success: true, message: 'User data added correctly' });
+    res.status(200).json({ success: true, message: 'User data added correctly' });
 
-    } catch (error) {
-        console.error('Error signing up and creating user details:', error);
-        res.status(500).json({ success: false, message: 'Error signing up and creating user details' });
-    }
+  } catch (error) {
+    console.error('Error signing up and creating user details:', error);
+    res.status(500).json({ success: false, message: 'Error signing up and creating user details' });
+  }
 }
 
-exports.Login = async (req,res,next) =>
-{
+exports.Login = async (req, res, next) => {
   const { email, password } = req.body;
 
   console.log(req.body);
 
   try {
     // Sign in the user with Firebase Authentication
-     const userCredential = await signInWithEmailAndPassword(auth, email, password);
+    const userCredential = await signInWithEmailAndPassword(auth, email, password);
     const user = userCredential.user;
 
 
-    
+
     const customToken = await admin.auth().createCustomToken(user.uid);
 
     console.log(user);
-    
+
     // If login is successful, return user data
-  res.json({ token: customToken });
-  
+    res.json({ token: customToken });
+
   } catch (error) {
     // If there's an error, return an error message
     console.log(error);
@@ -141,8 +138,7 @@ exports.Login = async (req,res,next) =>
 
 }
 
-exports.RedirectToStore =(req,res) =>
-{
-    const frontendRedirectUrl='/store';
-    res.json({ data: "SingUp successful", redirectUrl: frontendRedirectUrl});
+exports.RedirectToStore = (req, res) => {
+  const frontendRedirectUrl = '/store';
+  res.json({ data: "SingUp successful", redirectUrl: frontendRedirectUrl });
 }

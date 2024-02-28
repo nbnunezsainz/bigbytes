@@ -3,6 +3,7 @@ import Login from './pages/Login.js';
 import Signup from './pages/Signup.js';
 import Home from './pages/Home.js';
 import UserDetailsForm from './pages/UserDataSignup.js';
+import BackendTesting from './pages/BackendFunctionality/BackendTesting.js';
 import ReactDOM from "react-dom/client";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
@@ -39,14 +40,11 @@ function App() {
 
         <Route path="/UserData" element={<UserDetailsForm />} />
 
-
-
+        <Route path="BackendTesting" element={<BackendTesting />} />
 
 
       </Routes>
     </BrowserRouter>
-
-
 
   );
 }

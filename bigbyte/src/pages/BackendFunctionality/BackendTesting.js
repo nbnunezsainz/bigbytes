@@ -71,8 +71,7 @@ function BackendTesting() {
             const resumeURL = await viewResume(userIDToGet);
             window.open(resumeURL, '_blank');
             console.log("Succesfully opened tab to view resume");
-        } catch(error)
-        {
+        } catch (error) {
             console.log("ERROR WHEN VIEWING RESUME");
             console.log(error);
         }
@@ -127,7 +126,7 @@ function BackendTesting() {
 
             <h3>Resume to Upload:</h3>
             <label>File Name to Uplaod</label>
-            <input type="file" onChange={(event) => {setImageUpload(event.target.files[0]);}}/>
+            <input type="file" onChange={(event) => { setImageUpload(event.target.files[0]); }} />
             <button onClick={handleUploadResume}>Upload Resume</button>
 
             <h3>View Resume:</h3>

@@ -13,8 +13,7 @@ const db = getFirestore()
 
 //add a User --> takes userData in json format (FirstName: John, LastName: Smith)
 export async function addUser(userData, userAuthID) {
-  try 
-  {
+  try {
     let userRef = doc(db, Constants.COLLECTION_USERS, userAuthID);
     const data = {
       //input all data from userData json object
@@ -34,16 +33,14 @@ export async function addUser(userData, userAuthID) {
     //addDoc(userRef, data, "TESTING");
     await setDoc(userRef, data);
     console.log("Success- a new user has been added!");
-  } catch (error) 
-  {
+  } catch (error) {
     console.log("There was some error when adding user");
     console.log(error);
   }
 }
 
 //query all Users based on a specific field, filtering technique, and target value
-export async function queryUsers(field, filter, target)
-{
+export async function queryUsers(field, filter, target) {
   return queryCollection(Constants.COLLECTION_USERS, field, filter, target);
 }
 
@@ -73,8 +70,7 @@ relates user ID with internship ID, mentor ID, and internship status
 */
 
 export async function applyForInternship(userID, internshipID) {
-  try
-  {
+  try {
     let applicationRef = doc(db, Constants.COLLECTION_RELATIONAL_APPLICATIONS, userID);
     let internshipData = getInternship(internshipID);
     const data = {
@@ -86,8 +82,7 @@ export async function applyForInternship(userID, internshipID) {
     console.log("Success- internship applied to!");
     postInternshipApplicationUpdates(userID, internshipID);
     console.log("Sucess updating internship and user info post internship application")
-  } catch(error)
-  {
+  } catch (error) {
     console.log("There was some error when adding document to relationalDatabse");
     console.log(error);
   }
@@ -111,8 +106,7 @@ function postInternshipApplicationUpdates(userID, internshipID) {
     let appCount = internshipData.ApplicationCounter + 1;
     let newStatus = internshipData.Status;
     let newDisplay = internshipData.Display;
-    if (appCount >= internshipData.RefferalLimit)
-    {
+    if (appCount >= internshipData.RefferalLimit) {
       newStatus = Constants.INTERNSHIP_STATUS_REVIEW;
       newDisplay = false;
     }
@@ -124,8 +118,7 @@ function postInternshipApplicationUpdates(userID, internshipID) {
 
     console.log("User and internship data are updated after application was submitted");
 
-  } catch(error)
-  {
+  } catch (error) {
 
   }
 }
