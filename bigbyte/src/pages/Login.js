@@ -39,7 +39,7 @@ export default function Login() {
             // Check if the login was successful
             if (data.success) {
                 // Redirect to the next page
-                setRedirectToUserData(truee);
+                setRedirectToUserData(true);
             } else {
                 console.error('Login failed:', data.message);
                 // Handle login failure
