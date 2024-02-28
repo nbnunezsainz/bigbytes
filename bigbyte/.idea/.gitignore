@@ -1,8 +1,8 @@
 # Default ignored files
 /shelf/
 /workspace.xml
-*.env
-Secure.env
-FBADdmin.json
+.env
+
+FBAdmin.json
 # Editor-based HTTP Client requests
 /httpRequests/
