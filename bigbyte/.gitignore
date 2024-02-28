@@ -7,7 +7,7 @@
 
 *.env
 Secure.env
-FBADdmin.json
+FBAdmin.json
 # testing
 /coverage
 
