@@ -1,5 +1,6 @@
 import { Collapse } from "bootstrap";
 import * as Constants from "../../databaseConstants.js"
+import { addInternship } from "./internshipFunctions.js"
 import { auth, getFirebaseConfig } from "../../firebaseConfiguration.js";
 import { queryCollection, deleteDocument, getDocument } from "../generalDataFunctions.js";
 const { initializeApp } = require("firebase/app");
@@ -60,5 +61,15 @@ export async function getMentor(mentorID) {
     }
   } catch (error) {
     console.log("RAN INTO PROBLEM LOOKING FOR MENTOR");
+  }
+}
+
+export async function generateInternship(internshipData, mentorID) {
+  try {
+    addInternship(internshipData, mentorID);
+    console.log("succesfully added a internship for this mentor");
+  } catch(error)
+  {
+    console.log("Had an error with generating this internship");
   }
 }

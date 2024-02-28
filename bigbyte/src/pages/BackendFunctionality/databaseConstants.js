@@ -3,7 +3,7 @@
 this file holds database names that are stored in Firebase*/
 
 //constants for Firestore collections
-export const COLLECTION_USERS = "Users";
+export const COLLECTION_USERS = "User";
 export const COLLECTION_MENTORS = "Mentor";
 export const COLLECTION_INTERNSHIP = "Internship";
     //constants for Internship statuses
