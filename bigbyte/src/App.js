@@ -2,12 +2,10 @@ import './App.css';
 import Login from './pages/Login.js';
 import Signup from './pages/Signup.js';
 import Home from './pages/Home.js';
-
+import UserDetailsForm from './pages/UserDataSignup.js';
 import ReactDOM from "react-dom/client";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import BackendTesting from './pages/BackendFunctionality/BackendTesting';
-import {SignUp2} from "./pages/BackendFunctionality/signup-alternative"
-import {LogIn2} from "./pages/BackendFunctionality/login-alternative";
+
 
 
 
@@ -35,16 +33,15 @@ function App() {
     <Routes>
       
         <Route index element={<Home />} />
-        {/* replaced LogIn with LogIn2 */}
-        <Route path="Login" element= {<LogIn2 /> }/>
-        {/* replaced SignUp with SignUp2 */}
-        <Route path="SignUp" element= {<SignUp2 /> }/>
-
-
-
-        //FOR TESTING
-        //<Route path="BackendTesting" element= {<BackendTesting />}/>
+       
+        <Route path="Login" element= {<Login  /> }/>
+        <Route path="SignUp" element= {<Signup /> }/>
         
+        <Route path="/UserData" element= {<UserDetailsForm/> }/>
+
+
+
+       
      
     </Routes>
   </BrowserRouter>
