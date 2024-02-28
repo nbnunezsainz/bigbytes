@@ -1,7 +1,7 @@
 # Default ignored files
 /shelf/
 /workspace.xml
-.env
-backend-7a432-firebase-adminsdk-33j4d-8f2d1af191.json
+*.env
+FBADdmin.json
 # Editor-based HTTP Client requests
 /httpRequests/
