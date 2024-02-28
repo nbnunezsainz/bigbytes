@@ -30,24 +30,24 @@ function App() {
     //   </header>
     // </div>
     <BrowserRouter>
-    <Routes>
-      
+      <Routes>
+
         <Route index element={<Home />} />
-       
-        <Route path="Login" element= {<Login  /> }/>
-        <Route path="SignUp" element= {<Signup /> }/>
-        
-        <Route path="/UserData" element= {<UserDetailsForm/> }/>
+
+        <Route path="Login" element={<Login />} />
+        <Route path="SignUp" element={<Signup />} />
+
+        <Route path="/UserData" element={<UserDetailsForm />} />
 
 
 
-       
-     
-    </Routes>
-  </BrowserRouter>
 
-    
-    
+
+      </Routes>
+    </BrowserRouter>
+
+
+
   );
 }
 
