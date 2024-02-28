@@ -2,6 +2,7 @@
 /shelf/
 /workspace.xml
 *.env
+Secure.env
 FBADdmin.json
 # Editor-based HTTP Client requests
 /httpRequests/
