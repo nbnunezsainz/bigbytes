@@ -12,7 +12,7 @@
 var admin = require("firebase-admin");
 //const firebaseApp = require('../server.js'); //default sdk
 
-var serviceAccount = require("../lbackend-7a432-firebase-adminsdk-33j4d-8f2d1af191.json");
+var serviceAccount = require("../FBAdmin.json");
 
 const { getAuth, signInWithEmailAndPassword } = require('firebase/auth');
 
