@@ -27,16 +27,29 @@ admin.initializeApp({
   exports.SignUp = async (req,res,next) =>
 {
     const {email,password } = req.body;
+    if(!email || !password) 
+    {
+      res.status(500).json({ message:"Entor a valid email or password"});
+    }
     const userRecord = await admin.auth().createUser({
         email: email,
         password: password
       });
+
+      console.log(req.body,"info");
+      console.log(userRecord,"userRecord");
       const frontendRedirectUrl='/UserData';
-      const customToken = await admin.auth().createCustomToken(userRecord.uid);
+      if(userRecord){
+        const customToken = await admin.auth().createCustomToken(userRecord.uid);
       res.status(200).json({ success: true, customToken, redirectUrl: frontendRedirectUrl});
+        next();
+      }
+      else
+      res.status(500).json({ success: false, message:"error in signup, provide correct credintals"});
+      
       // Pass userRecord to the next middleware
       //res.status(200).json({ success: true, uid: userRecord.uid });
-      next();
+      
 
 }
 exports.createCustomToken = async (req, res,next) => { //send token on signup/login

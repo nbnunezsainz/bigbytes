@@ -4,14 +4,14 @@ import { Navigate } from 'react-router-dom';
 
 export default function Signup () 
 {
-const [username, setUsername] = useState('');
+const [email, setemail] = useState('');
 const [password, setPassword] = useState('');
 const [redirectToUserData, setRedirectToUserData] = useState(false);
 
 
 
-const handleUsernameChange = (event) => {
-    setUsername(event.target.value);
+const handleEmailChange = (event) => {
+  setemail(event.target.value);
 };
 
 const handlePasswordChange = (event) => {
@@ -22,7 +22,7 @@ const SignUserUp = () =>
 
 {
     const postData = {
-        username: username,
+        email: email,
         password: password
       };
       
@@ -65,8 +65,8 @@ if (redirectToUserData) {
         <input 
             type="text" 
             id="username" 
-            value={username} 
-            onChange={handleUsernameChange} 
+            value={email} 
+            onChange={handleEmailChange} 
             placeholder="Place your email here" 
         />
         <label htmlFor="password">Password:</label>

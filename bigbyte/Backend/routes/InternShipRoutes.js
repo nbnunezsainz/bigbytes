@@ -12,3 +12,4 @@ router.route('/Internship/:?').post(InternShipController.getInternship );
 module.exports = router;
 
 //User can send request here for SignUp/login and then be redicrected accordingly
+//check mate?
