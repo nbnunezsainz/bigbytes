@@ -128,6 +128,9 @@ function BackendTesting() {
         }
     }
 
+    const handleApplyInternship = async () => {
+
+    }
 
     //Display fields and buttons to receive/manipulate data
     return (
