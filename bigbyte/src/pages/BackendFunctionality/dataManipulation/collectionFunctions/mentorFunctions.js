@@ -4,7 +4,7 @@ import { addInternship } from "./internshipFunctions.js"
 import { auth, getFirebaseConfig } from "../../firebaseConfiguration.js";
 import { queryCollection, deleteDocument, getDocument } from "../generalDataFunctions.js";
 const { initializeApp } = require("firebase/app");
-const { getFirestore, collection, getDocs, getDoc, addDoc, doc, deleteDoc, onSnapshot, query, where } = require("firebase/firestore");
+const { getFirestore, collection, getDocs, setDoc, getDoc, addDoc, doc, deleteDoc, onSnapshot, query, where } = require("firebase/firestore");
 
 //Initialize Firebase
 const firebaseConfig = getFirebaseConfig();
@@ -14,8 +14,7 @@ const db = getFirestore()
 
 //add a Mentr --> takes mentorData in json format (FirstName: John, LastName: Smith)
 export async function addMentor(mentorData, authMentorID) {
-  try 
-  {
+  try {
     let mentorRef = doc(db, Constants.COLLECTION_MENTORS, authMentorID);
     const data = {
       //input all data from userData json object
@@ -30,16 +29,14 @@ export async function addMentor(mentorData, authMentorID) {
     await setDoc(mentorRef, data);
 
     console.log("Success- a new mentor has been added!");
-  } catch (error) 
-  {
+  } catch (error) {
     console.log("There was some error when adding mentor");
     console.log(error);
   }
 }
 
 //query all Mentors based on a specific field, filtering technique, and target value
-export async function queryMentors(field, filter, target)
-{
+export async function queryMentors(field, filter, target) {
   return queryCollection(Constants.COLLECTION_MENTORS, field, filter, target);
 }
 
@@ -66,10 +63,10 @@ export async function getMentor(mentorID) {
 
 export async function generateInternship(internshipData, mentorID) {
   try {
-    addInternship(internshipData, mentorID);
-    console.log("succesfully added a internship for this mentor");
-  } catch(error)
-  {
-    console.log("Had an error with generating this internship");
+    await addInternship(internshipData, mentorID);
+    console.log("succesfully added a internship for this mentor in backend");
+  } catch (error) {
+    console.log("Had an error with generating this internship in backend");
   }
 }
+

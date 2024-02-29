@@ -11,10 +11,9 @@ initializeApp(firebaseConfig)
 const db = getFirestore()
 
 //add a Internship --> takes internshipData in json format (Title: Developer, Company: Google)
-export async function addInternship(internshipData, mentorID /*add ID here if needed*/) {
-  try 
-  {
-    let internshipRef = doc(db, Constants.COLLECTION_INTERNSHIP /*add ID here if needed*/);
+export async function addInternship(internshipData, mentorID) {
+  try {
+    let internshipRef = doc(db, Constants.COLLECTION_INTERNSHIP, "PLACEHOLDER HERE");
     const data = {
       //input all data from userData json object
       Title: internshipData.title,
@@ -22,13 +21,13 @@ export async function addInternship(internshipData, mentorID /*add ID here if ne
       Description: internshipData.description,
       Location: internshipData.location,
       Pay: internshipData.pay,
-      Category: internshipData.category,
+      Category: internshipData.category || [],
       Qualifications: internshipData.tags,
       URL: internshipData.url,
       RefferalLimit: internshipData.refferalLimit,
-      MentorID: mentorID,
 
       //not provided by entered data
+      MentorID: mentorID,
       ApplicationCounter: 0,
       Display: true,
       Status: Constants.INTERNSHIP_STATUS_OPEN,
@@ -37,15 +36,14 @@ export async function addInternship(internshipData, mentorID /*add ID here if ne
     await setDoc(internshipRef, data);
 
     console.log("Success- a new internship has been added!");
-  } catch (error) 
-  {
+  } catch (error) {
     console.log("There was some error when adding internship");
+    console.log(error);
   }
 }
 
 //query all Internships based on a specific field, filtering technique, and target value
-export async function queryInternships(field, filter, target)
-{
+export async function queryInternships(field, filter, target) {
   return queryCollection(Constants.COLLECTION_INTERNSHIP, field, filter, target);
 }
 
