@@ -21,6 +21,7 @@ function BackendTesting() {
 
     // States for relational database
     const [randomMentorID, setRandomMentorID] = useState('');
+    const [randomUserID, setRandomUserID] = useState('');
 
 
     // Function to handle adding a user
@@ -127,6 +128,9 @@ function BackendTesting() {
         }
     }
 
+    const handleApplyInternship = async () => {
+
+    }
 
     //Display fields and buttons to receive/manipulate data
     return (
@@ -188,6 +192,10 @@ function BackendTesting() {
             <h2>Relational Database Testing!</h2>
             <button onClick={handleRandomMentor}>Generate random Mentor</button>
             <button onClick={handleRandomInternship}>Generate random Internship Associated with Mentor</button>
+
+            <label>User ID to apply to internship:</label>
+            <input type="text" value={randomUserID} onChange={(e) => setRandomUserID(e.target.value)} />
+            <button onClick={handleViewResume}>Submit user ID</button>
 
 
         </div>
