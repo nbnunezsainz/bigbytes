@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { addUser, deleteUser, getUser } from './dataManipulation/collectionFunctions/userFunctions.js'
 import { addResume, viewResume } from './handleFiles/fileFunctions.js';
+import { addMentor, generateInternship } from './dataManipulation/collectionFunctions/mentorFunctions.js';
 
 function BackendTesting() {
     // State for user input fields
@@ -17,6 +18,9 @@ function BackendTesting() {
 
     // State for resume fields
     const [imageUpload, setImageUpload] = useState(null);
+
+    // States for relational database
+    const [randomMentorID, setRandomMentorID] = useState('');
 
 
     // Function to handle adding a user
@@ -71,10 +75,55 @@ function BackendTesting() {
             const resumeURL = await viewResume(userIDToGet);
             window.open(resumeURL, '_blank');
             console.log("Succesfully opened tab to view resume");
-        } catch(error)
-        {
+        } catch (error) {
             console.log("ERROR WHEN VIEWING RESUME");
             console.log(error);
+        }
+    }
+
+    //Funciton to generate a random mentor
+    const handleRandomMentor = async () => {
+        try {
+            const mentorData = {
+                firstName: "Shivum",
+                lastName: "Kapoor",
+                company: "American Red Cross",
+                bio: "This is testing info",
+                mentorStatus: true,
+                linkedIn: "linkedIn",
+            };
+
+            //
+            let mentorID = Math.floor(Math.random() * 100000 + 1).toString();
+            setRandomMentorID(mentorID);
+
+            await addMentor(mentorData, mentorID);
+            console.log("created mentor with mentorID: " + mentorID);
+
+        } catch (error) {
+            console.log("Something messed up when creating mentor");
+        }
+    }
+
+    //Function to generate random internship associated with the random mentor
+    const handleRandomInternship = async () => {
+        try {
+            const internshipData = {
+                title: "Software Engineer",
+                company: "Apple",
+                description: "You do stuff",
+                location: "Remote",
+                pay: "$35",
+                category: "Tech",
+                tags: "fun",
+                url: "www.google.com",
+                refferalLimit: "10",
+            }
+
+            await generateInternship(internshipData, randomMentorID);
+            console.log("Random internship generated from front end!");
+        } catch (error) {
+            console.log("ERROR from front end!");
         }
     }
 
@@ -127,14 +176,18 @@ function BackendTesting() {
 
             <h3>Resume to Upload:</h3>
             <label>File Name to Uplaod</label>
-            <input type="file" onChange={(event) => {setImageUpload(event.target.files[0]);}}/>
+            <input type="file" onChange={(event) => { setImageUpload(event.target.files[0]); }} />
             <button onClick={handleUploadResume}>Upload Resume</button>
 
             <h3>View Resume:</h3>
-            <label>User ID to View Resume::</label>
+            <label>User ID to View Resume:</label>
             <input type="text" value={userIDToGet} onChange={(e) => setUserIDToGet(e.target.value)} />
             <button onClick={handleViewResume}>View Resume</button>
 
+
+            <h2>Relational Database Testing!</h2>
+            <button onClick={handleRandomMentor}>Generate random Mentor</button>
+            <button onClick={handleRandomInternship}>Generate random Internship Associated with Mentor</button>
 
 
         </div>
