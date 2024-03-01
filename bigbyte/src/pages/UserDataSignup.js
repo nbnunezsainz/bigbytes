@@ -13,6 +13,7 @@ function UserDetailsForm() {
         UserStatus: '',
         linkedIn: ''
     });
+    const [redirectToLanding, setRedirectToLanding] = useState(false);
 
     const handleButtonClick = (selectedRole) => {
         setRole(selectedRole);
@@ -34,6 +35,34 @@ function UserDetailsForm() {
         e.preventDefault();
         console.log(userDetails);
         // Send userDetails to backend for further processing
+
+        fetch('http://localhost:3001/api/v1/user', {
+            method: 'POST',
+            headers: {
+                'Content-Type' : 'application/json'
+            },
+            body: JSON.stringify(userDetails)
+        })
+        .then(response => {
+            if(!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log('Response from server:', data);
+            // Check if signup success
+            if(data.success) {
+                // signup successful
+                setRedirectToLanding(true);
+            } else {
+                // Handle signup error
+                console.error('Signup failed: ', data.message);
+            }
+        })
+        .catch(error => {
+            console.error('There was a problem with your fetch operation: ', error);
+        });
     };
 
     return (
