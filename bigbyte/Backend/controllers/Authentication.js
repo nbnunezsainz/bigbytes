@@ -95,7 +95,12 @@ exports.createCustomToken = async (req, res,next) => { //send token on signup/lo
 exports.CreateDetailsAboutUser = async (req,res) =>
 {
     const db = admin.firestore();
-    const userDetails = {
+    User = req.user; // got this from verifytoken function
+
+    //need to get the token to verify who a user is first too.
+    if(req.body.UserStatus =="student")
+    {
+      let userDetails = {
         FirstName: req.body.firstName,
         LastName: req.body.lastName,
         Major: req.body.major,
@@ -106,24 +111,59 @@ exports.CreateDetailsAboutUser = async (req,res) =>
         Resume: req.body.resume || null,
         //RefferalCount: 20, This is for internships
         //uid:req.body.uid,
-        student:req.body.student, //bool
-        mentor:req.body.mentor, //bool
+        UserStatus:req.body.UserStatus, //tells us if user or student
+        // student:req.body.student, //bool
+        // mentor:req.body.mentor, //bool
+
         
     };
-    //console.log(userDetails.uid);
-    //const userRecord = req; //userRecord.uid
-
     try{
         
-        // Add a new document in collection "USER" with ID Corresponding to UID
-        await db.collection('User').doc(userDetails.uid).set(userDetails);
-       
-        res.status(200).json({ success: true, message: 'User data added correctly' });
+      // Add a new document in collection "USER" with ID Corresponding to UID, 
+       await db.collection('User').doc(User.uid).set(userDetails);
+     
+      res.status(200).json({ success: true, message: 'User data added correctly' });
 
-    } catch (error) {
-        console.error('Error signing up and creating user details:', error);
-        res.status(500).json({ success: false, message: 'Error signing up and creating user details' });
+  } catch (error) {
+      console.error('Error signing up and creating user details:', error);
+      res.status(500).json({ success: false, message: 'Error signing up and creating user details' });
+  }
+
+
     }
+    else
+    {
+      let userDetails = {
+        FirstName: req.body.firstName,
+        LastName: req.body.lastName,
+        Major: req.body.major,
+        Year: req.body.year,
+        Bio: req.body.bio || null,
+        Organizations: req.body.organizations || [],
+        LinkedIn: req.body.linkedIn || null,
+        Resume: req.body.resume || null,
+        //RefferalCount: 20, This is for internships
+        //uid:req.body.uid,
+        UserStatus:req.body.UserStatus, //tells us if user or student
+        // student:req.body.student, //bool
+        // mentor:req.body.mentor, //bool
+        
+    };
+    try{
+        
+      // Add a new document in collection "USER" with ID Corresponding to UID, 
+       await db.collection('User').doc(User.uid).set(userDetails);
+     
+      res.status(200).json({ success: true, message: 'User data added correctly' });
+
+  } catch (error) {
+      console.error('Error signing up and creating user details:', error);
+      res.status(500).json({ success: false, message: 'Error signing up and creating user details' });
+  }
+  }
+ // next(); Ideally redirect us to the next page
+   
+    
 }
 
 exports.Login = async (req,res,next) =>
