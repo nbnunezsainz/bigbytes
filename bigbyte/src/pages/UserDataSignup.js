@@ -36,7 +36,7 @@ function UserDetailsForm() {
         console.log(userDetails);
         // Send userDetails to backend for further processing
 
-        fetch('http://localhost:3001/api/v1/user', {
+        fetch('http://localhost:3001/api/v1/user/userDetails', {
             method: 'POST',
             headers: {
                 'Content-Type' : 'application/json'
