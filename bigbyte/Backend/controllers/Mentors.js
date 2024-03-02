@@ -1,7 +1,4 @@
-var admin = require("firebase-admin");
-
-
-const db = admin.firestore();
+const {db,admin} =require('../FireBaseSetUp.js');
 
 //add a Mentr --> takes mentorData in json format (FirstName: John, LastName: Smith)
 exports.addMentor = async (req,res, UserUID) =>{

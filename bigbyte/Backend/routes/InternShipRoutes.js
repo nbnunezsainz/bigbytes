@@ -4,9 +4,8 @@ const router = express.Router();
 //const AuthenticationController = require('../controllers/Authentication');
 const InternShipController = require('../controllers/Internships');
 
-router.route('/Internship').post(InternShipController.addInternship).delete(InternShipController.deleteInternship);
-router.route('/Internship/:?').post(InternShipController.getInternship );
-
+router.route('/Internship').post(InternShipController.addInternship);//.delete(InternShipController.deleteInternship);
+//router.route('/Internship/:?').post(InternShipController.getInternship );
 // router.route('/SignOut').post(AuthenticationController.login ,AuthenticationController.RedirectToStorePage);
 // router.route('/DeleteAccount').post(AuthenticationController.login ,AuthenticationController.RedirectToStorePage);
 module.exports = router;
