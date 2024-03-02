@@ -1,30 +1,12 @@
 
-//const { initializeApp } = require('firebase-admin/app');
 
-// admin.initializeApp({
-//     credential: admin.credential.cert(),
-//     // Replace 'path/to/serviceAccountKey.json' with the actual path to your service account key file
-//     // Or directly pass the credentials object if it's stored as a variable
-// });
-//
-//const db = fb.firestore()
+const { signInWithEmailAndPassword } = require('firebase/auth');
+const {Clientauth} =require('../fb.js');
+const {db,admin} =require('../FireBaseSetUp.js');
 
-var admin = require("firebase-admin");
-//const firebaseApp = require('../server.js'); //default sdk
 
-var serviceAccount = require("../FBAdmin.json");
 
-const { getAuth, signInWithEmailAndPassword } = require('firebase/auth');
-
-const fb = require('../fb');
-const auth = getAuth(fb);
-
-admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount),
-  databaseURL: "https://lbackend-7a432-default-rtdb.firebaseio.com"
-});
-
-  exports.SignUp = async (req,res,next) =>
+exports.SignUp = async (req,res,next) =>
 {
     const {email,password } = req.body;
     if(!email || !password) 
@@ -47,11 +29,9 @@ admin.initializeApp({
       else
       res.status(500).json({ success: false, message:"error in signup, provide correct credintals"});
       
-      // Pass userRecord to the next middleware
-      //res.status(200).json({ success: true, uid: userRecord.uid });
-      
 
 }
+
 exports.createCustomToken = async (req, res,next) => { //send token on signup/login
     try {
       // Create custom token with additional claims
@@ -92,13 +72,13 @@ exports.createCustomToken = async (req, res,next) => { //send token on signup/lo
     }
   };
   
-exports.CreateDetailsAboutUser = async (req,res) =>
+  exports.CreateDetailsAboutUser = async (req,res) =>
 {
-    const db = admin.firestore();
+    //const db = admin.firestore();
     User = req.user; // got this from verifytoken function
 
     //need to get the token to verify who a user is first too.
-    if(req.body.UserStatus =="student")
+    if(req.body.UserStatus =="Student")
     {
       let userDetails = {
         FirstName: req.body.firstName,
@@ -110,7 +90,7 @@ exports.CreateDetailsAboutUser = async (req,res) =>
         LinkedIn: req.body.linkedIn || null,
         Resume: req.body.resume || null,
         //RefferalCount: 20, This is for internships
-        //uid:req.body.uid,
+        uid:req.body.uid,
         UserStatus:req.body.UserStatus, //tells us if user or student
         // student:req.body.student, //bool
         // mentor:req.body.mentor, //bool
@@ -119,8 +99,11 @@ exports.CreateDetailsAboutUser = async (req,res) =>
     };
     try{
         
-      // Add a new document in collection "USER" with ID Corresponding to UID, 
-       await db.collection('User').doc(User.uid).set(userDetails);
+    
+      const UsersRef = db.collection('User'); //this did not give deprecation error
+      UsersRef.doc(req.body.uid).set(userDetails);
+
+       //await db.collection('User').doc(req.body.uid).set(userDetails);
      
       res.status(200).json({ success: true, message: 'User data added correctly' });
 
@@ -174,8 +157,10 @@ exports.Login = async (req,res,next) =>
 
   try {
     // Sign in the user with Firebase Authentication
-     const userCredential = await signInWithEmailAndPassword(auth, email, password);
+     const userCredential = await signInWithEmailAndPassword( Clientauth , email, password);
     const user = userCredential.user;
+
+    console.log(user);
 
 
     
@@ -199,3 +184,4 @@ exports.RedirectToStore =(req,res) =>
     const frontendRedirectUrl='/store';
     res.json({ data: "SingUp successful", redirectUrl: frontendRedirectUrl});
 }
+
