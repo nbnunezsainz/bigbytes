@@ -3,7 +3,11 @@ const { db, admin } = require('../FireBaseSetUp.js');
 const Constants = require('./databaseConstant.js');
 
 //query all Collections based on a specific field, filtering technique, and target value --> returns dictionary of document ID to document data in json format (FirstName: John, LastName: Smith)
-async function queryCollection(colRef, field, filter, target) {
+async function queryCollection(colRef, reqBody) {
+    let field = reqBody.field;
+    let filter = reqBody.filter;
+    let target = reqBody.target;
+
     let q = await colRef.where(field, filter, target).get();
 
     const queryDict = {}
