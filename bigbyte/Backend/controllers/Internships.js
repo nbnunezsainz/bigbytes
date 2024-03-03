@@ -2,7 +2,6 @@ const { getFirestore, Timestamp, FieldValue, Filter } = require('firebase-admin/
 const { db, admin } = require('../FireBaseSetUp.js');
 const Constants = require('./databaseConstant.js');
 const { queryCollection, deleteDocument, getDocument } = require('./databaseFunctions.js');
-const { get } = require('../routes/InternShipRoutes.js');
 
 // create and initialize a database reference to the "Internship" collection
 const InternshipRef = db.collection(Constants.COLLECTION_INTERNSHIP);
@@ -42,15 +41,13 @@ exports.addInternship = async (req, res) => {
   }
 };
 
-//query all Internships based on a specific field, filtering technique, and target value
+//query all Internships based on a specific field, filtering technique, and target value --> returns dictionary of internship ID to their data
 exports.queryInternships = async (req, res) => {
   try {
-    let field = req.body.field;
-    let filter = req.body.filter;
-    let target = req.body.target;
 
-    queryDict = queryCollection(InternshipRef, field, filter, target);
+    queryDict = await queryCollection(InternshipRef, req.body);
 
+    console.log(queryDict);
     console.log("Success- internship has been found!");
     res.status(200).json({ success: true, message: 'Internship has been found' });
     return queryDict;
@@ -61,12 +58,13 @@ exports.queryInternships = async (req, res) => {
   }
 };
 
+//deletes an internship based on their ID
 exports.deleteInternship = async (req, res) => {
   try {
     let internshipID = req.body.id;
 
-    const result = deleteDocument(InternshipRef, internshipID);
-
+    const result = await deleteDocument(InternshipRef, internshipID);
+    console.log(result)
     console.log("Success- internship deleted!");
     res.status(200).json({ success: true, message: 'Internship deleted successfully' });
   } catch (error) {
@@ -75,14 +73,15 @@ exports.deleteInternship = async (req, res) => {
   }
 };
 
+// find and return an internship dictionary that relates their ID to thier data
 exports.getInternship = async (req, res) => {
   try {
     let internshipID = req.body.id;
     const internship = await getDocument(InternshipRef, internshipID);
+    console.log(internship)
 
-    console.log("Success- internship deleted!");
+    console.log("Success- internship received!");
     res.status(200).json({ success: true, message: 'Internship received successfully' });
-    console.log(internship);
     return internship;
 
   } catch (error) {

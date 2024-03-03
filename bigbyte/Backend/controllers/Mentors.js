@@ -1,58 +1,84 @@
-const {db,admin} =require('../FireBaseSetUp.js');
+const { getFirestore, Timestamp, FieldValue, Filter } = require('firebase-admin/firestore');
+const { db, admin } = require('../FireBaseSetUp.js');
+const Constants = require('./databaseConstant.js');
+const { queryCollection, deleteDocument, getDocument } = require('./databaseFunctions.js');
 
-//add a Mentr --> takes mentorData in json format (FirstName: John, LastName: Smith)
-exports.addMentor = async (req,res, UserUID) =>{
-  try 
-  {
+// create and initialize a database reference to the "Internship" collection
+const MentorRef = db.collection(Constants.COLLECTION_MENTORS);
 
-    const MentorData = {
-        // Retrieve data from req.body
-        FirstName: req.body.firstName,
-        LastName: req.body.lastName,
-        Company: req.body.company,
-        Bio: req.body.bio || null,
-        MentorStatus: req.body.mentorStatus || false,
-        LinkedIn: req.body.linkedIn || null,
+//add a Mentor --> takes mentorData in json format (FirstName: John, LastName: Smith)
+exports.addMentor = async (req, res) => {
+  try {
+    const mentorData = req.body;
+    const mentorID = req.body.id;
+
+    console.log(mentorData);
+
+    const data = {
+      // Retrieve data from req.body
+      FirstName: mentorData.firstName,
+      LastName: mentorData.lastName,
+      Company: mentorData.company,
+      Bio: mentorData.bio || null,
+      MentorStatus: mentorData.mentorStatus || false,
+      LinkedIn: mentorData.linkedIn || null,
     };
 
-    await db.collection('Mentor').doc(userDetails.uid).set(MentorData);
+    await MentorRef.doc(mentorID).set(data);
 
     console.log("Success- a new mentor has been added!");
-  } catch (error) 
-  {
-    console.log("There was some error when adding mentor");
-    console.log(error);
+    res.status(200).json({ success: true, message: 'Mentor added successfully' });
+  } catch (error) {
+    console.log("There was some error when adding mentor", error);
+    res.status(500).json({ success: false, message: 'Error adding mentor' });
   }
 }
 
-//query all Mentors based on a specific field, filtering technique, and target value
-exports.queryMentors = async(field, filter, target) =>
-{
-  return queryCollection("Mentor", field, filter, target);
-}
+//query all mentors based on a specific field, filtering technique, and target value --> returns dictionary of mentor ID to their data
+exports.queryMentors = async (req, res) => {
+  try {
 
-//delete a Mentor --> takes user ID
-exports.deleteMentor = async(mentorID)  =>{
-  deleteDocument("Mentor", mentorID);
-}
+    queryDict = await queryCollection(MentorRef, req.body);
 
-//find a Mentor --> takes mentor ID and returns mentor data in json format (FirstName: John, LastName: Smith)
-exports.getMentor = async(req, resp) => {
-    try {
-      const mentorID = req.params.mentorID;
-  
-      const mentorRef = db.collection("Mentor").doc(mentorID);
-      const mentorSnapshot = await mentorRef.get();
-  
-      if (mentorSnapshot.exists) {
-        const mentorData = mentorSnapshot.data();
-        return resp.status(200).json({ success: true, mentorData });
-      } else {
-        console.log("MENTOR NOT FOUND");
-        return resp.status(404).json({ success: false, message: "Mentor not found" });
-      }
-    } catch (error) {
-      console.log("RAN INTO PROBLEM LOOKING FOR MENTOR", error);
-      return resp.status(500).json({ success: false, message: "Error looking for mentor" });
-    }
+    console.log(queryDict);
+    console.log("Success- mentors have been found!");
+    res.status(200).json({ success: true, message: 'Mentors have been found' });
+    return queryDict;
+
+  } catch (error) {
+    console.log("RAN INTO PROBLEM QUERYING MENTORS", error);
+    res.status(500).json({ success: false, message: 'Error querying mentors' });
   }
+};
+
+//deletes a mentor based on their ID
+exports.deleteMentor = async (req, res) => {
+  try {
+    let mentorID = req.body.id;
+
+    const result = await deleteDocument(MentorRef, mentorID);
+    console.log(result)
+    console.log("Success- mentor deleted!");
+    res.status(200).json({ success: true, message: 'Mentor deleted successfully' });
+  } catch (error) {
+    console.log("There was some error when deleting mentor", error);
+    res.status(500).json({ success: false, message: 'Error deleting mentor' });
+  }
+};
+
+// find and return an mentor dictionary that relates their ID to their data
+exports.getMentor = async (req, res) => {
+  try {
+    let mentorID = req.body.id;
+    const mentor = await getDocument(MentorRef, mentorID);
+    console.log(mentor)
+
+    console.log("Success- mentor received!");
+    res.status(200).json({ success: true, message: 'Internship mentor successfully' });
+    return mentor;
+
+  } catch (error) {
+    console.log("RAN INTO PROBLEM LOOKING FOR MENTOR", error);
+    res.status(500).json({ success: false, message: 'Error when getting mentor' });
+  }
+};
