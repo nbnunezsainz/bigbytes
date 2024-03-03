@@ -1,50 +1,38 @@
- const admin = require("firebase-admin");
-// const { initializeApp } = require("firebase/app");
-//  const { getDocs, getDoc, setDoc, doc, deleteDoc, onSnapshot, query, where } = require('firebase/firestore');
-//  const { getFirebaseConfig } = require ("./firebaseConfigInfo.js");
-//  const { collection, addDoc } = require('firebase/firestore');
-//const { getFirestore } = require('firebase-admin/firestore')
-
-//Initialize Firebase
-//const app3 = initializeApp(getFirebaseConfig);
-//const firebaseConfig = getFirebaseConfig();
-//initializeApp(firebaseConfig);
-
-const { initializeApp, applicationDefault, cert } = require('firebase-admin/app');
 const { getFirestore, Timestamp, FieldValue, Filter } = require('firebase-admin/firestore');
+const { db, admin } = require('../FireBaseSetUp.js');
+const Constants = require('./databaseConstant.js');
+const { queryCollection, deleteDocument, getDocument } = require('./databaseFunctions.js');
+const { get } = require('../routes/InternShipRoutes.js');
 
-// const serviceAccount = require("../FBAdmin.json");
-// initializeApp({
-//   credential: cert(serviceAccount),
-//   //databaseURL: "https://lbackend-7a432-default-rtdb.firebaseio.com"
-// });
+// create and initialize a database reference to the "Internship" collection
+const InternshipRef = db.collection(Constants.COLLECTION_INTERNSHIP);
 
-const db = getFirestore();
-//const db = admin.firestore();
-
+// add an internship taking in a request
 exports.addInternship = async (req, res) => {
-  try { //needs to be related to a mentor!
-
+  try {
+    // initialize the body of response data to become the data
     const internshipData = req.body;
-    //const internshipRef = doc(db, "Internship");
-    
     const data = {
+      //input all data from req.body json object
       Title: internshipData.title,
       Company: internshipData.company,
       Description: internshipData.description,
       Location: internshipData.location,
       Pay: internshipData.pay,
-      Category: internshipData.category,
+      Category: internshipData.category || [],
+      Qualifications: internshipData.tags,
       URL: internshipData.url,
       RefferalLimit: internshipData.refferalLimit,
+      MentorID: internshipData.mentorID,
 
-      //NOT PROVIDED IN REQ
+      //not provided by entered data
       ApplicationCounter: 0,
       Display: true,
+      Status: Constants.INTERNSHIP_STATUS_OPEN,
     };
-   // await db.collection('User').doc(User.uid).set(userDetails);
-    //addDoc(internshipRef, data);
-    await db.collection('Internship').doc("THIS IS A TEST new").set(data);
+
+    // add the internship with a random ID
+    await InternshipRef.add(data);
 
     console.log("Success- a new internship has been added!");
     res.status(200).json({ success: true, message: 'Internship added successfully' });
@@ -54,12 +42,19 @@ exports.addInternship = async (req, res) => {
   }
 };
 
-/*
+//query all Internships based on a specific field, filtering technique, and target value
 exports.queryInternships = async (req, res) => {
-  const { field, filter, target } = req.body;
   try {
-    // Implement queryCollection function logic here
-    // Return the result using res.status().json()
+    let field = req.body.field;
+    let filter = req.body.filter;
+    let target = req.body.target;
+
+    queryDict = queryCollection(InternshipRef, field, filter, target);
+
+    console.log("Success- internship has been found!");
+    res.status(200).json({ success: true, message: 'Internship has been found' });
+    return queryDict;
+
   } catch (error) {
     console.log("RAN INTO PROBLEM QUERYING INTERNSHIPS", error);
     res.status(500).json({ success: false, message: 'Error querying internships' });
@@ -68,8 +63,11 @@ exports.queryInternships = async (req, res) => {
 
 exports.deleteInternship = async (req, res) => {
   try {
-    const internshipID = req.params.internshipID;
-    // Implement deleteDocument function logic here
+    let internshipID = req.body.id;
+
+    const result = deleteDocument(InternshipRef, internshipID);
+
+    console.log("Success- internship deleted!");
     res.status(200).json({ success: true, message: 'Internship deleted successfully' });
   } catch (error) {
     console.log("There was some error when deleting internship", error);
@@ -79,13 +77,16 @@ exports.deleteInternship = async (req, res) => {
 
 exports.getInternship = async (req, res) => {
   try {
-    const internshipID = req.params.internshipID;
-    // Implement getDocument function logic here
-    // Return the result using res.status().json()
+    let internshipID = req.body.id;
+    const internship = await getDocument(InternshipRef, internshipID);
+
+    console.log("Success- internship deleted!");
+    res.status(200).json({ success: true, message: 'Internship received successfully' });
+    console.log(internship);
+    return internship;
+
   } catch (error) {
     console.log("RAN INTO PROBLEM LOOKING FOR INTERNSHIP", error);
-    res.status(500).json({ success: false, message: 'Error looking for internship' });
+    res.status(500).json({ success: false, message: 'Error when getting internship' });
   }
 };
-
-*/
