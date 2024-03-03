@@ -22,12 +22,12 @@ export async function addInternship(internshipData, mentorID) {
       Location: internshipData.location,
       Pay: internshipData.pay,
       Category: internshipData.category || [],
-      Qualifications: internshipData.tags,
+      Qualifications: internshipData.tags || [],
       URL: internshipData.url,
       RefferalLimit: internshipData.refferalLimit,
+      MentorID: internshipData.mentorID,
 
       //not provided by entered data
-      MentorID: mentorID,
       ApplicationCounter: 0,
       Display: true,
       Status: Constants.INTERNSHIP_STATUS_OPEN,
