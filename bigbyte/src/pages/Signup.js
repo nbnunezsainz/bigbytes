@@ -1,15 +1,17 @@
 import React, { useState } from 'react';
 import '../Signup.css';
-
+import { Navigate } from 'react-router-dom';
 
 export default function Signup () 
 {
-const [username, setUsername] = useState('');
+const [email, setemail] = useState('');
 const [password, setPassword] = useState('');
+const [redirectToUserData, setRedirectToUserData] = useState(false);
 
 
-const handleUsernameChange = (event) => {
-    setUsername(event.target.value);
+
+const handleEmailChange = (event) => {
+  setemail(event.target.value);
 };
 
 const handlePasswordChange = (event) => {
@@ -20,7 +22,7 @@ const SignUserUp = () =>
 
 {
     const postData = {
-        username: username,
+        email: email,
         password: password
       };
       
@@ -39,11 +41,11 @@ const SignUserUp = () =>
         return response.json();
       })
       .then(data => {
-        console.log('Response from server:', data);
+        
         // Check if the login was successful
-        if (data.message === 'Login successful') {
+        if (data.success) {
           // Redirect to the next page
-          window.location.href = '/nextpage.html'; // Replace with your next page URL
+          setRedirectToUserData(true);
         } else {
           console.error('Login failed:', data.message);
           // Handle login failure
@@ -54,15 +56,18 @@ const SignUserUp = () =>
       });
 }
 
+if (redirectToUserData) {
+  return <Navigate to="/UserData" />;
+}
     return (
         <div>
-        <label htmlFor="username">Username/Email:</label>
+        <label htmlFor="username">Email:</label>
         <input 
             type="text" 
             id="username" 
-            value={username} 
-            onChange={handleUsernameChange} 
-            placeholder="Enter your username or email" 
+            value={email} 
+            onChange={handleEmailChange} 
+            placeholder="Place your email here" 
         />
         <label htmlFor="password">Password:</label>
         <input 

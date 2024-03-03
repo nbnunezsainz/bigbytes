@@ -2,9 +2,14 @@ import './App.css';
 import Login from './pages/Login.js';
 import Signup from './pages/Signup.js';
 import Home from './pages/Home.js';
-// import BackendTesting from './pages/BackendTesting.js'
+import BackendTesting from './pages/BackendFunctionality/BackendTesting';
+import UserDetailsForm from './pages/UserDataSignup.js';
 import ReactDOM from "react-dom/client";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+
+
+
+
 
 function App() {
   return (
@@ -26,19 +31,24 @@ function App() {
     //   </header>
     // </div>
     <BrowserRouter>
-    <Routes>
-      
-        <Route index element={<Home />} />
-        {/* <Route path="BackendTesting" element= {<BackendTesting /> }/> */}
-        <Route path="Login" element= {<Login /> }/>
-        <Route path="SignUp" element= {<Signup /> }/>
-        
-     
-    </Routes>
-  </BrowserRouter>
+      <Routes>
 
-    
-    
+        <Route index element={<Home />} />
+
+        <Route path="Login" element={<Login />} />
+        <Route path="SignUp" element={<Signup />} />
+
+        <Route path="/UserData" element={<UserDetailsForm />} />
+        <Route path="BackendTesting" element={<BackendTesting />} />
+
+
+
+
+      </Routes>
+    </BrowserRouter>
+
+
+
   );
 }
 
