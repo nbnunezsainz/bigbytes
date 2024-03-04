@@ -172,7 +172,29 @@ exports.Login = async (req, res, next) => {
   }
 
 }
+//signout functionality....... test this more. see how to use in postman
+//build in login rout
 
+exports.SignOut = async (req, res) => {
+  try {
+    if (req.user) {
+      await admin.auth().revokeRefreshTokens(req.user.uid);
+      res.json(
+          {message: 'User successfully signed out'}
+      );
+    } else {
+      res.status(401).json(
+          { message: 'user not authenticated'});
+    }
+  } catch (e) {
+    res.status(500).json(
+        {
+          message: 'error: user wont sign out',
+        });
+
+  }
+
+};
 exports.RedirectToStore = (req, res) => {
   const frontendRedirectUrl = '/store';
   res.json({ data: "SingUp successful", redirectUrl: frontendRedirectUrl });
