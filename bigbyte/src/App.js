@@ -2,6 +2,8 @@ import './App.css';
 import Login from './pages/Login.js';
 import Signup from './pages/Signup.js';
 import Home from './pages/Home.js';
+import InternshipSearch from './pages/InternshipSearch.js';
+import Resume from './pages/Resume.js';
 import BackendTesting from './pages/BackendFunctionality/BackendTesting';
 import UserDetailsForm from './pages/UserDataSignup.js';
 import ReactDOM from "react-dom/client";
@@ -40,6 +42,8 @@ function App() {
 
         <Route path="/UserData" element={<UserDetailsForm />} />
         <Route path="BackendTesting" element={<BackendTesting />} />
+        <Route path="InternshipSearch" element={<InternshipSearch />} />
+        <Route path="Resume" element={<Resume />} />
 
 
 
