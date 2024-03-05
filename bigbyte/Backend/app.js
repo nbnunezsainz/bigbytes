@@ -1,5 +1,6 @@
 const express = require('express');
 const cors = require('cors');
+const cookieParser = require('cookie-parser');
 
 const app = express();
 
@@ -9,6 +10,7 @@ const app = express();
 // Then, define the CORS middleware
 
 app.use(express.json());
+app.use(cookieParser()); 
 
 
 
