@@ -9,7 +9,7 @@ const UserController = require('../controllers/Users');
 router.route('/SignUp').post(AuthenticationController.SignUp);
 // router.route('/userDetails').post(AuthenticationController.verifyToken,AuthenticationController.CreateDetailsAboutUser);
 router.route('/userDetails').post(AuthenticationController.CreateDetailsAboutUser);
-router.route('/login').post(AuthenticationController.Login, AuthenticationController.RedirectToStore);
+router.route('/login').post(AuthenticationController.Login);
 router.route('/SignOut').post(AuthenticationController.SignOut ,AuthenticationController.RedirectToStore); //later change redirect to login
 // router.route('/DeleteAccount').post(AuthenticationController.login ,AuthenticationController.RedirectToStorePage);
 

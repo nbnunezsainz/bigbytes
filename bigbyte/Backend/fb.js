@@ -3,6 +3,7 @@ const { initializeApp } = require("firebase/app");
 require('dotenv').config({ path: './.env' }) 
 const { getAuth } = require("firebase/auth");
 
+
 // const firebaseConfig = {
 //     apiKey: process.env.apiKey,
 //     authDomain: process.env.apiKey,

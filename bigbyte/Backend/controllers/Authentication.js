@@ -1,7 +1,9 @@
 
 
-const { signInWithEmailAndPassword } = require('firebase/auth');
+const { signInWithEmailAndPassword , Auth} = require('firebase/auth');
+
 const { Clientauth } = require('../fb.js');
+
 const { db, admin } = require('../FireBaseSetUp.js');
 
 
@@ -152,6 +154,7 @@ exports.Login = async (req, res, next) => {
   try {
     // Sign in the user with Firebase Authentication
     const userCredential = await signInWithEmailAndPassword(Clientauth, email, password);
+    console.log("here");
     const user = userCredential.user;
 
     console.log(user);
@@ -163,12 +166,13 @@ exports.Login = async (req, res, next) => {
     console.log(user);
 
     // If login is successful, return user data
-    res.json({ token: customToken });
+    res.json({ token: customToken , success:true});
+    next();
 
   } catch (error) {
     // If there's an error, return an error message
     console.log(error);
-    res.status(401).json({ message: 'Authentication failed. Please check your credentials.' });
+    res.status(401).json({ sucess:false, message: 'Authentication failed. Please check your credentials.' });
   }
 
 }
@@ -199,4 +203,7 @@ exports.RedirectToStore = (req, res) => {
   const frontendRedirectUrl = '/store';
   res.json({ data: "SingUp successful", redirectUrl: frontendRedirectUrl });
 }
-
+exports.RedirectToInternships = (req, res) => {
+  //const frontendRedirectUrl = '/store';
+  res.json({success: false, redirectUrl: frontendRedirectUrl });
+}
