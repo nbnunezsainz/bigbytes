@@ -2,6 +2,7 @@ const { getFirestore, Timestamp, FieldValue, Filter } = require('firebase-admin/
 const { db, admin } = require('../FireBaseSetUp.js');
 const Constants = require('./databaseConstant.js');
 const { queryCollection, deleteDocument, getDocument } = require('./databaseFunctions.js');
+const { addInternship } = require('./Internships.js');
 
 // create and initialize a database reference to the "Internship" collection
 const MentorRef = db.collection(Constants.COLLECTION_MENTORS);
@@ -74,11 +75,26 @@ exports.getMentor = async (req, res) => {
     console.log(mentor)
 
     console.log("Success- mentor received!");
-    res.status(200).json({ success: true, message: 'Internship mentor successfully' });
+    res.status(200).json({ success: true, message: 'Mentor successfully returned' });
     return mentor;
 
   } catch (error) {
     console.log("RAN INTO PROBLEM LOOKING FOR MENTOR", error);
     res.status(500).json({ success: false, message: 'Error when getting mentor' });
+  }
+};
+
+// generates an internship posting --> MUST INCLUDE THE MENTOR'S ID WITHIN REQ.BODY
+exports.generateInternship = async (req, res) => {
+  try {
+    //await addInternship(internshipData, mentorID);
+    await addInternship(req, res);
+    console.log("succesfully added a internship for this mentor in backend");
+    res.status(200).json({ success: true, message: 'Internship successfully generated for mentor' });
+
+  } catch (error) {
+    console.log("Had an error with generating this internship in backend");
+    console.log(error);
+    res.status(500).json({ success: false, message: 'Error when generating an internship for the mentor' });
   }
 };

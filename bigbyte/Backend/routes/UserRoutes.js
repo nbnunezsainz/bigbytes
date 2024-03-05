@@ -10,13 +10,15 @@ router.route('/SignUp').post(AuthenticationController.SignUp);
 // router.route('/userDetails').post(AuthenticationController.verifyToken,AuthenticationController.CreateDetailsAboutUser);
 router.route('/userDetails').post(AuthenticationController.CreateDetailsAboutUser);
 router.route('/login').post(AuthenticationController.Login);
-router.route('/SignOut').post(AuthenticationController.SignOut ,AuthenticationController.RedirectToStore); //later change redirect to login
+router.route('/SignOut').post(AuthenticationController.SignOut, AuthenticationController.RedirectToStore); //later change redirect to login
 // router.route('/DeleteAccount').post(AuthenticationController.login ,AuthenticationController.RedirectToStorePage);
 
 router.route('/AddUser').post(UserController.addUser);
 router.route('/QueryUsers').get(UserController.queryUsers);
 router.route('/DeleteUser').delete(UserController.deleteUser);
 router.route('/GetUser').get(UserController.getUser);
+router.route('/ApplyToInternship').post(UserController.applyForInternship);
+
 
 module.exports = router;
 

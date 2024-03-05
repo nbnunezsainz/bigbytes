@@ -9,5 +9,6 @@ router.route('/AddMentor').post(MentorController.addMentor);
 router.route('/QueryMentors').get(MentorController.queryMentors);
 router.route('/DeleteMentor').delete(MentorController.deleteMentor);
 router.route('/GetMentor').get(MentorController.getMentor);
+router.route('/GenerateInternship').post(MentorController.generateInternship);
 
 module.exports = router;

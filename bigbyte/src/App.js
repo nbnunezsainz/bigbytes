@@ -5,7 +5,6 @@ import Home from './pages/Home.js';
 
 import Internships from './AuthenticatedPages/InternShips.js';
 import Resume from './pages/Resume.js';
-import BackendTesting from './pages/BackendFunctionality/BackendTesting';
 import UserDetailsForm from './pages/UserDataSignup.js';
 import ReactDOM from "react-dom/client";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
@@ -43,8 +42,7 @@ function App() {
         <Route path="SignUp" element={<Signup />} />
 
         <Route path="/UserData" element={<UserDetailsForm />} />
-        <Route path="BackendTesting" element={<BackendTesting />} />
-        <Route path="/InternShips" element={<Internships/>} />
+        <Route path="/InternShips" element={<Internships />} />
         <Route path="Resume" element={<Resume />} />
 
 

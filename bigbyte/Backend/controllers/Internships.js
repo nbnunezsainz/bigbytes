@@ -6,7 +6,7 @@ const { queryCollection, deleteDocument, getDocument } = require('./databaseFunc
 // create and initialize a database reference to the "Internship" collection
 const InternshipRef = db.collection(Constants.COLLECTION_INTERNSHIP);
 
-// add an internship taking in a request
+// add an internship taking in a request --> SHOULD ONLY BE CALLED VIA generateInternship FROM MENTORS.JS
 exports.addInternship = async (req, res) => {
   try {
     // initialize the body of response data to become the data
@@ -34,10 +34,11 @@ exports.addInternship = async (req, res) => {
     await InternshipRef.add(data);
 
     console.log("Success- a new internship has been added!");
-    res.status(200).json({ success: true, message: 'Internship added successfully' });
+
+    // unneccesary as the only result needed is from generateInternship (which this function is solely called from)
+    //res.status(200).json({ success: true, message: 'Internship added successfully' });
   } catch (error) {
     console.log("There was some error when adding internship", error);
-    res.status(500).json({ success: false, message: 'Error adding internship' });
   }
 };
 
@@ -45,28 +46,23 @@ exports.addInternship = async (req, res) => {
 exports.queryInternships = async (req, res) => {
   try {
 
-    //queryDict = await queryCollection(InternshipRef);
-
-   // const querySnapshot = await getDocs(InternshipRef);
-    
-
     let internships = [];
-    internships= await InternshipRef.get();
+    internships = await InternshipRef.get();
 
-    console.log(internships,"intenrships");
+    console.log(internships, "intenrships");
     if (!internships.empty) {
       // Create an array to hold the internship data
       let internshipData = [];
-  
+
       // Iterate over each document in the QuerySnapshot
       internships.forEach(doc => {
-          // Add the document data to the array
-          // Each document's data is accessed with the .data() method
-          internshipData.push({ id: doc.id, ...doc.data() });
+        // Add the document data to the array
+        // Each document's data is accessed with the .data() method
+        internshipData.push({ id: doc.id, ...doc.data() });
       });
 
       console.log(internshipData, "Success- internship has been found!");
-      res.status(200).json({ success: true, message: 'Internship has been found', internshipData:internshipData });
+      res.status(200).json({ success: true, message: 'Internship has been found', internshipData: internshipData });
     }
 
 
@@ -76,7 +72,6 @@ exports.queryInternships = async (req, res) => {
     res.status(500).json({ success: false, message: 'Error querying internships' });
   }
 }
-
 
 //deletes an internship based on their ID
 exports.deleteInternship = async (req, res) => {
