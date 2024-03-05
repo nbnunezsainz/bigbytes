@@ -23,6 +23,15 @@ exports.SignUp = async (req, res, next) => {
   const frontendRedirectUrl = '/UserData';
   if (userRecord) {
     const customToken = await admin.auth().createCustomToken(userRecord.uid);
+
+    const cookieOptions = {
+      httpOnly: true, // The cookie is not accessible to client-side scripts
+      secure: true,   // The cookie will be sent only over HTTPS
+      maxAge: 3600000 // The cookie will expire after 1 hour
+    };
+
+    // Set the cookie
+    res.cookie('jwtToken', token, cookieOptions);
     res.status(200).json({ success: true, customToken, redirectUrl: frontendRedirectUrl });
     next();
   }
@@ -49,22 +58,21 @@ exports.verifyToken = async (req, res, next) => {
   try {
     // Get the ID token from the request headers or query parameters
 
-    console.log(req.header, "header");
-    const idToken = req.header('Authorization'); //.replace('Bearer', '').trim();
+    // console.log(req.header, "header");
+    // const idToken = req.header('Authorization'); //.replace('Bearer', '').trim();
 
+    const idToken = req.cookies['jwtToken'];
     if (!idToken) {
-      return res.status(403).json({ success: false, message: 'No token provided' });
-    }
+    return res.status(403).send('A token is required for authentication');
+  }
+
+  
 
     // Verify the ID token
     const decodedToken = await admin.auth().verifyIdToken(idToken);
     req.user = decodedToken; //this now holds data about user we can query/find out 
 
-    // Optionally, you can access custom claims from the decoded token
-    // const { premiumAccount } = decodedToken;
-
-    // If the verification is successful, proceed to the next middleware
-    //req.user = decodedToken;
+  
     next();
   } catch (error) {
     console.error('Error verifying token:', error);
