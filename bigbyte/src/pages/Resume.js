@@ -2,6 +2,7 @@ import React from 'react';
 import { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import { Navigate } from 'react-router-dom';
+import AuthNavbar from '../AuthenticatedPages/AuthenticatedNavBar';
 import '../Login.css';
 
 // export default function Resume() {
@@ -36,6 +37,8 @@ export default function Resume() {
     };
 
     return (
+        <>
+        <AuthNavbar />
         <div className="resume_form">
             <center>
                 <form>
@@ -54,6 +57,7 @@ export default function Resume() {
             )}
         </div>
         
+        </>
     );
 }
 
