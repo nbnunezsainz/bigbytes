@@ -1,4 +1,4 @@
-const { getFirestore, Timestamp, FieldValue, Filter } = require('firebase-admin/firestore');
+const { getFirestore, Timestamp, FieldValue, Filter, collection, getDocs } = require('firebase-admin/firestore');
 const { db, admin } = require('../FireBaseSetUp.js');
 const Constants = require('./databaseConstant.js');
 const { queryCollection, deleteDocument, getDocument } = require('./databaseFunctions.js');
@@ -45,18 +45,38 @@ exports.addInternship = async (req, res) => {
 exports.queryInternships = async (req, res) => {
   try {
 
-    queryDict = await queryCollection(InternshipRef, req.body);
+    //queryDict = await queryCollection(InternshipRef);
 
-    console.log(queryDict);
-    console.log("Success- internship has been found!");
-    res.status(200).json({ success: true, message: 'Internship has been found' });
-    return queryDict;
+   // const querySnapshot = await getDocs(InternshipRef);
+    
+
+    let internships = [];
+    internships= await InternshipRef.get();
+
+    console.log(internships,"intenrships");
+    if (!internships.empty) {
+      // Create an array to hold the internship data
+      let internshipData = [];
+  
+      // Iterate over each document in the QuerySnapshot
+      internships.forEach(doc => {
+          // Add the document data to the array
+          // Each document's data is accessed with the .data() method
+          internshipData.push({ id: doc.id, ...doc.data() });
+      });
+
+      console.log(internshipData, "Success- internship has been found!");
+      res.status(200).json({ success: true, message: 'Internship has been found', internshipData:internshipData });
+    }
+
+
 
   } catch (error) {
     console.log("RAN INTO PROBLEM QUERYING INTERNSHIPS", error);
     res.status(500).json({ success: false, message: 'Error querying internships' });
   }
-};
+}
+
 
 //deletes an internship based on their ID
 exports.deleteInternship = async (req, res) => {

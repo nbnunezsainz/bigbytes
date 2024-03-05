@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
-//const AuthenticationController = require('../controllers/Authentication');
+const AuthenticationController = require('../controllers/Authentication');
 const InternshipController = require('../controllers/Internships');
 
 // Internship routes

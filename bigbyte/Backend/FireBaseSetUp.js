@@ -1,5 +1,5 @@
 
-const { getFirestore } = require("firebase-admin/firestore");
+const { getFirestore, } = require("firebase-admin/firestore");
 const admin = require("firebase-admin");
 const serviceAccount = require("./FBAdmin.json");
 //const { initializeApp, cert } = require('firebase-admin/app');
