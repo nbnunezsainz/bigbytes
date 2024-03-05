@@ -46,6 +46,8 @@ exports.addInternship = async (req, res) => {
 exports.queryInternships = async (req, res) => {
   try {
 
+    console.log(req.user,"user");
+
     let internships = [];
     internships = await InternshipRef.get();
 
@@ -61,7 +63,7 @@ exports.queryInternships = async (req, res) => {
         internshipData.push({ id: doc.id, ...doc.data() });
       });
 
-      console.log(internshipData, "Success- internship has been found!");
+     // console.log(internshipData, "Success- internship has been found!");
       res.status(200).json({ success: true, message: 'Internship has been found', internshipData: internshipData });
     }
 
