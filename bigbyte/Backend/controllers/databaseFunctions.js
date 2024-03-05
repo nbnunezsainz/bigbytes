@@ -2,6 +2,11 @@ const { getFirestore, Timestamp, FieldValue, Filter } = require('firebase-admin/
 const { db, admin } = require('../FireBaseSetUp.js');
 const Constants = require('./databaseConstant.js');
 
+/*
+All functions within this file are used internally by Internships, Mentors, and Users.js as helper functions
+*/
+
+
 //query all Collections based on a specific field, filtering technique, and target value --> returns dictionary of document ID to document data in json format (FirstName: John, LastName: Smith)
 async function queryCollection(colRef, reqBody) {
     let field = reqBody.field;
@@ -28,15 +33,29 @@ async function deleteDocument(colRef, docID) {
 
 //find a document within a collection --> takes docuent ID and returns dictionary of document ID to document data in json format (FirstName: John, LastName: Smith)
 async function getDocument(colRef, docID) {
-    const docRef = await colRef.doc(docID).get();
+    const doc = await colRef.doc(docID).get();
 
-    if (!docRef.exists) {
+    if (!doc.exists) {
         return null;
     } else {
-        return { [docRef.id]: docRef.data() };
+        return { [doc.id]: doc.data() };
     }
 }
 
 module.exports = {
     queryCollection, deleteDocument, getDocument
 };
+
+/*
+
+const user = UserRef.doc(userID);
+        let userData = (await user.get()).data();
+        console.log(userData)
+        await user.update(
+            {
+                MonthlyRefferalCount: userData.MonthlyRefferalCount - 1,
+                TotalRefferalCount: userData.TotalRefferalCount + 1
+            }
+        );
+
+*/

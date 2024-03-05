@@ -10,7 +10,7 @@ exports.COLLECTION_INTERNSHIP = "Internship";
 exports.INTERNSHIP_STATUS_OPEN = "Open for Applications";
 exports.INTERNSHIP_STATUS_REVIEW = "Applications are Under Review";
 exports.INTERNSHIP_STATUS_CLOSED = "Applications are Now Closed";
-exports.COLLECTION_RELATIONAL_APPLICATIONS = "User->Internship(UID->IID,MID,Status)";
+exports.COLLECTION_RELATIONAL_APPLICATIONS = "User->InternshipApp(UID->IID,MID,Company)";
 
 //constants for Storage names
 exports.STORAGE_RESUME = "resumes/";

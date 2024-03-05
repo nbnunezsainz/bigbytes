@@ -3,6 +3,7 @@ const { db, admin } = require('../FireBaseSetUp.js');
 const Constants = require('./databaseConstant.js');
 const { queryCollection, deleteDocument, getDocument } = require('./databaseFunctions.js');
 
+
 // create and initialize a database reference to the "Internship" collection
 const UserRef = db.collection(Constants.COLLECTION_USERS);
 
@@ -39,7 +40,6 @@ exports.addUser = async (req, res) => {
     }
 }
 
-
 //query all users based on a specific field, filtering technique, and target value --> returns dictionary of mentor ID to their data
 exports.queryUsers = async (req, res) => {
     try {
@@ -72,8 +72,7 @@ exports.deleteUser = async (req, res) => {
     }
 };
 
-
-// find and return an user dictionary that relates their ID to their data
+// find and return an user dictionary that relates their ID to their data --> used by front end
 exports.getUser = async (req, res) => {
     try {
         let userID = req.body.id;
@@ -87,5 +86,82 @@ exports.getUser = async (req, res) => {
     } catch (error) {
         console.log("RAN INTO PROBLEM LOOKING FOR USER", error);
         res.status(500).json({ success: false, message: 'Error when getting user' });
+    }
+};
+
+/*
+apply to an internship --> relates user ID to internship ID, mentor ID, and internship company
+creates a new document in the User->InternshipApp(UID->IID,MID,Company) collection
+when displaying this application, including the internship status may be useful --> can be done by dynamically searching for the internship and pulling its status
+
+req.body only contains userID and internshipID
+*/
+exports.applyForInternship = async (req, res) => {
+    try {
+        // gather user information
+        const appRef = db.collection(Constants.COLLECTION_RELATIONAL_APPLICATIONS);
+        let userID = req.body.userID;
+
+        // gather internship information
+        let internshipID = req.body.internshipID;
+        const InternshipRef = db.collection(Constants.COLLECTION_INTERNSHIP);
+        let internshipData = await getDocument(InternshipRef, internshipID);
+        internshipData = internshipData[internshipID];
+
+        // create and post application data
+        const appData = {
+            UserID: userID,
+            InternshipID: internshipID,
+            MentorID: internshipData.MentorID,
+            InternshipCompany: internshipData.Company
+        }
+        await appRef.add(appData);
+
+        // update user and internship data post application
+        updateUserAndInternship(userID, internshipID, InternshipRef, internshipData);
+
+        console.log("Success- user has applied to the internship");
+        res.status(200).json({ success: true, message: 'User has applied successfully' });
+    } catch (error) {
+        console.log("There was some error when applying to the internship", error);
+        res.status(500).json({ success: false, message: 'Error applying to internship' });
+    }
+};
+
+
+// this is an internal funciton to update User and Internship data
+const updateUserAndInternship = async (userID, internshipID, InternshipRef, internshipData) => {
+    try {
+        // gather and update user information
+        const user = UserRef.doc(userID);
+        let userData = (await user.get()).data();
+        console.log(userData)
+        await user.update(
+            {
+                MonthlyRefferalCount: userData.MonthlyRefferalCount - 1,
+                TotalRefferalCount: userData.TotalRefferalCount + 1
+            }
+        );
+
+        // gather and update internship information
+        const internship = InternshipRef.doc(internshipID);
+        let appCount = internshipData.ApplicationCounter + 1;
+        let newStatus = internshipData.Status;
+        let newDisplay = internshipData.Display;
+        if (appCount >= internshipData.RefferalLimit) {
+            newStatus = Constants.INTERNSHIP_STATUS_REVIEW;
+            newDisplay = false;
+        }
+        await internship.update(
+            {
+                ApplicationCounter: appCount,
+                Status: newStatus,
+                Display: newDisplay
+            }
+        );
+
+        console.log("User/internship data are updated after application was submitted");
+    } catch (error) {
+        console.log("There was some error when updating user/internship data", error);
     }
 };
