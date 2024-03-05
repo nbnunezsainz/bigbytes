@@ -4,17 +4,16 @@ import { Outlet, Link } from "react-router-dom";
 
 function Home() {
   return (
-    <div>
+    <>
       <Navbar />
       <MainContent />
-
-    </div>
+    </>
   )
 } export default Home;
 
 function Navbar() {
   return (
-    <nav>
+    <nav className='fixed-top'>
       <ul>
         <img
           src="https://1000logos.net/wp-content/uploads/2017/11/UCLA-Logo.png"
