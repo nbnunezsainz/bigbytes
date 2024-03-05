@@ -8,6 +8,7 @@ import Resume from './pages/Resume.js';
 import UserDetailsForm from './pages/UserDataSignup.js';
 import ReactDOM from "react-dom/client";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { AuthProvider } from "./AuthContext.js"; 
 
 
 
@@ -32,11 +33,14 @@ function App() {
     //     </a>
     //   </header>
     // </div>
+    // 
+    <AuthProvider>
     <BrowserRouter>
+   
       <Routes>
-
+      
         <Route index element={<Home />} />
-        <Route path="Home" element={<Home />} />
+        {/* <Route path="Home" element={<Home />} /> */}
 
         <Route path="Login" element={<Login />} />
         <Route path="SignUp" element={<Signup />} />
@@ -47,9 +51,12 @@ function App() {
 
 
 
-
+        
       </Routes>
+     
     </BrowserRouter>
+    </AuthProvider>
+     
 
 
 
