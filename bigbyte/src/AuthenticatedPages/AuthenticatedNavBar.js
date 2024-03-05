@@ -14,10 +14,10 @@ function AuthNavbar() {
   
           <li>
             <Link to="/Home">Home</Link>
-            <Link to="/InternshipSearch">Internship Search</Link>
+            <Link to="/Internships">Internships</Link>
             <Link to="/Resume">Resume Tools</Link>
             <Link to="/MentorList">Mentors</Link>
-            <Link to="/Login">Logout</Link>
+            <Link to="/Home">Logout</Link>
           </li>
   
         </ul>

@@ -37,13 +37,14 @@ function App() {
       <Routes>
 
         <Route index element={<Home />} />
+        <Route path="Home" element={<Home />} />
 
         <Route path="Login" element={<Login />} />
         <Route path="SignUp" element={<Signup />} />
 
         <Route path="/UserData" element={<UserDetailsForm />} />
         <Route path="BackendTesting" element={<BackendTesting />} />
-        <Route path="/Internships" element={<Internships/>} />
+        <Route path="/InternShips" element={<Internships/>} />
         <Route path="Resume" element={<Resume />} />
 
 
