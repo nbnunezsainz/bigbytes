@@ -17,7 +17,7 @@ export default function Login() {
 
     const handleLogin = () => {
         const postData = {
-            username: username,
+            email: username,
             password: password
         };
 
@@ -52,9 +52,9 @@ export default function Login() {
  
 
     //uncoment this once we have a page created 
-    // if (redirectToUserData) {
-    //     return <Navigate to="/MainPage" />;
-    //   }
+     if (redirectToUserData) {
+         return <Navigate to="/Internships" />;
+       }
 
     return (
         <div className="Login">
