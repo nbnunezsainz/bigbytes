@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Container, Row, Col, Button, Card } from 'react-bootstrap';
+import AuthNavbar from './AuthenticatedNavBar';
 
 const JobDetail = () => {
   const [jobs, setJobs] = useState([]); // State to store internship data
@@ -33,6 +34,7 @@ const JobDetail = () => {
 
   return (
     <Container>
+      <AuthNavbar />
       <Row className="mt-5">
         {jobs.map((job) => (
           <Col md={12} >
