@@ -6,6 +6,7 @@ import Home from './pages/Home.js';
 import Internships from './AuthenticatedPages/InternShips.js';
 import Resume from './pages/Resume.js';
 import UserDetailsForm from './pages/UserDataSignup.js';
+import ResumesViewer from './AuthenticatedPages/ResumeReview.js';
 import ReactDOM from "react-dom/client";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "./AuthContext.js"; 
@@ -47,7 +48,8 @@ function App() {
 
         <Route path="/UserData" element={<UserDetailsForm />} />
         <Route path="/InternShips" element={<Internships />} />
-        <Route path="Resume" element={<Resume />} />
+        <Route path="/Resume" element={<Resume />} />
+        <Route path="/ResumeReviwer" element={<ResumesViewer />} />
 
 
 
