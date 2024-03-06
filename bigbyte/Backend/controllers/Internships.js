@@ -42,6 +42,39 @@ exports.addInternship = async (req, res) => {
   }
 };
 
+//query ALL Internships based on a specific field, filtering technique, and target value --> returns dictionary of internship ID to their data
+exports.getAllInternships = async (req, res) => {
+  try {
+
+    console.log(req.user, "user");
+
+    let internships = [];
+    internships = await InternshipRef.get();
+
+    console.log(internships, "intenrships");
+    if (!internships.empty) {
+      // Create an array to hold the internship data
+      let internshipData = [];
+
+      // Iterate over each document in the QuerySnapshot
+      internships.forEach(doc => {
+        // Add the document data to the array
+        // Each document's data is accessed with the .data() method
+        internshipData.push({ id: doc.id, ...doc.data() });
+      });
+
+      // console.log(internshipData, "Success- internship has been found!");
+      res.status(200).json({ success: true, message: 'Internship has been found', internshipData: internshipData });
+    }
+
+
+
+  } catch (error) {
+    console.log("RAN INTO PROBLEM QUERYING INTERNSHIPS", error);
+    res.status(500).json({ success: false, message: 'Error querying internships' });
+  }
+}
+
 //query all Internships based on a specific field, filtering technique, and target value --> returns dictionary of internship ID to their data
 exports.queryInternships = async (req, res) => {
   try {
