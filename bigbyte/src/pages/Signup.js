@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import '../Signup.css';
 import { Navigate } from 'react-router-dom';
+import { useAuth } from ".././AuthContext.js";
 
 export default function Signup () 
 {
 const [email, setemail] = useState('');
 const [password, setPassword] = useState('');
 const [redirectToUserData, setRedirectToUserData] = useState(false);
+const { register, setError } = useAuth();
 
 
 
@@ -18,43 +20,54 @@ const handlePasswordChange = (event) => {
     setPassword(event.target.value);
 };
 
-const SignUserUp = () =>
-
-{
-    const postData = {
-        email: email,
-        password: password
-      };
-      
-      fetch('http://localhost:3001/api/v1/user/SignUp', {
-        method: 'POST',
-         headers: {
-           'Content-Type': 'application/json'
-         },
-        body: JSON.stringify(postData)
-      })
-      .then(response => {
-        if (!response.ok) {
-            console.log(response);
-          throw new Error('Network response was not ok');
-        }
-        return response.json();
-      })
-      .then(data => {
-        
-        // Check if the login was successful
-        if (data.success) {
-          // Redirect to the next page
-          setRedirectToUserData(true);
-        } else {
-          console.error('Login failed:', data.message);
-          // Handle login failure
-        }
-      })
-      .catch(error => {
-        console.error('There was a problem with your fetch operation:', error);
-      });
+const SignUserUp = async () => {
+  
+  try {
+    
+    await register(email, password);
+    setRedirectToUserData(true);
+  } catch (e) {
+    setError("Failed to register");
+  }
 }
+
+// const SignUserUp = () =>
+
+// {
+//     const postData = {
+//         email: email,
+//         password: password
+//       };
+      
+//       fetch('http://localhost:3001/api/v1/user/SignUp', {
+//         method: 'POST',
+//          headers: {
+//            'Content-Type': 'application/json'
+//          },
+//         body: JSON.stringify(postData)
+//       })
+//       .then(response => {
+//         if (!response.ok) {
+//             console.log(response);
+//           throw new Error('Network response was not ok');
+//         }
+//         return response.json();
+//       })
+//       .then(data => {
+        
+//         // Check if the login was successful
+//         if (data.success) {
+//           // Redirect to the next page
+//           setRedirectToUserData(true);
+//         } else {
+//           console.error('Login failed:', data.message);
+//           // Handle login failure
+//         }
+//       })
+//       .catch(error => {
+//         console.error('There was a problem with your fetch operation:', error);
+//       });
+// }
 
 if (redirectToUserData) {
   return <Navigate to="/UserData" />;

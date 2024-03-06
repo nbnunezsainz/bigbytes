@@ -1,54 +1,72 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect  } from 'react';
 import Button from 'react-bootstrap/Button';
 import '../Login.css';
-import { Navigate } from 'react-router-dom';
+import {Link, Navigate } from 'react-router-dom';
+
+import { useAuth } from ".././AuthContext.js";
+
 
 export default function Login() {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [loggedIn, setLoggedIn] = useState(false);
     const [redirectToUserData, setRedirectToUserData] = useState(false);
+    const { currentUser, login, setError } = useAuth();
 
-    const handleLogout = () => {
-        setLoggedIn(false);
-        setUsername('');
-        setPassword('');
-    };
+    // useEffect(() => {
+    //     if (currentUser) {
+    //     setRedirectToUserData(true)
+    //     }
+    //   }, [currentUser]);
+    
+   const handleLogin2 = async () =>{
+        
+    
+        try {
+          //setError("");
+          //setLoading(true);
+          await login(username, password);
+          setRedirectToUserData(true);
+        } catch (e) {
+          //setError("Failed to login");
+          setRedirectToUserData(false);
+        }
+      }
 
-    const handleLogin = () => {
-        const postData = {
-            email: username,
-            password: password
-        };
+    // const handleLogin = () => {
+    //     const postData = {
+    //         email: username,
+    //         password: password
+    //     };
 
-        fetch('http://localhost:3001/api/v1/user/login', {
-            method: 'POST',
-             headers: {
-               'Content-Type': 'application/json'
-             },
-            body: JSON.stringify(postData)
-        })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            return response.json();
-        })
-        .then(data => {
-            console.log('Response from server:', data);
-            // Check if the login was successful
-            if (data.success) {
-                // Redirect to the next page
-                setRedirectToUserData(true);
-            } else {
-                console.error('Login failed:', data.message);
-                // Handle login failure
-            }
-        })
-        .catch(error => {
-            console.error('There was a problem with your fetch operation:', error);
-        });
-    };
+    //     fetch('http://localhost:3001/api/v1/user/login', {
+    //         method: 'POST',
+    //          headers: {
+    //            'Content-Type': 'application/json'
+    //          },
+    //         body: JSON.stringify(postData)
+    //     })
+    //     .then(response => {
+    //         if (!response.ok) {
+    //             throw new Error('Network response was not ok');
+    //         }
+    //         return response.json();
+    //     })
+    //     .then(data => {
+    //         console.log('Response from server:', data);
+    //         // Check if the login was successful
+    //         if (data.success) {
+    //             // Redirect to the next page
+    //             setRedirectToUserData(true);
+    //         } else {
+    //             console.error('Login failed:', data.message);
+    //             // Handle login failure
+    //         }
+    //     })
+    //     .catch(error => {
+    //         console.error('There was a problem with your fetch operation:', error);
+    //     });
+    // };
  
 
     //uncoment this once we have a page created 
@@ -78,7 +96,7 @@ export default function Login() {
                       onChange={(e) => setPassword(e.target.value)}
                   />
               </div>
-              <Button onClick={handleLogin}>Login</Button>
+              <Button onClick={handleLogin2}>Login</Button>
             </div>
         </div>
     );

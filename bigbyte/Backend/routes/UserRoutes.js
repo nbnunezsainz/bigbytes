@@ -18,6 +18,8 @@ router.route('/QueryUsers').get(UserController.queryUsers);
 router.route('/DeleteUser').delete(UserController.deleteUser);
 router.route('/GetUser').get(UserController.getUser);
 router.route('/ApplyToInternship').post(UserController.applyForInternship);
+router.route('/UploadResume').post(UserController.UploadResume);
+router.route('/GetResumes').get(UserController.getResumes); //returns all resumes sir
 
 
 module.exports = router;

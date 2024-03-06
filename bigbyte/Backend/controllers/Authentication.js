@@ -1,6 +1,6 @@
 
 
-const { signInWithEmailAndPassword , Auth} = require('firebase/auth');
+const { signInWithEmailAndPassword , getIdToken,onAuthStateChanged} = require('firebase/auth');
 
 const { Clientauth } = require('../fb.js');
 
@@ -56,29 +56,22 @@ exports.createCustomToken = async (req, res, next) => { //send token on signup/l
 
 exports.verifyToken = async (req, res, next) => {
   try {
-    // Get the ID token from the request headers or query parameters
+    const token = req.headers.authorization.split(" ")[1];
+    const decodeValue = await admin.auth().verifyIdToken(token);
+    if (decodeValue) {
+      req.user = decodeValue;
+      next()
+    }
+    else
+    {
+      res.json({ message: "Not the correct user" });
+    }
 
-    // console.log(req.header, "header");
-    // const idToken = req.header('Authorization'); //.replace('Bearer', '').trim();
-
-    const idToken = req.cookies['jwtToken'];
-    if (!idToken) {
-    return res.status(403).send('A token is required for authentication');
-  }
-
-  
-
-    // Verify the ID token
-    const decodedToken = await admin.auth().verifyIdToken(idToken);
-    req.user = decodedToken; //this now holds data about user we can query/find out 
-
-  
-    next();
-  } catch (error) {
-    console.error('Error verifying token:', error);
-    return res.status(401).json({ success: false, message: 'Unauthorized' });
-  }
-};
+    } catch {
+      res.status(401).json({ success: false, message: 'Unauthorized' });
+    }
+  };
+   
 
 exports.CreateDetailsAboutUser = async (req, res) => {
   //const db = admin.firestore();
@@ -165,16 +158,15 @@ exports.Login = async (req, res, next) => {
     console.log("here");
     const user = userCredential.user;
 
-    console.log(user);
+   
 
 
+    //const customToken = await admin.auth().createCustomToken(user.uid);
 
-    const customToken = await admin.auth().createCustomToken(user.uid);
-
-    console.log(user);
 
     // If login is successful, return user data
-    res.json({ token: customToken , success:true});
+    // res.json({ token: customToken , success:true});
+    res.json({ success:true});
     next();
 
   } catch (error) {

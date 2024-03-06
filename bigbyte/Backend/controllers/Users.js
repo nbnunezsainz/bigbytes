@@ -1,5 +1,5 @@
 const { getFirestore, Timestamp, FieldValue, Filter } = require('firebase-admin/firestore');
-const { db, admin } = require('../FireBaseSetUp.js');
+const { db, admin, bucket} = require('../FireBaseSetUp.js');
 const Constants = require('./databaseConstant.js');
 const { queryCollection, deleteDocument, getDocument } = require('./databaseFunctions.js');
 
