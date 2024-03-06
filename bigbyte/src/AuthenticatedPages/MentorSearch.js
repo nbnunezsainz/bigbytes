@@ -3,7 +3,7 @@ import { Container, Row, Col, Button, Card } from 'react-bootstrap';
 import AuthNavbar from './AuthenticatedNavBar';
 import auth from "../fb.js";
 
-const JobDetail = () => {
+const MentorSearch = () => {
   const [jobs, setJobs] = useState([]); // State to store internship data
   const [loading, setLoading] = useState(true); // State to manage loading status
   
@@ -49,9 +49,9 @@ const JobDetail = () => {
   }
 
   return (
-    <>
+    <Container>
       <AuthNavbar />
-      <Row className="mt-5" style={{paddingTop : "30px"}}>
+      <Row className="mt-5">
         {jobs.map((job) => (
           <Col md={12} >
             <Card className="mb-3">
@@ -66,8 +66,8 @@ const JobDetail = () => {
           </Col>
         ))}
       </Row>
-    </>
+    </Container>
   );
 };
 
-export default JobDetail;
+export default MentorSearch;
