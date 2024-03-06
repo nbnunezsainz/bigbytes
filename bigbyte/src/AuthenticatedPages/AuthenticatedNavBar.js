@@ -13,7 +13,7 @@ function AuthNavbar() {
           />
   
           <li>
-            <Link to="/Home">Home</Link>
+            {/* <Link to="/Home">Home</Link> */}
             <Link to="/Internships">Internships</Link>
             <Link to="/Resume">Upload Resume</Link>
             <Link to="/ResumeReviwer">Resume Reviewer</Link>

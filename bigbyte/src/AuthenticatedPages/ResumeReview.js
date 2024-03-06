@@ -15,20 +15,22 @@ const ResumeReviewer = () => {
     }, []);
 
     return (
-        <div>
+        <>
             <AuthNavbar />
-            <h1>Resumes</h1>
-            {resumes.length > 0 ? (
-                resumes.map((resume, index) => (
-                    <div key={index}>
-                        <h2>User: {resume.userId}</h2>
-                        <PDFViewer resumeUrl={resume.resumeUrl} />
-                    </div>
-                ))
-            ) : (
-                <p>Loading resumes or no resumes available...</p>
-            )}
-        </div>
+            <div style={{paddingTop : "80px"}}>
+                <h1>Resumes</h1>
+                {resumes.length > 0 ? (
+                    resumes.map((resume, index) => (
+                        <div key={index}>
+                            <h2>User: {resume.userId}</h2>
+                            <PDFViewer resumeUrl={resume.resumeUrl} />
+                        </div>
+                    ))
+                ) : (
+                    <p>Loading resumes or no resumes available...</p>
+                )}
+            </div>
+        </>
     );
 };
 
