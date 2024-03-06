@@ -6,6 +6,7 @@ const InternshipController = require('../controllers/Internships');
 
 // Internship routes
 router.route('/AddInternship').post(InternshipController.addInternship);
+router.route('/GetAllInternships').get(InternshipController.getAllInternships);
 router.route('/QueryInternships').get(AuthenticationController.verifyToken,InternshipController.queryInternships);
 router.route('/DeleteInternship').delete(InternshipController.deleteInternship);
 router.route('/GetInternship').get(InternshipController.getInternship);
