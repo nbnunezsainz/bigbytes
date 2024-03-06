@@ -67,46 +67,28 @@ exports.getAllInternships = async (req, res) => {
       res.status(200).json({ success: true, message: 'Internship has been found', internshipData: internshipData });
     }
 
-
-
   } catch (error) {
     console.log("RAN INTO PROBLEM QUERYING INTERNSHIPS", error);
     res.status(500).json({ success: false, message: 'Error querying internships' });
   }
 }
 
-//query all Internships based on a specific field, filtering technique, and target value --> returns dictionary of internship ID to their data
+//query internships based on a specific field, filtering technique, and target value --> returns dictionary of internship ID to their data
 exports.queryInternships = async (req, res) => {
   try {
 
-    console.log(req.user,"user");
+    queryDict = await queryCollection(InternshipRef, req.body);
 
-    let internships = [];
-    internships = await InternshipRef.get();
-
-    console.log(internships, "intenrships");
-    if (!internships.empty) {
-      // Create an array to hold the internship data
-      let internshipData = [];
-
-      // Iterate over each document in the QuerySnapshot
-      internships.forEach(doc => {
-        // Add the document data to the array
-        // Each document's data is accessed with the .data() method
-        internshipData.push({ id: doc.id, ...doc.data() });
-      });
-
-     // console.log(internshipData, "Success- internship has been found!");
-      res.status(200).json({ success: true, message: 'Internship has been found', internshipData: internshipData });
-    }
-
-
+    console.log(queryDict);
+    console.log("Success- internships have been found!");
+    res.status(200).json({ success: true, message: 'Internships have been found' });
+    return queryDict;
 
   } catch (error) {
     console.log("RAN INTO PROBLEM QUERYING INTERNSHIPS", error);
     res.status(500).json({ success: false, message: 'Error querying internships' });
   }
-}
+};
 
 //deletes an internship based on their ID
 exports.deleteInternship = async (req, res) => {
