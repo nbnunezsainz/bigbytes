@@ -8,6 +8,7 @@ import Resume from './pages/Resume.js';
 import UserDetailsForm from './pages/UserDataSignup.js';
 import ResumesViewer from './AuthenticatedPages/ResumeReview.js';
 import ReactDOM from "react-dom/client";
+import MentorSearch from './AuthenticatedPages/MentorSearch.js';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "./AuthContext.js"; 
 
@@ -50,7 +51,7 @@ function App() {
         <Route path="/Resume" element={<Resume />} />
         <Route path="/ResumeReviwer" element={<ResumesViewer />} />
         
-        {/* <Route path="/MentorSearch" element={<MentorSearch />} /> */}
+         <Route path="/MentorSearch" element={<MentorSearch />} /> 
       </Routes>
      
     </BrowserRouter>
