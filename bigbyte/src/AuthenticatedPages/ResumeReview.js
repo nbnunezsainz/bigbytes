@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import PDFViewer from './PDFViewer.js'; // Adjust this if the file path is different
+import AuthNavbar from './AuthenticatedNavBar';
 
 const ResumeReviewer = () => {
     const [resumes, setResumes] = useState([]);
@@ -15,6 +16,7 @@ const ResumeReviewer = () => {
 
     return (
         <div>
+            <AuthNavbar />
             <h1>Resumes</h1>
             {resumes.length > 0 ? (
                 resumes.map((resume, index) => (
