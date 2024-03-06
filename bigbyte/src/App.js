@@ -48,9 +48,6 @@ function App() {
         <Route path="/InternShips" element={<Internships />} />
         <Route path="/Resume" element={<Resume />} />
         <Route path="/ResumeReviwer" element={<ResumesViewer />} />
-
-        <Route path="/MentorSearch" element={<MentorList />} />
-
         
       </Routes>
      
