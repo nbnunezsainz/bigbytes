@@ -6,10 +6,12 @@ const serviceAccount = require("./FBAdmin.json");
 
 const firebaseApp = admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
-  databaseURL: "https://lbackend-7a432-default-rtdb.firebaseio.com"
+  databaseURL: "https://lbackend-7a432-default-rtdb.firebaseio.com",
+  storageBucket:'lbackend-7a432.appspot.com'
 });
 
 const db = getFirestore(firebaseApp);
+const bucket = admin.storage().bucket();
 
-module.exports = { db, admin };
+module.exports = { db, admin, bucket};
 

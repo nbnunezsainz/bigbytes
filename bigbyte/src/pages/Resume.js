@@ -1,6 +1,6 @@
 import React from 'react';
 import { useState } from 'react';
-import Button from 'react-bootstrap/Button';
+import { Container, Form, Button, FormGroup, FormControl, FormLabel } from 'react-bootstrap';
 import { Navigate } from 'react-router-dom';
 import AuthNavbar from '../AuthenticatedPages/AuthenticatedNavBar';
 import '../Login.css';
@@ -30,35 +30,55 @@ export default function Resume() {
 
     const handleSubmit = () => {
         if (resumeFile) {
-            // You can handle submitting the file here
+            // Create a FormData object and append the file
+            const formData = new FormData();
+            formData.append('resume', resumeFile); // 'resume' is the key that the server expects for the file
+    
+            // Make the fetch request to send the PDF to the server
+            fetch('http://localhost:3001/api/v1/user/UploadResume', { 
+                method: 'POST',
+                body: formData, // Pass in the formData as the request body
+                // Note: Don't set 'Content-Type' header when using FormData,
+                // the browser will set it automatically including the boundary parameter
+            })
+            .then(response => response.json()) // Assuming the server responds with JSON
+            .then(data => {
+                console.log('Success:', data); // Handle success response
+            })
+            .catch(error => {
+                console.error('Error:', error); // Handle error response
+            });
+    
             console.log('Submitted:', resumeFile.name);
-            // For example, you can send the file to a server using fetch or axios
-        } 
+        }
     };
+    
 
     return (
         <>
         <AuthNavbar />
-        <div className="resume_form">
-            <center>
-                <form>
-                    <label htmlFor="file">Upload Your Resume (PDF only):</label>
-                    <input type="file" id="file" accept=".pdf" onChange={handleFileChange} />
-                </form>
-                <Button onClick={handleSubmit} disabled={!resumeFile}>
+        <Container className="mt-5">
+            <Form>
+                <FormGroup className="mb-3" controlId="formFile">
+                    <FormLabel>Upload Your Resume (PDF only):</FormLabel>
+                    <FormControl
+                        type="file"
+                        accept=".pdf"
+                        onChange={handleFileChange}
+                    />
+                </FormGroup>
+                <Button variant="primary" onClick={handleSubmit} disabled={!resumeFile}>
                     Submit
                 </Button>
-
-            </center>
+            </Form>
             {resumeFile && (
-                <div>
+                <div className="mt-3">
                     <p>Uploaded File: {resumeFile.name}</p>
                 </div>
             )}
-        </div>
-        
-        </>
-    );
+        </Container>
+    </>
+);
 }
 
 

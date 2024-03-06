@@ -1,8 +1,10 @@
 const express = require('express');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
+const fileUpload = require('express-fileupload');
 
 const app = express();
+
 
 
 // Define your custom middleware first
@@ -11,7 +13,7 @@ const app = express();
 
 app.use(express.json());
 app.use(cookieParser()); 
-
+app.use(fileUpload()); //allows us to grab files via request
 
 
 app.use((req, res, next) => {

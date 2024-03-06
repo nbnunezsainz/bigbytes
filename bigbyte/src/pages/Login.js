@@ -13,11 +13,11 @@ export default function Login() {
     const [redirectToUserData, setRedirectToUserData] = useState(false);
     const { currentUser, login, setError } = useAuth();
 
-    useEffect(() => {
-        if (currentUser) {
-        setRedirectToUserData(true)
-        }
-      }, [currentUser]);
+    // useEffect(() => {
+    //     if (currentUser) {
+    //     setRedirectToUserData(true)
+    //     }
+    //   }, [currentUser]);
     
    const handleLogin2 = async () =>{
         
