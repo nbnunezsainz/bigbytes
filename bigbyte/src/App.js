@@ -39,6 +39,7 @@ function App() {
     <BrowserRouter>
    
       <Routes>
+        <Route index element={<Home />} />
         <Route path="Home" element={<Home />} />
 
         <Route path="Login" element={<Login />} />
@@ -49,6 +50,7 @@ function App() {
         <Route path="/Resume" element={<Resume />} />
         <Route path="/ResumeReviwer" element={<ResumesViewer />} />
         
+        {/* <Route path="/MentorSearch" element={<MentorSearch />} /> */}
       </Routes>
      
     </BrowserRouter>
