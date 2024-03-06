@@ -42,7 +42,7 @@ exports.addInternship = async (req, res) => {
   }
 };
 
-//query ALL Internships based on a specific field, filtering technique, and target value --> returns dictionary of internship ID to their data
+//query ALL Internships based on a specific field, filtering technique, and target value --> returns dictionary of ALL internship IDs to their data
 exports.getAllInternships = async (req, res) => {
   try {
 
