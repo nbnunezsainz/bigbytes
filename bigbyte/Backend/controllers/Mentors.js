@@ -84,6 +84,38 @@ exports.getMentor = async (req, res) => {
   }
 };
 
+//get all Mentors
+
+exports.getAllMentors = async (req, res) => {
+  try {
+
+    console.log(req.user, "user");
+
+    let mentors = [];
+    mentors = await MentorRef.get();
+
+    console.log(mentors, "mentors");
+    if (!mentors.empty) {
+      // Create an array to hold the internship data
+      let mentorData = [];
+
+      // Iterate over each document in the QuerySnapshot
+      mentors.forEach(doc => {
+        // Add the document data to the array
+        // Each document's data is accessed with the .data() method
+        mentorData.push({ id: doc.id, ...doc.data() });
+      });
+
+      // console.log(internshipData, "Success- internship has been found!");
+      res.status(200).json({ success: true, message: 'Mentorship has been found', mentorData: mentorData });
+    }
+
+  } catch (error) {
+    console.log("RAN INTO PROBLEM QUERYING INTERNSHIPS", error);
+    res.status(500).json({ success: false, message: 'Error querying internships' });
+  }
+}
+
 // generates an internship posting --> MUST INCLUDE THE MENTOR'S ID WITHIN REQ.BODY
 exports.generateInternship = async (req, res) => {
   try {
