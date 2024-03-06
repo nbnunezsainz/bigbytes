@@ -49,9 +49,9 @@ const MentorSearch = () => {
   }
 
   return (
-    <Container>
+    <>
       <AuthNavbar />
-      <Row className="mt-5">
+      <Row className="mt-5" style={{paddingTop : "30px"}}>
         {jobs.map((job) => (
           <Col md={12} >
             <Card className="mb-3">
@@ -66,7 +66,7 @@ const MentorSearch = () => {
           </Col>
         ))}
       </Row>
-    </Container>
+    </>
   );
 };
 
