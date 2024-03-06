@@ -25,7 +25,7 @@ const JobDetail = () => {
         };
   
         // Using the token to fetch internships
-        const response = await fetch('http://localhost:3001/api/v1/internship/QueryInternships', payloadHeader);
+        const response = await fetch('http://localhost:3001/api/v1/internship/getAllInternships', payloadHeader);
         if (!response.ok) {
           throw new Error('Failed to fetch');
         }
