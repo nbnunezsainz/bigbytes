@@ -1,3 +1,5 @@
+// change to use mentor searching, currently same as internship searching
+
 import React, { useState, useEffect } from 'react';
 import { Container, Row, Col, Button, Card } from 'react-bootstrap';
 import AuthNavbar from './AuthenticatedNavBar';
