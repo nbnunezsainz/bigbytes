@@ -6,7 +6,7 @@ import AuthNavbar from './AuthenticatedNavBar';
 import auth from "../fb.js";
 
 const MentorSearch = () => {
-  const [jobs, setJobs] = useState([]); // State to store internship data
+  const [Mentors, setMentors] = useState([]); // State to store internship data
   const [loading, setLoading] = useState(true); // State to manage loading status
   
   useEffect(() => {
@@ -27,13 +27,13 @@ const MentorSearch = () => {
         };
   
         // Using the token to fetch internships
-        const response = await fetch('http://localhost:3001/api/v1/internship/QueryInternships', payloadHeader);
+        const response = await fetch('http://localhost:3001/api/v1/mentor/GetAllMentors', payloadHeader);
         if (!response.ok) {
           throw new Error('Failed to fetch');
         }
   
         const data = await response.json();
-        setJobs(data.internshipData); // Assuming the response JSON structure matches our state
+        setMentors(data.mentorData); // Assuming the response JSON structure matches our state
       } catch (error) {
         console.error("Error fetching data:", error);
       } finally {
@@ -54,14 +54,14 @@ const MentorSearch = () => {
     <>
       <AuthNavbar />
       <Row className="mt-5" style={{paddingTop : "30px"}}>
-        {jobs.map((job) => (
+        {Mentors.map((Mentor) => (
           <Col md={12} >
             <Card className="mb-3">
               <Card.Body>
-                <Card.Title>{job.title}</Card.Title>
-                <Card.Text><strong>Company:</strong> {job.Company}</Card.Text>
-                <Card.Text><strong>Date Posted:</strong> {job.datePosted}</Card.Text>
-                <Card.Text>{job.Description}</Card.Text>
+                <Card.Title>{Mentor.title}</Card.Title>
+                <Card.Text><strong>Company:</strong> {Mentor.Company}</Card.Text>
+                <Card.Text><strong>Date Posted:</strong> {Mentor.datePosted}</Card.Text>
+                <Card.Text>{Mentor.Description}</Card.Text>
                 <Button variant="primary">Apply</Button>
               </Card.Body>
             </Card>
