@@ -19,8 +19,8 @@ Installattion Process:
 Backups:
 Assyming the project is installed and you navigate to the /Backend folder with proper admin access. Run the terminal command below 'export' to save your current data and 'import' to rewrite the exported data to the database
 Naming convention: backup[x].json - backup1.json, backup2.json, etc
-1. export data: npx -p node-firestore-import-export firestore-export -a FBAdmin.json -b backup[x].json
-2. import data: npx -p node-firestore-import-export firestore-import -a FBAdmin.json -b backup[x].json
+1. export data (you can also specify a file path before your backup file name): npx -p node-firestore-import-export firestore-export -a FBAdmin.json -b backup[x].json
+2. import data (ensure the correct filepath is appended to backup file name): npx -p node-firestore-import-export firestore-import -a FBAdmin.json -b backup[x].json
 
 Major Problems Solved Resources:
     Problem 1:How to render Pdfs, received CORS issue due to google permissions, how to solve below
