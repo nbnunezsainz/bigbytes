@@ -19,7 +19,6 @@ exports.addInternship = async (req, res) => {
       Location: internshipData.location,
       Pay: internshipData.pay,
       Category: internshipData.category || [],
-      Qualifications: internshipData.tags,
       URL: internshipData.url,
       RefferalLimit: internshipData.refferalLimit,
       MentorID: internshipData.mentorID,
@@ -58,9 +57,11 @@ exports.getAllInternships = async (req, res) => {
 
       // Iterate over each document in the QuerySnapshot
       internships.forEach(doc => {
-        // Add the document data to the array
-        // Each document's data is accessed with the .data() method
-        internshipData.push({ id: doc.id, ...doc.data() });
+        // Add the document data to the array only if it's display flag is set to true
+        let data = doc.data();
+        if (data.Display) {
+          internshipData.push({ id: doc.id, ...data });
+        }
       });
 
       // console.log(internshipData, "Success- internship has been found!");

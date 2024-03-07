@@ -23,7 +23,6 @@ exports.addUser = async (req, res) => {
             Bio: userData.bio || null,
             Organizations: userData.organizations || [],
             LinkedIn: userData.linkedIn || null,
-            Resume: userData.resume || null,
 
             //not provided by entered data
             MonthlyRefferalCount: 20,
@@ -118,7 +117,8 @@ exports.applyForInternship = async (req, res) => {
         await appRef.add(appData);
 
         // update user and internship data post application
-        updateUserAndInternship(userID, internshipID, InternshipRef, internshipData);
+        updateUserData(userID);
+        updateInternshipData(internshipID, InternshipRef, internshipData);
 
         console.log("Success- user has applied to the internship");
         res.status(200).json({ success: true, message: 'User has applied successfully' });
@@ -128,8 +128,8 @@ exports.applyForInternship = async (req, res) => {
     }
 };
 
-// this is an internal funciton to update User and Internship data
-const updateUserAndInternship = async (userID, internshipID, InternshipRef, internshipData) => {
+// these are  internal funcitons to update User and Internship data
+const updateUserData = async (userID) => {
     try {
         // gather and update user information
         const user = UserRef.doc(userID);
@@ -141,7 +141,13 @@ const updateUserAndInternship = async (userID, internshipID, InternshipRef, inte
                 TotalRefferalCount: userData.TotalRefferalCount + 1
             }
         );
-
+        console.log("User data is updated after application was submitted");
+    } catch (error) {
+        console.log("There was some error when updating user data", error);
+    }
+};
+const updateInternshipData = async (internshipID, InternshipRef, internshipData) => {
+    try {
         // gather and update internship information
         const internship = InternshipRef.doc(internshipID);
         let appCount = internshipData.ApplicationCounter + 1;
@@ -158,15 +164,15 @@ const updateUserAndInternship = async (userID, internshipID, InternshipRef, inte
                 Display: newDisplay
             }
         );
-
-        console.log("User/internship data are updated after application was submitted");
+        console.log("Internship data is updated after application was submitted");
     } catch (error) {
-        console.log("There was some error when updating user/internship data", error);
+        console.log("There was some error when updating internship data", error);
     }
 };
 
+
 /*
-below are functionality for users to upload resumes 
+below are functions for users to upload, delete, and view their resumes 
 */
 
 /* 

@@ -21,7 +21,6 @@ exports.addMentor = async (req, res) => {
       LastName: mentorData.lastName,
       Company: mentorData.company,
       Bio: mentorData.bio || null,
-      MentorStatus: mentorData.mentorStatus || false,
       LinkedIn: mentorData.linkedIn || null,
     };
 
