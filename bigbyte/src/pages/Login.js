@@ -77,7 +77,7 @@ export default function Login() {
     return (
         <div className="Login">
             <div className="form-elements">
-              <h2>Login</h2>
+              <h2>Welcome Back!</h2>
               <div>
                   <label htmlFor="username">Username:</label>
                   <input
@@ -96,8 +96,11 @@ export default function Login() {
                       onChange={(e) => setPassword(e.target.value)}
                   />
               </div>
-              <Button onClick={handleLogin2}>Login</Button>
+              <div className = "form-group">
+              <Button className = "login-btn" onClick={handleLogin2}>Log in</Button>
+            </div>
             </div>
         </div>
     );
 }
+
