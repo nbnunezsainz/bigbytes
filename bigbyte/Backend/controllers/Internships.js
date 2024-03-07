@@ -17,10 +17,10 @@ exports.addInternship = async (req, res) => {
       Company: internshipData.company,
       Description: internshipData.description,
       Location: internshipData.location,
-      Pay: internshipData.pay,
+      Pay: internshipData.pay || null,
       Category: internshipData.category || [],
       URL: internshipData.url,
-      RefferalLimit: internshipData.refferalLimit,
+      ReferalLimit: internshipData.referralLimit,
       MentorID: internshipData.mentorID,
 
       //not provided by entered data
@@ -34,7 +34,7 @@ exports.addInternship = async (req, res) => {
 
     console.log("Success- a new internship has been added!");
 
-    // unneccesary as the only result needed is from generateInternship (which this function is solely called from)
+    // unneccesary as the only result needed is from generateInternship in Mentors.js (which this function is solely called from)
     //res.status(200).json({ success: true, message: 'Internship added successfully' });
   } catch (error) {
     console.log("There was some error when adding internship", error);
@@ -122,3 +122,24 @@ exports.getInternship = async (req, res) => {
     res.status(500).json({ success: false, message: 'Error when getting internship' });
   }
 };
+
+
+
+/*
+Below includes functions solely for testing. These will NOT be included 
+*/
+const internshipData = require('../TestDataGeneration/testInternshipData.js');
+exports.generateTestInternsip = async (req, res) => {
+  try {
+    console.log("The length of the test data is: " + internshipData.internships.length);
+
+    internshipData.internships.forEach((internship) => {
+      this.addInternship(internship, "");
+    })
+
+    res.status(200).json({ success: true, message: 'Was able to do user testing correctly' });
+  } catch (error) {
+    console.log("oops something went wrong")
+    res.status(500).json({ success: false, message: 'Something went wrong when testing user data' });
+  }
+}
