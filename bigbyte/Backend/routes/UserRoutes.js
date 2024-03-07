@@ -25,6 +25,9 @@ router.route('/DeleteResume').delete(UserController.deleteResume);
 router.route('/GetResume').get(UserController.getResume);
 router.route('/GetAllResumes').get(UserController.getAllResumes);
 
+// TO TEST USER DATASE WITH RANDOM USERS
+router.route('/GenerateUserTestData').post(UserController.generateTestUsers);
+
 module.exports = router;
 
 /*
