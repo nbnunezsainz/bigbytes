@@ -56,11 +56,12 @@ exports.queryUsers = async (req, res) => {
 };
 
 //deletes a user based on their ID
+// THIS CODE IS ESSENTIALLY USELESS NOW! TO ENSURE OUR DATA IS SECURE, WE HAVE COMMENTED THE deleteDocument() FUNCTION
 exports.deleteUser = async (req, res) => {
     try {
         let userID = req.body.id;
 
-        const result = await deleteDocument(UserRef, userID);
+        //const result = await deleteDocument(UserRef, userID);
         console.log(result)
         console.log("Success- user deleted!");
         res.status(200).json({ success: true, message: 'User deleted successfully' });
