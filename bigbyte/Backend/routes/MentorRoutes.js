@@ -12,4 +12,7 @@ router.route('/DeleteMentor').delete(MentorController.deleteMentor);
 router.route('/GetMentor').get(MentorController.getMentor);
 router.route('/GenerateInternship').post(MentorController.generateInternship);
 
+// TO TEST USER DATASE WITH RANDOM MENTORS
+router.route('/GenerateMentorTestData').post(MentorController.generateTestMentors);
+
 module.exports = router;

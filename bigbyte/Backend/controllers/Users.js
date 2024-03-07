@@ -3,7 +3,6 @@ const { db, admin, bucket, storage } = require('../FireBaseSetUp.js');
 const Constants = require('./databaseConstant.js');
 const { queryCollection, deleteDocument, getDocument } = require('./databaseFunctions.js');
 
-
 // create and initialize a database reference to the "Internship" collection
 const UserRef = db.collection(Constants.COLLECTION_USERS);
 
@@ -11,7 +10,7 @@ const UserRef = db.collection(Constants.COLLECTION_USERS);
 exports.addUser = async (req, res) => {
     try {
         const userData = req.body;
-        const userID = req.body.id;
+        const userID = userData.id;
 
         console.log(userData);
 
@@ -19,7 +18,7 @@ exports.addUser = async (req, res) => {
             FirstName: userData.firstName,
             LastName: userData.lastName,
             Major: userData.major,
-            Year: userData.year,
+            GradYear: userData.gradYear,
             Bio: userData.bio || null,
             Organizations: userData.organizations || [],
             LinkedIn: userData.linkedIn || null,
@@ -264,5 +263,27 @@ exports.getAllResumes = async (req, res) => {
         console.log("an error happened:");
         console.log(error);
         res.status(500).json({ success: false, message: 'Error when getting all resumes' });
+    }
+}
+
+
+
+/*
+Below includes functions solely for testing. These will NOT be included 
+*/
+const userData = require('../TestDataGeneration/testUserData.js');
+exports.generateTestUsers = async (req, res) => {
+    try {
+        console.log("The length of the test data is: " + userData.users.length);
+
+        userData.users.forEach((user) => {
+            console.log("I am attempting to create a user");
+            this.addUser(user, "");
+        })
+
+        res.status(200).json({ success: true, message: 'Was able to do user testing correctly' });
+    } catch (error) {
+        console.log("oops something went wrong")
+        res.status(500).json({ success: false, message: 'Something went wrong when testing user data' });
     }
 }

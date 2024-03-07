@@ -129,3 +129,28 @@ exports.generateInternship = async (req, res) => {
     res.status(500).json({ success: false, message: 'Error when generating an internship for the mentor' });
   }
 };
+
+/*
+Below includes functions solely for testing. These will NOT be included 
+*/
+const mentorData = require('../TestDataGeneration/testMentorData.js');
+exports.generateTestMentors = async (req, res) => {
+  try {
+    console.log("The length of the test data is: " + mentorData.mentors.length);
+    let count = 0;
+
+    const promises = mentorData.mentors.map((mentor) => {
+      console.log("I am attempting to create a mentor");
+      return this.addMentor(mentor, "");
+    });
+
+    await Promise.all(promises);
+
+    console.log(count);
+
+    res.status(200).json({ success: true, message: 'Was able to do mentor testing correctly' });
+  } catch (error) {
+    console.log("oops something went wrong")
+    res.status(500).json({ success: false, message: 'Something went wrong when testing mentor data' });
+  }
+}
