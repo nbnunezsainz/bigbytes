@@ -92,11 +92,12 @@ exports.queryInternships = async (req, res) => {
 };
 
 //deletes an internship based on their ID
+// THIS CODE IS ESSENTIALLY USELESS NOW! TO ENSURE OUR DATA IS SECURE, WE HAVE COMMENTED THE deleteDocument() FUNCTION
 exports.deleteInternship = async (req, res) => {
   try {
     let internshipID = req.body.id;
 
-    const result = await deleteDocument(InternshipRef, internshipID);
+    //const result = await deleteDocument(InternshipRef, internshipID);
     console.log(result)
     console.log("Success- internship deleted!");
     res.status(200).json({ success: true, message: 'Internship deleted successfully' });

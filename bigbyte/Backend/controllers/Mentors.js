@@ -52,11 +52,12 @@ exports.queryMentors = async (req, res) => {
 };
 
 //deletes a mentor based on their ID
+// THIS CODE IS ESSENTIALLY USELESS NOW! TO ENSURE OUR DATA IS SECURE, WE HAVE COMMENTED THE deleteDocument() FUNCTION
 exports.deleteMentor = async (req, res) => {
   try {
     let mentorID = req.body.id;
 
-    const result = await deleteDocument(MentorRef, mentorID);
+    //const result = await deleteDocument(MentorRef, mentorID);
     console.log(result)
     console.log("Success- mentor deleted!");
     res.status(200).json({ success: true, message: 'Mentor deleted successfully' });
