@@ -137,16 +137,13 @@ const mentorData = require('../TestDataGeneration/testMentorData.js');
 exports.generateTestMentors = async (req, res) => {
   try {
     console.log("The length of the test data is: " + mentorData.mentors.length);
-    let count = 0;
 
     const promises = mentorData.mentors.map((mentor) => {
-      console.log("I am attempting to create a mentor");
-      return this.addMentor(mentor, "");
+      console.log("Mentor ID: " + mentor.body.id);
+      //return this.addMentor(mentor, "");
     });
 
-    await Promise.all(promises);
-
-    console.log(count);
+    //await Promise.all(promises);
 
     res.status(200).json({ success: true, message: 'Was able to do mentor testing correctly' });
   } catch (error) {
