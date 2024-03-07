@@ -1,5 +1,5 @@
-const { getFirestore, Timestamp, FieldValue, Filter } = require('firebase-admin/firestore');
-const { db, admin, bucket} = require('../FireBaseSetUp.js');
+const { uploadBytes, ref, deleteObject, getDownloadURL, listAll } = require('firebase/storage');
+const { db, admin, bucket, storage } = require('../FireBaseSetUp.js');
 const Constants = require('./databaseConstant.js');
 const { queryCollection, deleteDocument, getDocument } = require('./databaseFunctions.js');
 
@@ -165,76 +165,98 @@ const updateUserAndInternship = async (userID, internshipID, InternshipRef, inte
     }
 };
 
-exports.UploadResume = async (req, res) => {
+/*
+below are functionality for users to upload resumes 
+*/
 
-    if (!req.files || Object.keys(req.files).length === 0) {
-        return res.status(400).send('No files were uploaded.');
-    }
-    // const userId = req.body.userId; // Or however you obtain the user's ID
-    const file = req.files.resume; // Assuming the file input name is 'resume'
-
-    uploadPdfAndStoreReference(file, "andresisHere")
-        .then(() => res.status(200).json({ message: "File uploaded and reference stored successfully." }))
-        .catch(error => res.status(500).send({ message: error.message }));
-}
-
-
-async function uploadPdfAndStoreReference(file, userId) {
+/* 
+function for a user to upload a resume
+req must contain the following:
+- resume file that is stored in req.files.Resume.data (file must be renamed to "Resume")
+- userID that contains the user's unique ID which will serve as the resume's internal file name
+*/
+exports.uploadResume = async (req, res) => {
     try {
-        if (!file || !userId) {
-            throw new Error('Missing file or user ID.');
-        }
-
-        // Upload the PDF to Firebase Storage
-        const blob = bucket.file(`${userId}/${file.name}`); // Storing under a 'userId' directory for organization
-        const blobStream = blob.createWriteStream({
-            metadata: {
-                contentType: 'application/pdf',
-            },
-        });
-
-        await new Promise((resolve, reject) => {
-            blobStream.on('error', reject);
-            blobStream.on('finish', resolve);
-            blobStream.end(file.data);
-        });
-
-        // Get the public URL for the uploaded file
-        const url = `https://firebasestorage.googleapis.com/v0/b/${bucket.name}/o/${encodeURIComponent(blob.name)}?alt=media`;
-
-        // Store the URL in Cloud Firestore
-        await db.collection('users').doc(userId).set({
-            resumeUrl: url
-        }, { merge: true });
-
-        console.log("File uploaded and reference stored successfully.");
+        let pathName = Constants.STORAGE_RESUME + req.body.userID;
+        const resumeRef = ref(storage, pathName);
+        const metadata = {
+            contentType: "application/pdf"
+        };
+        await uploadBytes(resumeRef, req.files.Resume.data, metadata);
+        res.status(200).json({ success: true, message: 'Succes when getting resume' });
     } catch (error) {
-        console.error('Error uploading file and storing reference:', error);
-        throw error; // Re-throw the error to handle it appropriately in the calling context
+        console.log("an error happened:");
+        console.log(error);
+        res.status(500).json({ success: false, message: 'Error posting resume' });
+
     }
 }
 
-exports.getResumes = async (req, res) => {
+/* 
+function for a user to delete their resume
+req must contain the following:
+- userID that contains the user's unique ID
+*/
+exports.deleteResume = async (req, res) => {
     try {
-        console.log("hello")
-        const usersCollection = await db.collection('users').get();
+        let pathName = Constants.STORAGE_RESUME + req.body.userID;
+        const resumeRef = ref(storage, pathName);
+
+        await deleteObject(resumeRef);
+
+        res.status(200).json({ success: true, message: 'Succes when deleting resume' });
+    } catch (error) {
+        console.log("an error happened:");
+        console.log(error);
+        res.status(500).json({ success: false, message: 'Error deleting resume' });
+    }
+}
+
+/* 
+function to retrive ONE resume --> returns the URL to view their resume
+req must contain the following:
+- userID of the user whose resume is to be returned
+*/
+exports.getResume = async (req, res) => {
+    try {
+        let pathName = Constants.STORAGE_RESUME + req.body.userID;
+        const resumeRef = ref(storage, pathName);
+        const URL = await getDownloadURL(resumeRef);
+
+        res.status(200).json({ success: true, message: 'Succes when getting resume' });
+        return URL;
+
+    } catch (error) {
+        console.log("an error happened:");
+        console.log(error);
+        res.status(500).json({ success: false, message: 'Error getting resume' });
+    }
+}
+
+/* 
+function to retrive ALL resumes in system --> returns list of key-value pairs (relates userID to the URL to view their resume)
+req is empty (will not be read)
+*/
+exports.getAllResumes = async (req, res) => {
+    try {
+        let pathName = Constants.STORAGE_RESUME;
+        const resumeRef = ref(storage, pathName);
         const resumes = [];
 
-        usersCollection.forEach(doc => {
-            const userData = doc.data();
-            if (userData.resumeUrl) { // Make sure the user has a resume URL
-                resumes.push({ userId: doc.id, resumeUrl: userData.resumeUrl });
-            }
+        const allResumes = await listAll(resumeRef);
+
+        const promises = allResumes.items.map(async (resume) => {
+            let URL = await getDownloadURL(resume);
+            resumes.push({ userID: resume.name, URL: URL });
         });
+        await Promise.all(promises);
 
-        console.log(resumes, "resumes");
+        res.status(200).json({ success: true, message: 'Succes when returning all resumes' });
+        return resumes;
 
-        // Send the list of resumes back to the client
-        res.status(200).json(resumes);
     } catch (error) {
-        console.error('Error fetching resumes:', error);
-        res.status(500).send({ message: 'Error fetching resumes' });
+        console.log("an error happened:");
+        console.log(error);
+        res.status(500).json({ success: false, message: 'Error when getting all resumes' });
     }
-
-
 }

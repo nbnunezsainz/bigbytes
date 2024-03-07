@@ -1,0 +1,24 @@
+.Resume {
+    height: 100vh;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.form-elements {
+    padding: 15px;
+    margin: auto;
+    border-radius: 20px;
+
+    /* for testing below */
+    /* background: rgb(50,50,50) */
+}
+
+.form-elements * {
+    display: flex;
+    margin: 5px;
+    justify-content: center;
+    align-items: center;
+}
