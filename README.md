@@ -32,4 +32,3 @@ Credits:
         Shivum Kapoor and Christian Gonzalez
     Full-stack team:
         Andres Enriquez
-
