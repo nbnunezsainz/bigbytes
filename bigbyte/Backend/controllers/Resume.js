@@ -35,6 +35,7 @@ req must contain the following:
 exports.getResume = async (req, res) => {
     try {
         let pathName = Constants.STORAGE_RESUME + req.body.userID;
+        console.log(pathName)
         const resumeRef = ref(storage, pathName);
         const URL = await getDownloadURL(resumeRef);
 
@@ -104,67 +105,96 @@ exports.uploadResume = async (req, res) => {
 // }
 
 //getAllResumes and comments
+//everytime a comment is collected
+
 exports.getAllResumesWithComments = async () => {
-    try {
+   // try {
         // Get all resumes
-        const resumesSnapshot = await db.collection('resumes').get();
+        const resumesSnapshot = await db.collection('User').get();
+
+      //  console.log("testing");
+        console.log(resumesSnapshot);
 
         // Array to store resumes with comments
-        const resumesWithComments = [];
+    //     const resumesWithComments = [];
+    //
+    //     // Iterate through each resume document
+    //     for (const resumeDoc of resumesSnapshot.docs) {
+    //         const resumeData = resumeDoc.data();
+    //         const resumeId = resumeDoc.id;
+    //
+    //         console.log(resumeId)
+    //
+    //         // Get comments for the current resume
+    //         const commentsSnapshot = await db
+    //             .collection('resume_comments')
+    //             .where('resumeId', '==', resumeId)
+    //             .get();
+    //
+    //         // Array to store comments for the current resume
+    //         const comments = [];
+    //
+    //         // Iterate through each comment document
+    //         commentsSnapshot.forEach((commentDoc) => {
+    //             const commentData = commentDoc.data();
+    //             comments.push({
+    //                 id: commentDoc.id,
+    //                 ...commentData,
+    //             });
+    //         });
+    //
+    //         // Add resume with comments to the array
+    //         resumesWithComments.push({
+    //             id: resumeId,
+    //             ...resumeData,
+    //             comments: comments,
+    //         });
+    //     }
+    //
+    //     // Return the array of resumes with comments
+    //     return resumesWithComments;
+    //  } //catch (error) {
+    //     console.error('Error retrieving resumes with comments:', error);
+    //     return [];
+    // }
 
-        // Iterate through each resume document
-        for (const resumeDoc of resumesSnapshot.docs) {
-            const resumeData = resumeDoc.data();
-            const resumeId = resumeDoc.id;
 
-            // Get comments for the current resume
-            const commentsSnapshot = await db
-                .collection('resume_comments')
-                .where('resumeId', '==', resumeId)
-                .get();
-
-            // Array to store comments for the current resume
-            const comments = [];
-
-            // Iterate through each comment document
-            commentsSnapshot.forEach((commentDoc) => {
-                const commentData = commentDoc.data();
-                comments.push({
-                    id: commentDoc.id,
-                    ...commentData,
-                });
-            });
-
-            // Add resume with comments to the array
-            resumesWithComments.push({
-                id: resumeId,
-                ...resumeData,
-                comments: comments,
-            });
-        }
-
-        // Return the array of resumes with comments
-        return resumesWithComments;
-    } catch (error) {
-        console.error('Error retrieving resumes with comments:', error);
-        return [];
-    }
 };
 
-
+//alter this too then
 //needs to take in a RESUME URl - still need to make work
-exports.CreateCommentsforAResume= async (req, res) => {
-    try {
-        let pathName = Constants.STORAGE_COMMENTS + req.body.userID;
-        const CommentsRef = ref(storage, pathName);
-        const URL = await getDownloadURL(resumeRef);
 
-        res.status(200).json({ success: true, message: 'Succes when getting resume' });
-        return URL;
+//DON'T CURRENTLY KNOW IF POST REQUEST SHOULD ONLY CONTAIN body or body + exactly which resume
+exports.commentOnAResume= async (req, res) => {
+    try {
+        //receives resumeURL from frontend. (where we get req.body.userID).   [ path: resume/[frontend] ]
+        //TO DO: once front end connected - uncomment 2 lines below
+        let pathName = Constants.STORAGE_RESUME + req.body.userID;
+       // const CommentsRef = ref(storage, pathName);
+        //const URL = await getDownloadURL(CommentsRef);
+        const {resumeComment} = req.body;
+
+        if (!resumeComment){
+            res.status(500).json({success:false, message: "No comment provided"});
+        }
+
+
+        //data to add to collection
+        //TO DO:  should add resume uid or whatever to collection
+        const newData = {
+            comment: resumeComment,
+            resume: "[would like to resume -- waiting for frontend uid]"
+        };
+
+        db.collection("Comments").add(newData);
+
+        res.status(200).json({success:true, message:"Success adding comment"})
+
+        //not needed: return URL
 
     } catch (error) {
-        console.log("an error happened:");
+        console.log("An Error Occurred:");
         console.log(error);
-        res.status(500).json({ success: false, message: 'Error getting resume' });
+        res.status(500).json({ success: false, message: 'Error adding comment' });
     }
 }
