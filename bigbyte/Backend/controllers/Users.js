@@ -12,8 +12,6 @@ exports.addUser = async (req, res) => {
         const userData = req.body;
         const userID = userData.id;
 
-        console.log(userData);
-
         const data = {
             FirstName: userData.firstName,
             LastName: userData.lastName,
@@ -44,7 +42,6 @@ exports.queryUsers = async (req, res) => {
 
         queryDict = await queryCollection(UserRef, req.body);
 
-        console.log(queryDict);
         console.log("Success- users have been found!");
         res.status(200).json({ success: true, message: 'Users have been found' });
         return queryDict;
@@ -62,7 +59,6 @@ exports.deleteUser = async (req, res) => {
         let userID = req.body.id;
 
         //const result = await deleteDocument(UserRef, userID);
-        console.log(result)
         console.log("Success- user deleted!");
         res.status(200).json({ success: true, message: 'User deleted successfully' });
     } catch (error) {
@@ -76,7 +72,6 @@ exports.getUser = async (req, res) => {
     try {
         let userID = req.body.id;
         const user = await getDocument(UserRef, userID);
-        console.log(user)
 
         console.log("Success- user received!");
         res.status(200).json({ success: true, message: 'Internship user successfully' });
@@ -134,7 +129,6 @@ const updateUserData = async (userID) => {
         // gather and update user information
         const user = UserRef.doc(userID);
         let userData = (await user.get()).data();
-        console.log(userData)
         await user.update(
             {
                 MonthlyRefferalCount: userData.MonthlyRefferalCount - 1,
@@ -245,19 +239,16 @@ req is empty (will not be read)
 */
 exports.getAllResumes = async (req, res) => {
     try {
-        let pathName = Constants.STORAGE_RESUME;
-        const resumeRef = ref(storage, pathName);
-        const resumes = [];
-
+        const resumeRef = await ref(storage, Constants.STORAGE_RESUME);
         const allResumes = await listAll(resumeRef);
+        let resumes = [];
 
-        const promises = allResumes.items.map(async (resume) => {
-            let URL = await getDownloadURL(resume);
-            resumes.push({ userID: resume.name, URL: URL });
-        });
-        await Promise.all(promises);
+        for (const doc of allResumes.items) {
+            let url = await getDownloadURL(doc);
+            resumes.push({ userID: doc.name, URL: url });
+        }
 
-        res.status(200).json({ success: true, message: 'Succes when returning all resumes' });
+        res.status(200).json({ success: true, message: 'Succes when returning all resumes', resumes: resumes });
         return resumes;
 
     } catch (error) {

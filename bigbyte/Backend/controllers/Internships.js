@@ -44,29 +44,17 @@ exports.addInternship = async (req, res) => {
 //query ALL Internships based on a specific field, filtering technique, and target value --> returns dictionary of ALL internship IDs to their data
 exports.getAllInternships = async (req, res) => {
   try {
+    let data = await InternshipRef.get();
 
-    console.log(req.user, "user");
+    let internshipData = [];
 
-    let internships = [];
-    internships = await InternshipRef.get();
+    data.forEach(internship => {
+      internshipData.push({ id: internship.id, ...internship.data() });
+    });
 
-    console.log(internships, "intenrships");
-    if (!internships.empty) {
-      // Create an array to hold the internship data
-      let internshipData = [];
+    res.status(200).json({ success: true, message: 'Internship has been found', internshipData: internshipData });
 
-      // Iterate over each document in the QuerySnapshot
-      internships.forEach(doc => {
-        // Add the document data to the array only if it's display flag is set to true
-        let data = doc.data();
-        if (data.Display) {
-          internshipData.push({ id: doc.id, ...data });
-        }
-      });
-
-      // console.log(internshipData, "Success- internship has been found!");
-      res.status(200).json({ success: true, message: 'Internship has been found', internshipData: internshipData });
-    }
+    return internshipData;
 
   } catch (error) {
     console.log("RAN INTO PROBLEM QUERYING INTERNSHIPS", error);
@@ -80,7 +68,6 @@ exports.queryInternships = async (req, res) => {
 
     queryDict = await queryCollection(InternshipRef, req.body);
 
-    console.log(queryDict);
     console.log("Success- internships have been found!");
     res.status(200).json({ success: true, message: 'Internships have been found' });
     return queryDict;
@@ -98,7 +85,6 @@ exports.deleteInternship = async (req, res) => {
     let internshipID = req.body.id;
 
     //const result = await deleteDocument(InternshipRef, internshipID);
-    console.log(result)
     console.log("Success- internship deleted!");
     res.status(200).json({ success: true, message: 'Internship deleted successfully' });
   } catch (error) {
@@ -112,7 +98,6 @@ exports.getInternship = async (req, res) => {
   try {
     let internshipID = req.body.id;
     const internship = await getDocument(InternshipRef, internshipID);
-    console.log(internship)
 
     console.log("Success- internship received!");
     res.status(200).json({ success: true, message: 'Internship received successfully' });
@@ -129,6 +114,7 @@ exports.getInternship = async (req, res) => {
 /*
 Below includes functions solely for testing. These will NOT be included 
 */
+/*
 const internshipData = require('../TestDataGeneration/testInternshipData.js');
 exports.generateTestInternsip = async (req, res) => {
   try {
@@ -144,3 +130,4 @@ exports.generateTestInternsip = async (req, res) => {
     res.status(500).json({ success: false, message: 'Something went wrong when testing user data' });
   }
 }
+*/

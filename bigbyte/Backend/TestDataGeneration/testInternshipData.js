@@ -588,7 +588,7 @@ const internships = [
     }
 ];
 
-//console.log(internships);
+console.log(internships);
 
 
 module.exports = {

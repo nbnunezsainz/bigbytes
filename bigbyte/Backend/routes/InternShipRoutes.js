@@ -12,6 +12,6 @@ router.route('/DeleteInternship').delete(InternshipController.deleteInternship);
 router.route('/GetInternship').get(InternshipController.getInternship);
 
 // TO TEST USER DATASE WITH RANDOM MENTORS
-router.route('/GenerateInternshipTestData').post(InternshipController.generateTestInternsip);
+//router.route('/GenerateInternshipTestData').post(InternshipController.generateTestInternsip);
 
 module.exports = router;
