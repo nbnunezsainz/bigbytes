@@ -6,6 +6,7 @@ this file holds database names that are stored in Firebase*/
 exports.COLLECTION_USERS = "User";
 exports.COLLECTION_MENTORS = "Mentor";
 exports.COLLECTION_INTERNSHIP = "Internship";
+
 //constants for Internship statuses
 exports.INTERNSHIP_STATUS_OPEN = "Open for Applications";
 exports.INTERNSHIP_STATUS_REVIEW = "Applications are Under Review";

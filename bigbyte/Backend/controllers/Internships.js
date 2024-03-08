@@ -17,11 +17,10 @@ exports.addInternship = async (req, res) => {
       Company: internshipData.company,
       Description: internshipData.description,
       Location: internshipData.location,
-      Pay: internshipData.pay,
+      Pay: internshipData.pay || null,
       Category: internshipData.category || [],
-      Qualifications: internshipData.tags,
       URL: internshipData.url,
-      RefferalLimit: internshipData.refferalLimit,
+      ReferalLimit: internshipData.referralLimit,
       MentorID: internshipData.mentorID,
 
       //not provided by entered data
@@ -35,7 +34,7 @@ exports.addInternship = async (req, res) => {
 
     console.log("Success- a new internship has been added!");
 
-    // unneccesary as the only result needed is from generateInternship (which this function is solely called from)
+    // unneccesary as the only result needed is from generateInternship in Mentors.js (which this function is solely called from)
     //res.status(200).json({ success: true, message: 'Internship added successfully' });
   } catch (error) {
     console.log("There was some error when adding internship", error);
@@ -45,27 +44,17 @@ exports.addInternship = async (req, res) => {
 //query ALL Internships based on a specific field, filtering technique, and target value --> returns dictionary of ALL internship IDs to their data
 exports.getAllInternships = async (req, res) => {
   try {
+    let data = await InternshipRef.get();
 
-    console.log(req.user, "user");
+    let internshipData = [];
 
-    let internships = [];
-    internships = await InternshipRef.get();
+    data.forEach(internship => {
+      internshipData.push({ id: internship.id, ...internship.data() });
+    });
 
-    console.log(internships, "intenrships");
-    if (!internships.empty) {
-      // Create an array to hold the internship data
-      let internshipData = [];
+    res.status(200).json({ success: true, message: 'Internship has been found', internshipData: internshipData });
 
-      // Iterate over each document in the QuerySnapshot
-      internships.forEach(doc => {
-        // Add the document data to the array
-        // Each document's data is accessed with the .data() method
-        internshipData.push({ id: doc.id, ...doc.data() });
-      });
-
-      // console.log(internshipData, "Success- internship has been found!");
-      res.status(200).json({ success: true, message: 'Internship has been found', internshipData: internshipData });
-    }
+    return internshipData;
 
   } catch (error) {
     console.log("RAN INTO PROBLEM QUERYING INTERNSHIPS", error);
@@ -79,7 +68,6 @@ exports.queryInternships = async (req, res) => {
 
     queryDict = await queryCollection(InternshipRef, req.body);
 
-    console.log(queryDict);
     console.log("Success- internships have been found!");
     res.status(200).json({ success: true, message: 'Internships have been found' });
     return queryDict;
@@ -91,12 +79,12 @@ exports.queryInternships = async (req, res) => {
 };
 
 //deletes an internship based on their ID
+// THIS CODE IS ESSENTIALLY USELESS NOW! TO ENSURE OUR DATA IS SECURE, WE HAVE COMMENTED THE deleteDocument() FUNCTION
 exports.deleteInternship = async (req, res) => {
   try {
     let internshipID = req.body.id;
 
-    const result = await deleteDocument(InternshipRef, internshipID);
-    console.log(result)
+    //const result = await deleteDocument(InternshipRef, internshipID);
     console.log("Success- internship deleted!");
     res.status(200).json({ success: true, message: 'Internship deleted successfully' });
   } catch (error) {
@@ -110,7 +98,6 @@ exports.getInternship = async (req, res) => {
   try {
     let internshipID = req.body.id;
     const internship = await getDocument(InternshipRef, internshipID);
-    console.log(internship)
 
     console.log("Success- internship received!");
     res.status(200).json({ success: true, message: 'Internship received successfully' });
@@ -121,3 +108,26 @@ exports.getInternship = async (req, res) => {
     res.status(500).json({ success: false, message: 'Error when getting internship' });
   }
 };
+
+
+
+/*
+Below includes functions solely for testing. These will NOT be included 
+*/
+/*
+const internshipData = require('../TestDataGeneration/testInternshipData.js');
+exports.generateTestInternsip = async (req, res) => {
+  try {
+    console.log("The length of the test data is: " + internshipData.internships.length);
+
+    internshipData.internships.forEach((internship) => {
+      this.addInternship(internship, "");
+    })
+
+    res.status(200).json({ success: true, message: 'Was able to do user testing correctly' });
+  } catch (error) {
+    console.log("oops something went wrong")
+    res.status(500).json({ success: false, message: 'Something went wrong when testing user data' });
+  }
+}
+*/

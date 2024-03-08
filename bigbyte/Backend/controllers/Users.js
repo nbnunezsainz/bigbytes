@@ -3,7 +3,6 @@ const { db, admin, bucket, storage } = require('../FireBaseSetUp.js');
 const Constants = require('./databaseConstant.js');
 const { queryCollection, deleteDocument, getDocument } = require('./databaseFunctions.js');
 
-
 // create and initialize a database reference to the "Internship" collection
 const UserRef = db.collection(Constants.COLLECTION_USERS);
 
@@ -11,19 +10,16 @@ const UserRef = db.collection(Constants.COLLECTION_USERS);
 exports.addUser = async (req, res) => {
     try {
         const userData = req.body;
-        const userID = req.body.id;
-
-        console.log(userData);
+        const userID = userData.id;
 
         const data = {
             FirstName: userData.firstName,
             LastName: userData.lastName,
             Major: userData.major,
-            Year: userData.year,
+            GradYear: userData.gradYear,
             Bio: userData.bio || null,
             Organizations: userData.organizations || [],
             LinkedIn: userData.linkedIn || null,
-            Resume: userData.resume || null,
 
             //not provided by entered data
             MonthlyRefferalCount: 20,
@@ -46,7 +42,6 @@ exports.queryUsers = async (req, res) => {
 
         queryDict = await queryCollection(UserRef, req.body);
 
-        console.log(queryDict);
         console.log("Success- users have been found!");
         res.status(200).json({ success: true, message: 'Users have been found' });
         return queryDict;
@@ -58,12 +53,12 @@ exports.queryUsers = async (req, res) => {
 };
 
 //deletes a user based on their ID
+// THIS CODE IS ESSENTIALLY USELESS NOW! TO ENSURE OUR DATA IS SECURE, WE HAVE COMMENTED THE deleteDocument() FUNCTION
 exports.deleteUser = async (req, res) => {
     try {
         let userID = req.body.id;
 
-        const result = await deleteDocument(UserRef, userID);
-        console.log(result)
+        //const result = await deleteDocument(UserRef, userID);
         console.log("Success- user deleted!");
         res.status(200).json({ success: true, message: 'User deleted successfully' });
     } catch (error) {
@@ -77,7 +72,6 @@ exports.getUser = async (req, res) => {
     try {
         let userID = req.body.id;
         const user = await getDocument(UserRef, userID);
-        console.log(user)
 
         console.log("Success- user received!");
         res.status(200).json({ success: true, message: 'Internship user successfully' });
@@ -118,7 +112,8 @@ exports.applyForInternship = async (req, res) => {
         await appRef.add(appData);
 
         // update user and internship data post application
-        updateUserAndInternship(userID, internshipID, InternshipRef, internshipData);
+        updateUserData(userID);
+        updateInternshipData(internshipID, InternshipRef, internshipData);
 
         console.log("Success- user has applied to the internship");
         res.status(200).json({ success: true, message: 'User has applied successfully' });
@@ -128,20 +123,25 @@ exports.applyForInternship = async (req, res) => {
     }
 };
 
-// this is an internal funciton to update User and Internship data
-const updateUserAndInternship = async (userID, internshipID, InternshipRef, internshipData) => {
+// these are  internal funcitons to update User and Internship data
+const updateUserData = async (userID) => {
     try {
         // gather and update user information
         const user = UserRef.doc(userID);
         let userData = (await user.get()).data();
-        console.log(userData)
         await user.update(
             {
                 MonthlyRefferalCount: userData.MonthlyRefferalCount - 1,
                 TotalRefferalCount: userData.TotalRefferalCount + 1
             }
         );
-
+        console.log("User data is updated after application was submitted");
+    } catch (error) {
+        console.log("There was some error when updating user data", error);
+    }
+};
+const updateInternshipData = async (internshipID, InternshipRef, internshipData) => {
+    try {
         // gather and update internship information
         const internship = InternshipRef.doc(internshipID);
         let appCount = internshipData.ApplicationCounter + 1;
@@ -158,15 +158,15 @@ const updateUserAndInternship = async (userID, internshipID, InternshipRef, inte
                 Display: newDisplay
             }
         );
-
-        console.log("User/internship data are updated after application was submitted");
+        console.log("Internship data is updated after application was submitted");
     } catch (error) {
-        console.log("There was some error when updating user/internship data", error);
+        console.log("There was some error when updating internship data", error);
     }
 };
 
+
 /*
-below are functionality for users to upload resumes 
+below are functions for users to upload, delete, and view their resumes 
 */
 
 /* 
@@ -217,46 +217,65 @@ function to retrive ONE resume --> returns the URL to view their resume
 req must contain the following:
 - userID of the user whose resume is to be returned
 */
-exports.getResume = async (req, res) => {
-    try {
-        let pathName = Constants.STORAGE_RESUME + req.body.userID;
-        const resumeRef = ref(storage, pathName);
-        const URL = await getDownloadURL(resumeRef);
+// exports.getResume = async (req, res) => {
+//     try {
+//         let pathName = Constants.STORAGE_RESUME + req.body.userID;
+//         const resumeRef = ref(storage, pathName);
+//         const URL = await getDownloadURL(resumeRef);
 
-        res.status(200).json({ success: true, message: 'Succes when getting resume' });
-        return URL;
+//         res.status(200).json({ success: true, message: 'Succes when getting resume' });
+//         return URL;
 
-    } catch (error) {
-        console.log("an error happened:");
-        console.log(error);
-        res.status(500).json({ success: false, message: 'Error getting resume' });
-    }
-}
+//     } catch (error) {
+//         console.log("an error happened:");
+//         console.log(error);
+//         res.status(500).json({ success: false, message: 'Error getting resume' });
+//     }
+// }
 
 /* 
 function to retrive ALL resumes in system --> returns list of key-value pairs (relates userID to the URL to view their resume)
 req is empty (will not be read)
 */
-exports.getAllResumes = async (req, res) => {
+// exports.getAllResumes = async (req, res) => {
+//     try {
+//         const resumeRef = await ref(storage, Constants.STORAGE_RESUME);
+//         const allResumes = await listAll(resumeRef);
+//         let resumes = [];
+
+//         for (const doc of allResumes.items) {
+//             let url = await getDownloadURL(doc);
+//             resumes.push({ userID: doc.name, URL: url });
+//         }
+
+//         res.status(200).json({ success: true, message: 'Succes when returning all resumes', resumes: resumes });
+//         //                                                 return resumes;
+
+//     } catch (error) {
+//         console.log("an error happened:");
+//         console.log(error);
+//         res.status(500).json({ success: false, message: 'Error when getting all resumes' });
+//     }
+// }
+
+
+
+/*
+Below includes functions solely for testing. These will NOT be included 
+*/
+const userData = require('../TestDataGeneration/testUserData.js');
+exports.generateTestUsers = async (req, res) => {
     try {
-        let pathName = Constants.STORAGE_RESUME;
-        const resumeRef = ref(storage, pathName);
-        const resumes = [];
+        console.log("The length of the test data is: " + userData.users.length);
 
-        const allResumes = await listAll(resumeRef);
+        userData.users.forEach((user) => {
+            console.log("I am attempting to create a user");
+            this.addUser(user, "");
+        })
 
-        const promises = allResumes.items.map(async (resume) => {
-            let URL = await getDownloadURL(resume);
-            resumes.push({ userID: resume.name, URL: URL });
-        });
-        await Promise.all(promises);
-
-        res.status(200).json({ success: true, message: 'Succes when returning all resumes' });
-        return resumes;
-
+        res.status(200).json({ success: true, message: 'Was able to do user testing correctly' });
     } catch (error) {
-        console.log("an error happened:");
-        console.log(error);
-        res.status(500).json({ success: false, message: 'Error when getting all resumes' });
+        console.log("oops something went wrong")
+        res.status(500).json({ success: false, message: 'Something went wrong when testing user data' });
     }
 }
