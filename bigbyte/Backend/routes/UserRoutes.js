@@ -23,11 +23,11 @@ router.route('/GetUser').get(UserController.getUser);
 router.route('/ApplyToInternship').post(UserController.applyForInternship);
 
 
-// TO HANDLE RESUMES
-router.route('/UploadResume').post(UserController.uploadResume);
-router.route('/DeleteResume').delete(UserController.deleteResume);
-router.route('/GetResume').get(UserController.getResume);
-router.route('/GetAllResumes').get(UserController.getAllResumes);
+// // TO HANDLE RESUMES
+// router.route('/UploadResume').post(UserController.uploadResume);
+// router.route('/DeleteResume').delete(UserController.deleteResume);
+// router.route('/GetResume').get(UserController.getResume);
+// router.route('/GetAllResumes').get(UserController.getAllResumes);
 
 
 // TO TEST USER DATASE WITH RANDOM USERS

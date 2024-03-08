@@ -217,46 +217,46 @@ function to retrive ONE resume --> returns the URL to view their resume
 req must contain the following:
 - userID of the user whose resume is to be returned
 */
-exports.getResume = async (req, res) => {
-    try {
-        let pathName = Constants.STORAGE_RESUME + req.body.userID;
-        const resumeRef = ref(storage, pathName);
-        const URL = await getDownloadURL(resumeRef);
+// exports.getResume = async (req, res) => {
+//     try {
+//         let pathName = Constants.STORAGE_RESUME + req.body.userID;
+//         const resumeRef = ref(storage, pathName);
+//         const URL = await getDownloadURL(resumeRef);
 
-        res.status(200).json({ success: true, message: 'Succes when getting resume' });
-        return URL;
+//         res.status(200).json({ success: true, message: 'Succes when getting resume' });
+//         return URL;
 
-    } catch (error) {
-        console.log("an error happened:");
-        console.log(error);
-        res.status(500).json({ success: false, message: 'Error getting resume' });
-    }
-}
+//     } catch (error) {
+//         console.log("an error happened:");
+//         console.log(error);
+//         res.status(500).json({ success: false, message: 'Error getting resume' });
+//     }
+// }
 
 /* 
 function to retrive ALL resumes in system --> returns list of key-value pairs (relates userID to the URL to view their resume)
 req is empty (will not be read)
 */
-exports.getAllResumes = async (req, res) => {
-    try {
-        const resumeRef = await ref(storage, Constants.STORAGE_RESUME);
-        const allResumes = await listAll(resumeRef);
-        let resumes = [];
+// exports.getAllResumes = async (req, res) => {
+//     try {
+//         const resumeRef = await ref(storage, Constants.STORAGE_RESUME);
+//         const allResumes = await listAll(resumeRef);
+//         let resumes = [];
 
-        for (const doc of allResumes.items) {
-            let url = await getDownloadURL(doc);
-            resumes.push({ userID: doc.name, URL: url });
-        }
+//         for (const doc of allResumes.items) {
+//             let url = await getDownloadURL(doc);
+//             resumes.push({ userID: doc.name, URL: url });
+//         }
 
-        res.status(200).json({ success: true, message: 'Succes when returning all resumes', resumes: resumes });
-        return resumes;
+//         res.status(200).json({ success: true, message: 'Succes when returning all resumes', resumes: resumes });
+//         //                                                 return resumes;
 
-    } catch (error) {
-        console.log("an error happened:");
-        console.log(error);
-        res.status(500).json({ success: false, message: 'Error when getting all resumes' });
-    }
-}
+//     } catch (error) {
+//         console.log("an error happened:");
+//         console.log(error);
+//         res.status(500).json({ success: false, message: 'Error when getting all resumes' });
+//     }
+// }
 
 
 
