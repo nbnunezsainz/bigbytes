@@ -13,8 +13,6 @@ exports.addMentor = async (req, res) => {
     const mentorData = req.body;
     const mentorID = req.body.id;
 
-    console.log(mentorData);
-
     const data = {
       // Retrieve data from req.body
       FirstName: mentorData.firstName,
@@ -40,7 +38,6 @@ exports.queryMentors = async (req, res) => {
 
     queryDict = await queryCollection(MentorRef, req.body);
 
-    console.log(queryDict);
     console.log("Success- mentors have been found!");
     res.status(200).json({ success: true, message: 'Mentors have been found' });
     return queryDict;
@@ -58,7 +55,6 @@ exports.deleteMentor = async (req, res) => {
     let mentorID = req.body.id;
 
     //const result = await deleteDocument(MentorRef, mentorID);
-    console.log(result)
     console.log("Success- mentor deleted!");
     res.status(200).json({ success: true, message: 'Mentor deleted successfully' });
   } catch (error) {
@@ -72,7 +68,6 @@ exports.getMentor = async (req, res) => {
   try {
     let mentorID = req.body.id;
     const mentor = await getDocument(MentorRef, mentorID);
-    console.log(mentor)
 
     console.log("Success- mentor received!");
     res.status(200).json({ success: true, message: 'Mentor successfully returned' });
@@ -89,12 +84,9 @@ exports.getMentor = async (req, res) => {
 exports.getAllMentors = async (req, res) => {
   try {
 
-    console.log(req.user, "user");
-
     let mentors = [];
     mentors = await MentorRef.get();
 
-    console.log(mentors, "mentors");
     if (!mentors.empty) {
       // Create an array to hold the internship data
       let mentorData = [];
@@ -106,8 +98,8 @@ exports.getAllMentors = async (req, res) => {
         mentorData.push({ id: doc.id, ...doc.data() });
       });
 
-      // console.log(internshipData, "Success- internship has been found!");
       res.status(200).json({ success: true, message: 'Mentorship has been found', mentorData: mentorData });
+      return mentorData;
     }
 
   } catch (error) {
