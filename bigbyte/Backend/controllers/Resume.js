@@ -3,6 +3,7 @@ const { uploadBytes, ref, deleteObject, getDownloadURL, listAll } = require('fir
 const { db, admin, bucket, storage } = require('../FireBaseSetUp.js');
 const Constants = require('./databaseConstant.js');
 const { queryCollection, deleteDocument, getDocument } = require('./databaseFunctions.js');
+//import React, { useState } from 'react';
 
 exports.getAllResumes = async (req, res) => {  
     try {
@@ -104,13 +105,12 @@ exports.uploadResume = async (req, res) => {
 //     }
 // }
 
-//getAllResumes and comments
-//everytime a comment is collected
 
+//link 1 resume to list of all comments associated with it
 exports.getAllResumesWithComments = async () => {
    // try {
         // Get all resumes
-        const resumesSnapshot = await db.collection('User').get();
+        const resumesSnapshot = await db.collection('ResumeWithComments').get();
 
       //  console.log("testing");
         console.log(resumesSnapshot);
@@ -160,6 +160,78 @@ exports.getAllResumesWithComments = async () => {
 
 
 };
+
+//connect resume to all comments
+// exports.connectResumeToAllComments= async (req,res) => {
+//     try{
+//         //iterate through Comments collection
+//         // new resumes never seen before added to 'ResumeWithComments' collections
+//         // every time you see the same resume, keep adding to 'message' which is a list of all messages for
+//         // that specific resume
+//
+//         const newData = {
+//             comment: resumeComment,
+//             resume: "[would like to resume -- waiting for frontend uid]"
+//         };
+//         const resumeRef = db.collection('ResumeWithComments').doc();
+//
+//
+//
+//
+//     } catch (error) {
+//
+//     }
+// }
+//
+
+
+//const {dict, alreadyAdded} = true;
+
+//connect individual resume to allComments associated with it and publish on firebase
+//issues: can still add same data multiple times
+exports.connectResumeToAllComments = async (req,res) => {
+
+       try {
+
+           const {whichResume} = req.body;
+           const myDictionary = {};
+           const comments = await db.collection("Comments").get();
+
+           //const [count, setCount] = useState(0);
+
+
+           myDictionary[whichResume] = [];
+           comments.forEach((doc) => {
+               const commentData = doc.data();
+               if (whichResume === commentData.resume) {
+                   myDictionary[whichResume].push(commentData.comment);
+               }
+
+           });
+
+           //add to collection
+           const newData = {
+               resume: whichResume,
+               comment: myDictionary[whichResume]
+           };
+
+           //if(dict){
+           db.collection("ResumeWithComments").add(newData);
+           //alreadyAdded(false);
+          // }
+
+
+           res.json({message: "success", mapping: myDictionary});
+
+
+       } catch (error) {
+           console.error('Error updating ResumeWithComments:', error);
+
+       }
+
+
+};
+
 
 //alter this too then
 //needs to take in a RESUME URl - still need to make work
