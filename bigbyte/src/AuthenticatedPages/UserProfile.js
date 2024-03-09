@@ -21,13 +21,15 @@ const UserProfile = () => {
           },
         };
   
-        const response = await fetch('http://localhost:3001/api/v1/user/userDetails', payloadHeader);
+        const response = await fetch('http://localhost:3001/api/v1/user/GetUser', payloadHeader);
         if (!response.ok) {
           throw new Error('Failed to fetch');
         }
   
         const data = await response.json();
+        console.log(data,"data");
         setUser(data.userData); // Assuming the response JSON structure matches our state
+        console.log(User);
       } catch (error) {
         console.error("Error fetching data:", error);
       } finally {
