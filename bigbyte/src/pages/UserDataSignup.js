@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Button, Form } from 'react-bootstrap';
 import { Navigate } from 'react-router-dom';
+
 import auth from "../fb.js";
 
 function UserDetailsForm() {
@@ -71,10 +72,10 @@ function UserDetailsForm() {
         });
     };
 
+
     if (redirectToLanding) {
         return <Navigate to="/Internships" />;
       }
-
 
     return (
         <div>
