@@ -9,6 +9,7 @@ import UserDetailsForm from './pages/UserDataSignup.js';
 import ResumesViewer from './AuthenticatedPages/ResumeReview.js';
 import ReactDOM from "react-dom/client";
 import MentorSearch from './AuthenticatedPages/MentorSearch.js';
+import MentorProfile from './AuthenticatedPages/MentorProfile.js';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "./AuthContext.js"; 
 
@@ -52,6 +53,8 @@ function App() {
         <Route path="/ResumeReviwer" element={<ResumesViewer />} />
         
          <Route path="/MentorSearch" element={<MentorSearch />} /> 
+         <Route path="/MentorProfile" element={<MentorProfile />} />
+
       </Routes>
      
     </BrowserRouter>

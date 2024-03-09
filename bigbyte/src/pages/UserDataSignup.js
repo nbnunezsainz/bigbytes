@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Button, Form } from 'react-bootstrap';
+import { Navigate } from 'react-router-dom';
 
 function UserDetailsForm() {
     const [role, setRole] = useState('');
@@ -64,6 +65,10 @@ function UserDetailsForm() {
             console.error('There was a problem with your fetch operation: ', error);
         });
     };
+
+    if(redirectToLanding) {
+        return <Navigate to="/Internships" />;
+    }
 
     return (
         <div>
