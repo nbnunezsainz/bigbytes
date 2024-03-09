@@ -57,10 +57,11 @@ exports.createCustomToken = async (req, res, next) => { //send token on signup/l
 exports.verifyToken = async (req, res, next) => {
   try {
     const token = req.headers.authorization.split(" ")[1];
+
     const decodeValue = await admin.auth().verifyIdToken(token);
     if (decodeValue) {
       req.user = decodeValue;
-      next()
+      next();
     }
     else
     {
@@ -74,8 +75,7 @@ exports.verifyToken = async (req, res, next) => {
    
 
 exports.CreateDetailsAboutUser = async (req, res) => {
-  //const db = admin.firestore();
-  //User = req.user; // got this from verifytoken function
+  User = req.user.uid; // got this from verifytoken function
 
   //need to get the token to verify who a user is first too.
 
@@ -91,7 +91,7 @@ exports.CreateDetailsAboutUser = async (req, res) => {
       LinkedIn: req.body.linkedIn || null,
       Resume: req.body.resume || null,
       //RefferalCount: 20, This is for internships
-      uid: "hello12345666666",
+      uid: User,
       UserStatus: req.body.UserStatus, //tells us if user or student
       // student:req.body.student, //bool
       // mentor:req.body.mentor, //bool
@@ -102,7 +102,7 @@ exports.CreateDetailsAboutUser = async (req, res) => {
 
 
       const UsersRef = db.collection('User'); //this did not give deprecation error
-      UsersRef.doc(userDetails.uid).set(userDetails);
+      UsersRef.doc(User).set(userDetails);
 
       //await db.collection('User').doc(req.body.uid).set(userDetails);
 
@@ -126,7 +126,7 @@ exports.CreateDetailsAboutUser = async (req, res) => {
       LinkedIn: req.body.linkedIn || null,
       Resume: req.body.resume || null,
       //RefferalCount: 20, This is for internships
-      uid: "hello12345666663336",
+      uid:User,
       UserStatus: req.body.UserStatus, //tells us if user or student
       // student:req.body.student, //bool
       // mentor:req.body.mentor, //bool
@@ -135,7 +135,8 @@ exports.CreateDetailsAboutUser = async (req, res) => {
     try {
 
       // Add a new document in collection "USER" with ID Corresponding to UID, 
-      await db.collection('User').doc(userDetails.uid).set(userDetails);
+
+      await db.collection('Mentor').doc(User).set(userDetails);
 
       res.status(200).json({ success: true, message: 'User data added correctly' });
 

@@ -1,6 +1,7 @@
 //this will hold the links to pages, need to check if student/mentor bc students should not be ble to create internships only view them
 import React, {useState} from 'react';
 import { Outlet, Link } from "react-router-dom";
+import UserProfile from './UserProfile';
 
 function AuthNavbar() {
     const [userStatus, setUserStatus] = useState([]);
@@ -21,6 +22,7 @@ function AuthNavbar() {
             <Link to="/MentorSearch">Mentors</Link>
             <Link to="/MentorProfile">My Profile</Link>
             <Link to="/Home">Logout</Link>
+            <Link to="/UserProfile"> UserProfile </Link> 
           </li>
   
         </ul>
