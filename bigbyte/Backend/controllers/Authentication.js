@@ -5,6 +5,12 @@ const { signInWithEmailAndPassword , getIdToken,onAuthStateChanged} = require('f
 const { Clientauth } = require('../fb.js');
 
 const { db, admin } = require('../FireBaseSetUp.js');
+const Constants = require('./databaseConstant.js');
+const UserRef = db.collection(Constants.COLLECTION_USERS);
+
+
+// create and initialize a database reference to the "Internship" collection
+const MentorRef = db.collection(Constants.COLLECTION_MENTORS);
 
 
 
@@ -60,6 +66,8 @@ exports.verifyToken = async (req, res, next) => {
 
     const decodeValue = await admin.auth().verifyIdToken(token);
     if (decodeValue) {
+      console.log("here");
+      console.log(decodeValue,"kll");
       req.user = decodeValue;
       next();
     }
@@ -72,6 +80,29 @@ exports.verifyToken = async (req, res, next) => {
       res.status(401).json({ success: false, message: 'Unauthorized' });
     }
   };
+
+
+  exports.DetermineuserType = async (req, res, next) => {
+    let userID = req.user.uid;
+    console.log(userID);
+    console.log("here3");
+  
+    let doc = await UserRef.doc(userID).get();
+    if (!doc.exists) { //not a user collection check mentor
+      let doc2 = await MentorRef.doc(userID).get();
+      console.log("here4");
+       if(!doc2.exists) //not a mentor either
+       {
+        res.status(500).json({message:"error user does not exist in system"})
+       }
+       res.status(200).json({user:"mentor"});
+       return;
+
+    }
+    console.log("here");
+    res.status(200).json({user:"studet"});
+  }
+
    
 
 exports.CreateDetailsAboutUser = async (req, res) => {
