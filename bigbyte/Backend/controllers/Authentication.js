@@ -66,8 +66,6 @@ exports.verifyToken = async (req, res, next) => {
 
     const decodeValue = await admin.auth().verifyIdToken(token);
     if (decodeValue) {
-      console.log("here");
-      console.log(decodeValue,"kll");
       req.user = decodeValue;
       next();
     }
@@ -84,13 +82,12 @@ exports.verifyToken = async (req, res, next) => {
 
   exports.DetermineuserType = async (req, res, next) => {
     let userID = req.user.uid;
-    console.log(userID);
-    console.log("here3");
+  
   
     let doc = await UserRef.doc(userID).get();
     if (!doc.exists) { //not a user collection check mentor
       let doc2 = await MentorRef.doc(userID).get();
-      console.log("here4");
+   
        if(!doc2.exists) //not a mentor either
        {
         res.status(500).json({message:"error user does not exist in system"})
@@ -109,9 +106,8 @@ exports.CreateDetailsAboutUser = async (req, res) => {
   User = req.user.uid; // got this from verifytoken function
 
   //need to get the token to verify who a user is first too.
-
-  console.log("here");
-  if (req.body.UserStatus == "Student") {
+  console.log(req.body.UserStatus, "statuss");
+  if (req.body.UserStatus == "student") {
     let userDetails = {
       FirstName: req.body.firstName,
       LastName: req.body.lastName,
