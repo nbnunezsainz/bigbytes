@@ -37,8 +37,10 @@ app.get('/', (req, res) => {
 const userRouter = require('./routes/UserRoutes');
 const InternshipRouter = require('./routes/InternShipRoutes');
 const MentorRouter = require('./routes/MentorRoutes');
+const ResumeRouter = require('./routes/ResumeRoutes');
 
 app.use('/api/v1/user', userRouter);
+app.use('/api/v1/Resume', ResumeRouter);
 app.use('/api/v1/internship', InternshipRouter);
 app.use('/api/v1/mentor', MentorRouter);
 

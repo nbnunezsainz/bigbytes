@@ -6,30 +6,30 @@ import auth from "../fb.js";
 const JobDetail = () => {
   const [jobs, setJobs] = useState([]); // State to store internship data
   const [loading, setLoading] = useState(true); // State to manage loading status
-  
+
   useEffect(() => {
     // Define the asynchronous function inside the useEffect hook
-    
+
     const fetchData = async () => {
-     
+
       try {
         // Fetching the auth token
-        const user = auth.currentUser ;
+        const user = auth.currentUser;
         const token = user && (await user.getIdToken());
-  
+
         const payloadHeader = {
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
           },
         };
-  
+
         // Using the token to fetch internships
-        const response = await fetch('http://localhost:3001/api/v1/internship/QueryInternships', payloadHeader);
+        const response = await fetch('http://localhost:3001/api/v1/internship/GetAllInternships', payloadHeader);
         if (!response.ok) {
           throw new Error('Failed to fetch');
         }
-  
+
         const data = await response.json();
         setJobs(data.internshipData); // Assuming the response JSON structure matches our state
       } catch (error) {
@@ -38,11 +38,11 @@ const JobDetail = () => {
         setLoading(false); // Ensure loading is set to false after the fetch operation completes
       }
     };
-  
+
     // Call the fetchData function
     fetchData();
   }, []); // Empty dependency array means this effect runs once on mount
-  
+
 
   if (loading) {
     return <div>Loading...</div>; // Render a loading page or spinner here
@@ -51,7 +51,7 @@ const JobDetail = () => {
   return (
     <>
       <AuthNavbar />
-      <Row className="mt-5" style={{paddingTop : "30px"}}>
+      <Row className="mt-5" style={{ paddingTop: "30px" }}>
         {jobs.map((job) => (
           <Col md={12} >
             <Card className="mb-3">

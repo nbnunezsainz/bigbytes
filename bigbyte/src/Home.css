@@ -185,4 +185,24 @@ p {
       border-bottom-right-radius: .3rem;
     }
   }
-  
+
+  .container {
+    display: flex;
+    justify-content: space-between;
+    background-color: white;
+}
+
+.content {
+    display: flex;
+    align-items: center; /* Vertically center the content */
+    width: 100%; /* Ensure the content takes up the full width */
+   
+}
+
+.left-side {
+    flex: 1; /* Grow to fill available space */
+}
+
+.right-side {
+    margin-left: 20px; /* Add space between left and right sides */
+}

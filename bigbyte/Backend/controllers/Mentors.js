@@ -13,15 +13,12 @@ exports.addMentor = async (req, res) => {
     const mentorData = req.body;
     const mentorID = req.body.id;
 
-    console.log(mentorData);
-
     const data = {
       // Retrieve data from req.body
       FirstName: mentorData.firstName,
       LastName: mentorData.lastName,
       Company: mentorData.company,
       Bio: mentorData.bio || null,
-      MentorStatus: mentorData.mentorStatus || false,
       LinkedIn: mentorData.linkedIn || null,
     };
 
@@ -41,7 +38,6 @@ exports.queryMentors = async (req, res) => {
 
     queryDict = await queryCollection(MentorRef, req.body);
 
-    console.log(queryDict);
     console.log("Success- mentors have been found!");
     res.status(200).json({ success: true, message: 'Mentors have been found' });
     return queryDict;
@@ -53,12 +49,12 @@ exports.queryMentors = async (req, res) => {
 };
 
 //deletes a mentor based on their ID
+// THIS CODE IS ESSENTIALLY USELESS NOW! TO ENSURE OUR DATA IS SECURE, WE HAVE COMMENTED THE deleteDocument() FUNCTION
 exports.deleteMentor = async (req, res) => {
   try {
     let mentorID = req.body.id;
 
-    const result = await deleteDocument(MentorRef, mentorID);
-    console.log(result)
+    //const result = await deleteDocument(MentorRef, mentorID);
     console.log("Success- mentor deleted!");
     res.status(200).json({ success: true, message: 'Mentor deleted successfully' });
   } catch (error) {
@@ -72,7 +68,6 @@ exports.getMentor = async (req, res) => {
   try {
     let mentorID = req.body.id;
     const mentor = await getDocument(MentorRef, mentorID);
-    console.log(mentor)
 
     console.log("Success- mentor received!");
     res.status(200).json({ success: true, message: 'Mentor successfully returned' });
@@ -83,6 +78,35 @@ exports.getMentor = async (req, res) => {
     res.status(500).json({ success: false, message: 'Error when getting mentor' });
   }
 };
+
+//get all Mentors
+
+exports.getAllMentors = async (req, res) => {
+  try {
+
+    let mentors = [];
+    mentors = await MentorRef.get();
+
+    if (!mentors.empty) {
+      // Create an array to hold the internship data
+      let mentorData = [];
+
+      // Iterate over each document in the QuerySnapshot
+      mentors.forEach(doc => {
+        // Add the document data to the array
+        // Each document's data is accessed with the .data() method
+        mentorData.push({ id: doc.id, ...doc.data() });
+      });
+
+      res.status(200).json({ success: true, message: 'Mentorship has been found', mentorData: mentorData });
+      return mentorData;
+    }
+
+  } catch (error) {
+    console.log("RAN INTO PROBLEM QUERYING INTERNSHIPS", error);
+    res.status(500).json({ success: false, message: 'Error querying internships' });
+  }
+}
 
 // generates an internship posting --> MUST INCLUDE THE MENTOR'S ID WITHIN REQ.BODY
 exports.generateInternship = async (req, res) => {
@@ -98,3 +122,25 @@ exports.generateInternship = async (req, res) => {
     res.status(500).json({ success: false, message: 'Error when generating an internship for the mentor' });
   }
 };
+
+/*
+Below includes functions solely for testing. These will NOT be included 
+*/
+const mentorData = require('../TestDataGeneration/testMentorData.js');
+exports.generateTestMentors = async (req, res) => {
+  try {
+    console.log("The length of the test data is: " + mentorData.mentors.length);
+
+    const promises = mentorData.mentors.map((mentor) => {
+      console.log("Mentor ID: " + mentor.body.id);
+      //return this.addMentor(mentor, "");
+    });
+
+    //await Promise.all(promises);
+
+    res.status(200).json({ success: true, message: 'Was able to do mentor testing correctly' });
+  } catch (error) {
+    console.log("oops something went wrong")
+    res.status(500).json({ success: false, message: 'Something went wrong when testing mentor data' });
+  }
+}

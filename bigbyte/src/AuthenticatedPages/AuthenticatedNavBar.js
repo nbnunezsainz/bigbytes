@@ -17,7 +17,7 @@ function AuthNavbar() {
             <Link to="/Internships">Internships</Link>
             <Link to="/Resume">Upload Resume</Link>
             <Link to="/ResumeReviwer">Resume Reviewer</Link>
-            <Link to="/MentorList">Mentors</Link>
+            <Link to="/MentorSearch">Mentors</Link>
             <Link to="/Home">Logout</Link>
           </li>
   

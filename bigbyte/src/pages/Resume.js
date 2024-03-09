@@ -35,7 +35,7 @@ export default function Resume() {
             formData.append('resume', resumeFile); // 'resume' is the key that the server expects for the file
     
             // Make the fetch request to send the PDF to the server
-            fetch('http://localhost:3001/api/v1/user/UploadResume', { 
+            fetch('http://localhost:3001/api/v1/Resume/UploadResume', {
                 method: 'POST',
                 body: formData, // Pass in the formData as the request body
                 // Note: Don't set 'Content-Type' header when using FormData,
