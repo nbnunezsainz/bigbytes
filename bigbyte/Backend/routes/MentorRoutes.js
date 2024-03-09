@@ -10,7 +10,7 @@ router.route('/AddMentor').post(MentorController.addMentor);
 router.route('/QueryMentors').get(MentorController.queryMentors);
 router.route('/GetAllMentors').get(AuthenticationController.verifyToken,MentorController.getAllMentors);
 router.route('/DeleteMentor').delete(MentorController.deleteMentor);
-router.route('/GetMentor').get(MentorController.getMentor);
+router.route('/GetMentor').get(AuthenticationController.verifyToken, MentorController.getMentor);
 router.route('/GenerateInternship').post(MentorController.generateInternship);
 
 // TO TEST USER DATASE WITH RANDOM MENTORS
