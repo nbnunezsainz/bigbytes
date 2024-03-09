@@ -5,7 +5,7 @@ import 'react-pdf/dist/Page/TextLayer.css';
 import 'react-pdf/dist/Page/AnnotationLayer.css';
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
 
-function ResumeViewer({ resumeUrl, resumeUID }) {
+function ResumeViewer({ resumeUrl, resumeUID, resumeComments}) {
     const [showComments, setShowComments] = useState(false);
     const [comments, setComments] = useState([]);
     const [newComment, setNewComment] = useState('');
@@ -73,9 +73,21 @@ function ResumeViewer({ resumeUrl, resumeUID }) {
             {showComments && (
                 <div>
                     <div>
-                        {comments.map((comment, index) => (
-                            <div key={index}>{comment}</div>
-                        ))}
+                        {resumeComments.length > 0 ? (
+                            resumeComments.map((resComment, index) => (
+                                <div key={index}>
+                                    <h2>User: {resumeUID}</h2>
+                                    <p
+                                        value={resComment} 
+                                    />
+                                </div>
+                            ))
+                        ) : (
+                            <p>Loading resumes or no resumes available...</p>
+                        )}
+                            {comments.map((comment, index) => (
+                                <div key={index}>{comment}</div>
+                            ))}
                     </div>
                     <div>
                         <textarea

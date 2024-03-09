@@ -32,7 +32,7 @@ const ResumeReviewer = () => {
                         resumes.map((resume, index) => (
                             <div key={index}>
                                 <h2>User: {resume.userID}</h2>
-                                <PDFViewer resumeUrl={resume.URL} resumeUID= {resume.userID}/>
+                                <PDFViewer resumeUrl={resume.URL} resumeUID= {resume.userID} resumeComments = {resume.comments}/>
                             </div>
                         ))
                     ) : (
