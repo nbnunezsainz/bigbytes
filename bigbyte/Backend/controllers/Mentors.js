@@ -66,12 +66,24 @@ exports.deleteMentor = async (req, res) => {
 // find and return an mentor dictionary that relates their ID to their data
 exports.getMentor = async (req, res) => {
   try {
-    let mentorID = req.body.id;
-    const mentor = await getDocument(MentorRef, mentorID);
 
-    console.log("Success- mentor received!");
-    res.status(200).json({ success: true, message: 'Mentor successfully returned' });
-    return mentor;
+    let userID = req.user.uid;
+    let user;
+    const doc = await UserRef.doc(userID).get();
+    if (!doc.exists) {
+      res.status(500).json({ success: false, message: 'Error when getting user' });
+      return;
+  } else {
+      
+     user= doc.data() ;
+     delete user.uid; //removes the uid form data
+  }
+
+    // let mentorID = req.body.id;
+    // const mentor = await getDocument(MentorRef, mentorID);
+
+    res.status(200).json({ success: true, user:user });
+    // return mentor;
 
   } catch (error) {
     console.log("RAN INTO PROBLEM LOOKING FOR MENTOR", error);
