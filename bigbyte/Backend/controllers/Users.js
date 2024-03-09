@@ -69,18 +69,26 @@ exports.deleteUser = async (req, res) => {
 
 // find and return an user dictionary that relates their ID to their data --> used by front end
 exports.getUser = async (req, res) => {
-    try {
-        let userID = req.body.id;
-        const user = await getDocument(UserRef, userID);
+  
+        let userID = req.user.uid;
+        console.log(userID,"hello");
 
-        console.log("Success- user received!");
-        res.status(200).json({ success: true, message: 'Internship user successfully' });
-        return user;
+        //const user = await getDocument(UserRef, userID); cant use this because dont want to send USer UID back, secuirty hazard
+        let user;
+        const doc = await UserRef.doc(userID).get();
 
-    } catch (error) {
-        console.log("RAN INTO PROBLEM LOOKING FOR USER", error);
-        res.status(500).json({ success: false, message: 'Error when getting user' });
-    }
+        console.log(doc,"hello22");
+
+        if (!doc.exists) {
+            res.status(500).json({ success: false, message: 'Error when getting user' });
+            return;
+        } else {
+            
+           user= doc.data() ;
+           delete user.uid; //removes the uid form data
+        }
+        res.status(200).json({ success: true, user:user });
+    
 };
 
 /*

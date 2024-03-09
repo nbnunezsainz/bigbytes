@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { Button, Form } from 'react-bootstrap';
+import { Navigate } from 'react-router-dom';
+import auth from "../fb.js";
 
 function UserDetailsForm() {
     const [role, setRole] = useState('');
@@ -31,15 +33,19 @@ function UserDetailsForm() {
         }));
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         console.log(userDetails);
         // Send userDetails to backend for further processing
 
+        const user = auth.currentUser;
+        const token = user && (await user.getIdToken());
+
         fetch('http://localhost:3001/api/v1/user/userDetails', {
             method: 'POST',
             headers: {
-                'Content-Type' : 'application/json'
+                'Content-Type' : 'application/json',
+                Authorization: `Bearer ${token}`,
             },
             body: JSON.stringify(userDetails)
         })
@@ -64,6 +70,11 @@ function UserDetailsForm() {
             console.error('There was a problem with your fetch operation: ', error);
         });
     };
+
+    if (redirectToLanding) {
+        return <Navigate to="/Internships" />;
+      }
+
 
     return (
         <div>
