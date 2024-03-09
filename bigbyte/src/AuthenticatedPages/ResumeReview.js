@@ -6,7 +6,7 @@ const ResumeReviewer = () => {
     const [resumes, setResumes] = useState([]);
 
     useEffect(() => {
-        fetch('http://localhost:3001/api/v1/user/GetAllResumes')
+        fetch('http://localhost:3001/api/v1/Resume/GetAllResumes')
             .then(response => response.json())
             .then(data => {
                 setResumes(data.resumes);
