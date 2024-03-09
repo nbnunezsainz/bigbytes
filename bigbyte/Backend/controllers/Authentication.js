@@ -62,22 +62,31 @@ exports.createCustomToken = async (req, res, next) => { //send token on signup/l
 
 exports.verifyToken = async (req, res, next) => {
   try {
-    const token = req.headers.authorization.split(" ")[1];
+    // Check if the Authorization header is present
+    if (!req.headers.authorization) {
+      return res.status(401).json({ success: false, message: 'No authorization token provided' });
+    }
 
+    const token = req.headers.authorization.split(" ")[1];
+    if (!token) {
+      return res.status(401).json({ success: false, message: 'Unauthorized: No token provided' });
+    }
+
+    // Verify the token
     const decodeValue = await admin.auth().verifyIdToken(token);
     if (decodeValue) {
       req.user = decodeValue;
-      next();
+      next(); // Proceed to the next middleware/function
+    } else {
+      // Token is invalid
+      res.status(401).json({ success: false, message: "Unauthorized: Invalid token" });
     }
-    else
-    {
-      res.json({ message: "Not the correct user" });
-    }
+  } catch (error) {
+    console.error("Authentication error:", error);
+    res.status(401).json({ success: false, message: 'Unauthorized: Authentication failed', error: error.message });
+  }
+};
 
-    } catch {
-      res.status(401).json({ success: false, message: 'Unauthorized' });
-    }
-  };
 
 
   exports.DetermineuserType = async (req, res, next) => {

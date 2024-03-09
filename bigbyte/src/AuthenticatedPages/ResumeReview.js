@@ -6,14 +6,22 @@ const ResumeReviewer = () => {
     const [resumes, setResumes] = useState([]);
 
     useEffect(() => {
-        fetch('http://localhost:3001/api/v1/Resume/GetAllResumes')
+        fetch('http://localhost:3001/api/v1/Resume/GetAllResumesWithComments')
             .then(response => response.json())
             .then(data => {
-                setResumes(data.resumes);
+                if (data && data.resumesWithComments) {
+                    setResumes(data.resumesWithComments);
+                }
+                else
+                {
+                    setResumes([]);
+                }
             })
             .catch(error => console.error('Error fetching resumes:', error));
     }, []);
 
+
+    console.log(resumes, "resume data is here");
     return (
         <>
             <AuthNavbar />
@@ -24,7 +32,7 @@ const ResumeReviewer = () => {
                         resumes.map((resume, index) => (
                             <div key={index}>
                                 <h2>User: {resume.userID}</h2>
-                                <PDFViewer resumeUrl={resume.URL} />
+                                <PDFViewer resumeUrl={resume.URL} resumeUID= {resume.userID}/>
                             </div>
                         ))
                     ) : (

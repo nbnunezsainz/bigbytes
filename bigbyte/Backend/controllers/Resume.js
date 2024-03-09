@@ -5,9 +5,13 @@ const Constants = require('./databaseConstant.js');
 const { queryCollection, deleteDocument, getDocument } = require('./databaseFunctions.js');
 //import React, { useState } from 'react';
 
+const ResumeRef = db.collection(Constants.Collection_RESUME );
+const CommentRef = db.collection(Constants.Collection_COMMENTS);
+const Resume_CommentsRef = db.collection(Constants.Collection_RESUME_COMMENTS);
+
 exports.getAllResumes = async (req, res) => {  
     try {
-        const resumeRef = ref(storage, Constants.STORAGE_RESUME);
+        const resumeRef = ref(storage, Constants.STORAGE_RESUME); 
         const allResumes = await listAll(resumeRef);
         let resumes = [];
   
@@ -75,12 +79,23 @@ req must contain the following:
 */
 exports.uploadResume = async (req, res) => {
     try {
-        let pathName = Constants.STORAGE_RESUME + req.body.userID;
-        const resumeRef = ref(storage, pathName);
+        console.log("upload?")
+        let pathName = Constants.STORAGE_RESUME + req.user.uid;
+        const resumeStorageRef = ref(storage, pathName);
         const metadata = {
             contentType: "application/pdf"
         };
-        await uploadBytes(resumeRef, req.files.Resume.data, metadata);
+        const UploadResult =await uploadBytes(resumeStorageRef, req.files.resume.data, metadata); //add to storage 
+        
+        const DownloadUrl = await getDownloadURL(UploadResult.ref);
+        const resumeData = {
+            uid: req.user.uid,
+            storagePath: pathName,
+            DownloadUrl: DownloadUrl, // Reference to the file in the storage
+            // Add other relevant metadata here
+        };
+        await ResumeRef.doc(req.user.uid).set(resumeData);
+        
         res.status(200).json({ success: true, message: 'Succes when getting resume' });
     } catch (error) {
         console.log("an error happened:");
@@ -109,13 +124,57 @@ exports.uploadResume = async (req, res) => {
 
 
 //link 1 resume to list of all comments associated with it
-exports.getAllResumesWithComments = async () => {
-   // try {
+exports.getAllResumesWithComments = async (req,res) => {
+    try {
         // Get all resumes
-        const resumesSnapshot = await db.collection('ResumeWithComments').get();
+        const resumeRef = ref(storage, Constants.STORAGE_RESUME); 
+        const allResumes = await listAll(resumeRef);
+        let resumes = [];
+        for (const itemRef of allResumes.items) {
+            let url = await getDownloadURL(itemRef);
+            // Assuming doc.name or a portion of it can act as resumeID
+            const resumeID = itemRef.name; // or however you map this to your Firestore doc IDs
+            resumes.push({ userID: resumeID, URL: url }); // Store basic resume data first
+        }
+        let resumesWithComments = [];
+        for (let resume of resumes) {
+            const commentsRef = Resume_CommentsRef.doc(resume.userID);
+            const commentsSnapshot = await commentsRef.get();
+            
+            if (commentsSnapshot.exists) {
+                const commentIDs = commentsSnapshot.data().commentIDs || [];
+                const comments = [];
+
+                // Fetch each comment using its ID
+                for (let commentID of commentIDs) {
+                    const commentDoc = await CommentRef.doc(commentID).get();
+                    if (commentDoc.exists) {
+                        comments.push(commentDoc.data()); // Add full comment data
+                    }
+                }
+
+                resumesWithComments.push({ ...resume, comments });
+            } else {
+                // If there are no comments, just add the resume info
+                resumesWithComments.push(resume);
+            }
+        }
+
+        console.log(resumesWithComments, "resumewithcommentss");
+
+        // Send back the data
+        res.status(200).json({ success: true, resumesWithComments:resumesWithComments });
+    } catch (error) {
+        console.log("Error fetching resumes with comments:", error);
+        res.status(500).json({ success: false, message: 'Error fetching resumes with comments', error: error.toString() });
+    }
+
+
+
+        //const resumesSnapshot = await db.collection('ResumeWithComments').get();
 
       //  console.log("testing");
-        console.log(resumesSnapshot);
+       /// console.log(resumesSnapshot);
 
         // Array to store resumes with comments
     //     const resumesWithComments = [];
@@ -235,34 +294,51 @@ exports.connectResumeToAllComments = async (req,res) => {
 };
 
 
-//alter this too then
-//needs to take in a RESUME URl - still need to make work
-
-//DON'T CURRENTLY KNOW IF POST REQUEST SHOULD ONLY CONTAIN body or body + exactly which resume
 exports.commentOnAResume= async (req, res) => {
     try {
-        //receives resumeURL from frontend. (where we get req.body.userID).   [ path: resume/[frontend] ]
-        //TO DO: once front end connected - uncomment 2 lines below
-        let pathName = Constants.STORAGE_RESUME + req.body.userID;
-       // const CommentsRef = ref(storage, pathName);
-        //const URL = await getDownloadURL(CommentsRef);
-        const {resumeComment} = req.body;
 
-        if (!resumeComment){
-            res.status(500).json({success:false, message: "No comment provided"});
+        const resumeComment = req.body.comment; 
+        const resumeUID = req.body.resumeUID;
+
+        if (!resumeComment || !resumeUID){
+            res.status(500).json({success:false, message: "No comment or Resume provided"});
+            return;
         }
+
+        const newCommentData = {
+            comment: resumeComment,
+            resumeUID: resumeUID, // Link comment to specific resume by UID
+            
+        };
+
+       // await ResumeRef.doc(req.user.uid).set(resumeData);
+
+        const commentDocRef = await CommentRef.add(newCommentData);
+
+        const resumeCommentRef =  Resume_CommentsRef.doc(resumeUID);
+
+
+        await resumeCommentRef.set({
+            commentIDs: admin.firestore.FieldValue.arrayUnion(commentDocRef.id) // Add the new comment ID to the list
+        }, { merge: true });
+        res.status(200).json({ success: true, message: "Success adding comment" });
+        return;
+       
+
+
+
 
 
         //data to add to collection
-        //TO DO:  should add resume uid or whatever to collection
-        const newData = {
-            comment: resumeComment,
-            resume: "[would like to resume -- waiting for frontend uid]"
-        };
+        // //TO DO:  should add resume uid or whatever to collection
+        // const newData = {
+        //     comment: resumeComment,
+        //     resume: "[would like to resume -- waiting for frontend uid]"
+        // };
 
-        db.collection("Comments").add(newData);
+        // db.collection("Comments").add(newData);
 
-        res.status(200).json({success:true, message:"Success adding comment"})
+        // res.status(200).json({success:true, message:"Success adding comment"})
 
         //not needed: return URL
 
