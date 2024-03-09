@@ -69,7 +69,7 @@ exports.getMentor = async (req, res) => {
 
     let userID = req.user.uid;
     let user;
-    const doc = await UserRef.doc(userID).get();
+    const doc = await MentorRef.doc(userID).get();
     if (!doc.exists) {
       res.status(500).json({ success: false, message: 'Error when getting user' });
       return;

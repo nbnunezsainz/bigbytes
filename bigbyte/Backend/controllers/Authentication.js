@@ -57,6 +57,7 @@ exports.createCustomToken = async (req, res, next) => { //send token on signup/l
 exports.verifyToken = async (req, res, next) => {
   try {
     const token = req.headers.authorization.split(" ")[1];
+
     const decodeValue = await admin.auth().verifyIdToken(token);
     if (decodeValue) {
       req.user = decodeValue;
