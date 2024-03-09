@@ -2,8 +2,8 @@ const express = require('express');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
 const fileUpload = require('express-fileupload');
-
 const app = express();
+const bodyParser = require('body-parser');
 
 
 
@@ -11,8 +11,9 @@ const app = express();
 
 // Then, define the CORS middleware
 
-app.use(express.json());
+app.use(express.json({ limit: '100mb' }));
 app.use(cookieParser()); 
+
 app.use(fileUpload()); //allows us to grab files via request
 
 
@@ -38,6 +39,7 @@ const userRouter = require('./routes/UserRoutes');
 const InternshipRouter = require('./routes/InternShipRoutes');
 const MentorRouter = require('./routes/MentorRoutes');
 const ResumeRouter = require('./routes/ResumeRoutes');
+
 
 app.use('/api/v1/user', userRouter);
 app.use('/api/v1/Resume', ResumeRouter);

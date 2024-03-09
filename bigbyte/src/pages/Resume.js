@@ -4,6 +4,7 @@ import { Container, Form, Button, FormGroup, FormControl, FormLabel } from 'reac
 import { Navigate } from 'react-router-dom';
 import AuthNavbar from '../AuthenticatedPages/AuthenticatedNavBar';
 import '../Login.css';
+import auth from "../fb.js";
 
 // export default function Resume() {
 //     return (
@@ -28,18 +29,22 @@ export default function Resume() {
 
     };
 
-    const handleSubmit = () => {
+    const handleSubmit = async() => {
         if (resumeFile) {
             // Create a FormData object and append the file
+            const user = auth.currentUser;
+        const token = user && (await user.getIdToken());
+       
             const formData = new FormData();
             formData.append('resume', resumeFile); // 'resume' is the key that the server expects for the file
     
             // Make the fetch request to send the PDF to the server
             fetch('http://localhost:3001/api/v1/Resume/UploadResume', {
                 method: 'POST',
-                body: formData, // Pass in the formData as the request body
-                // Note: Don't set 'Content-Type' header when using FormData,
-                // the browser will set it automatically including the boundary parameter
+                body: formData, 
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                  },
             })
             .then(response => response.json()) // Assuming the server responds with JSON
             .then(data => {
