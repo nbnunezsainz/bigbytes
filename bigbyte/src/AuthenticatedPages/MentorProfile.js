@@ -10,6 +10,8 @@ const MentProfile = () => {
     const [linkedin, setLinkedin] = useState([]);       // state to store mentor LinkedIn
     const [bio, setBio] = useState([]);               // state to store mentor bio
     const [loading, setLoading] = useState([]);
+
+    const [mentor, setMentor] = useState([]);
     useEffect(() => {
         // Define the asynchronous function inside the useEffect hook
 
@@ -34,11 +36,8 @@ const MentProfile = () => {
               }
       
               const data = await response.json();
-              setFirstName(data.firstName);
-              setLastName(data.lastName);
-              setCompany(data.company);
-              setLinkedin(data.linkedin);
-              setBio(data.bio);
+              setMentor(data.user);
+              console.log(data.user,"data");
 
             //   set(data.internshipData); // Assuming the response JSON structure matches our state
             } catch (error) {
@@ -62,14 +61,14 @@ const MentProfile = () => {
         <AuthNavbar />
         <div style={{padding: "120px"}}>
             <div className='mt-3'>
-                <h1>{firstName}</h1>
-                <h2>{lastName}</h2>
+                <h1>{mentor.FirstName}</h1>
+                <h2>{mentor.LastName}</h2>
                 <h3>Mentor</h3>
-                <h3>{company}</h3>
-                <h3>{linkedin}</h3>
+                <h3>{mentor.Company}</h3>
+                <h3>{mentor.Linkedin}</h3>
             </div>
             <div className='mb-2'>
-                <p>{bio}</p>
+                <p>{mentor.Bio}</p>
             </div>
         </div>
         </>
