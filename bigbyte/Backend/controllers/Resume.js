@@ -7,7 +7,7 @@ const { queryCollection, deleteDocument, getDocument } = require('./databaseFunc
 
 exports.getAllResumes = async (req, res) => {  
     try {
-        const resumeRef = await ref(storage, Constants.STORAGE_RESUME);
+        const resumeRef = ref(storage, Constants.STORAGE_RESUME);
         const allResumes = await listAll(resumeRef);
         let resumes = [];
   
@@ -16,6 +16,8 @@ exports.getAllResumes = async (req, res) => {
             let url = await getDownloadURL(doc);
             resumes.push({ userID: doc.name, URL: url });
         }
+
+        
         
 
         res.status(200).json({ success: true, message: 'Succes when returning all resumes', resumes: resumes });

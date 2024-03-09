@@ -54,13 +54,10 @@ function AuthNavbar() {
             alt="logo"
           />
   
-          <li>
-            {/* <Link to="/Home">Home</Link> */}
+          <li> 
+            
             <Link to="/Internships">Internships</Link>
-          
             <Link to="/ResumeReviwer">Resume Reviewer</Link> 
-           
-           
             <Link to="/Home">Logout</Link>
 
             {userStatus === null ? (
