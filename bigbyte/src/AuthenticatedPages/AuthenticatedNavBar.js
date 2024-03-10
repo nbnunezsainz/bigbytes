@@ -1,7 +1,6 @@
 //this will hold the links to pages, need to check if student/mentor bc students should not be ble to create internships only view them
 import React, {useState,useEffect} from 'react';
 import { Outlet, Link } from "react-router-dom";
-import UserProfile from './UserProfile';
 import auth from "../fb.js"
 
 function AuthNavbar() {
@@ -25,7 +24,6 @@ function AuthNavbar() {
           }
     
           const data = await response.json();
-          // console.log(data.user);
           if(data.user === 'mentor')
           {
             setUserStatus(false);
