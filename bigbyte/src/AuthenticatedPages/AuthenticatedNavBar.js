@@ -25,7 +25,7 @@ function AuthNavbar() {
           }
     
           const data = await response.json();
-          console.log(data.user);
+          // console.log(data.user);
           if(data.user === 'mentor')
           {
             setUserStatus(false);

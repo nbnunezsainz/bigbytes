@@ -5,7 +5,7 @@ import 'react-pdf/dist/Page/TextLayer.css';
 import 'react-pdf/dist/Page/AnnotationLayer.css';
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
 
-function ResumeViewer({ resumeUrl, resumeUID }) {
+function ResumeViewer({ resumeUrl, resumeUID, resumeComments}) {
     const [showComments, setShowComments] = useState(false);
     const [comments, setComments] = useState([]);
     const [newComment, setNewComment] = useState('');
@@ -52,9 +52,9 @@ function ResumeViewer({ resumeUrl, resumeUID }) {
         } catch (error) {
             // Log network or other errors to the console
             console.error('Error submitting comment:', error);
-        }
-    
 
+
+        }
     };
 
     return (
@@ -73,9 +73,15 @@ function ResumeViewer({ resumeUrl, resumeUID }) {
             {showComments && (
                 <div>
                     <div>
-                        {comments.map((comment, index) => (
-                            <div key={index}>{comment}</div>
-                        ))}
+                        {resumeComments.length > 0 ? (
+                            resumeComments.map((resComment, index) => (
+                                <div key={index}>
+                                    <p>{resComment.resumeUID} : {resComment.comment} </p>
+                                </div>
+                            ))
+                        ) : (
+                            <p>No comments yet.</p>
+                        )}
                     </div>
                     <div>
                         <textarea
