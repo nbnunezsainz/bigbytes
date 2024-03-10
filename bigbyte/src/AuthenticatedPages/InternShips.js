@@ -9,44 +9,44 @@ const JobDetail = () => {
   const [jobs, setJobs] = useState([]); // State to store internship data
   const [loading, setLoading] = useState(true); // State to manage loading status
   const [filteredJobs, setFilteredJobs] = useState([]); // State to store filtered internship data
-const [filterMajor, setFilterMajor] = useState('');
-const [filterPay, setFilterPay] = useState('');
-const [filterLocation, setFilterLocation] = useState('');
+  const [filterMajor, setFilterMajor] = useState('');
+  const [filterPay, setFilterPay] = useState('');
+  const [filterLocation, setFilterLocation] = useState('');
 
-const applyFilters = async () => {
-  setLoading(true); // Start loading
+  const applyFilters = async () => {
+    setLoading(true); // Start loading
 
-  try {
-    const user = auth.currentUser;
-    const token = user && (await user.getIdToken());
+    try {
+      const user = auth.currentUser;
+      const token = user && (await user.getIdToken());
 
-    // Construct query parameters from state
-    let queryParams = new URLSearchParams({
-      major: filterMajor,
-      pay: filterPay,
-      location: filterLocation
-    }).toString();
+      // Construct query parameters from state
+      let queryParams = new URLSearchParams({
+        major: filterMajor,
+        pay: filterPay,
+        location: filterLocation
+      }).toString();
 
-    const payloadHeader = {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-    };
+      const payloadHeader = {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      };
 
-    const response = await fetch(`http://localhost:3001/api/v1/internship/GetFilteredInternships?${queryParams}`, payloadHeader);
-    if (!response.ok) {
-      throw new Error('Failed to fetch');
+      const response = await fetch(`http://localhost:3001/api/v1/internship/GetFilteredInternships?${queryParams}`, payloadHeader);
+      if (!response.ok) {
+        throw new Error('Failed to fetch');
+      }
+
+      const data = await response.json();
+      setJobs(data.internshipData);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    } finally {
+      setLoading(false); // Stop loading regardless of outcome
     }
-
-    const data = await response.json();
-    setJobs(data.internshipData);
-  } catch (error) {
-    console.error("Error fetching data:", error);
-  } finally {
-    setLoading(false); // Stop loading regardless of outcome
-  }
-};
+  };
 
 
 
@@ -129,14 +129,14 @@ const applyFilters = async () => {
                   onChange={(e) => setFilterLocation(e.target.value)}
                 />
               </Form.Group>
-              { <Button variant="primary" onClick={applyFilters}>Apply Filters</Button> }
+              {<Button variant="primary" onClick={applyFilters}>Apply Filters</Button>}
             </Form>
           </Col>
           <Col md={9}>
             {/* Job Listing Section */}
             <Row>
-              {jobs.map((job, index) => (
-                <Col md={12} key={index}>
+              {Object.entries(jobs).map(([internshipID, job]) => (
+                <Col md={12} key={internshipID}>
                   <Card className="mb-3">
                     <Card.Body>
                       <Card.Title>{job.title}</Card.Title>

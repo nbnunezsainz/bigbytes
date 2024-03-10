@@ -69,26 +69,23 @@ exports.deleteUser = async (req, res) => {
 
 // find and return an user dictionary that relates their ID to their data --> used by front end
 exports.getUser = async (req, res) => {
-  
-        let userID = req.user.uid;
-        console.log(userID,"hello");
 
-        //const user = await getDocument(UserRef, userID); cant use this because dont want to send USer UID back, secuirty hazard
-        let user;
-        const doc = await UserRef.doc(userID).get();
+    let userID = req.user.uid;
 
-        console.log(doc,"hello22");
+    //const user = await getDocument(UserRef, userID); cant use this because dont want to send USer UID back, secuirty hazard
+    let user;
+    const doc = await UserRef.doc(userID).get();
 
-        if (!doc.exists) {
-            res.status(500).json({ success: false, message: 'Error when getting user' });
-            return;
-        } else {
-            
-           user= doc.data() ;
-           delete user.uid; //removes the uid form data
-        }
-        res.status(200).json({ success: true, user:user });
-    
+    if (!doc.exists) {
+        res.status(500).json({ success: false, message: 'Error when getting user' });
+        return;
+    } else {
+
+        user = doc.data();
+        delete user.uid; //removes the uid form data
+    }
+    res.status(200).json({ success: true, user: user });
+
 };
 
 /*
@@ -220,7 +217,7 @@ exports.deleteResume = async (req, res) => {
     }
 }
 
-/* 
+/*
 function to retrive ONE resume --> returns the URL to view their resume
 req must contain the following:
 - userID of the user whose resume is to be returned
@@ -241,7 +238,7 @@ req must contain the following:
 //     }
 // }
 
-/* 
+/*
 function to retrive ALL resumes in system --> returns list of key-value pairs (relates userID to the URL to view their resume)
 req is empty (will not be read)
 */
@@ -271,6 +268,7 @@ req is empty (will not be read)
 /*
 Below includes functions solely for testing. These will NOT be included 
 */
+/*
 const userData = require('../TestDataGeneration/testUserData.js');
 exports.generateTestUsers = async (req, res) => {
     try {
@@ -287,3 +285,4 @@ exports.generateTestUsers = async (req, res) => {
         res.status(500).json({ success: false, message: 'Something went wrong when testing user data' });
     }
 }
+*/
