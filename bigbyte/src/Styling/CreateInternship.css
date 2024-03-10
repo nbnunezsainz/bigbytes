@@ -1,0 +1,29 @@
+.create-internship-container {
+    padding-top: 20px; /* Adjust based on your navbar height */
+    padding-bottom: 40px; /* Extra space at the bottom */
+    justify-content: center;
+}
+
+.create-internship-content {
+    background: #fff; /* Change this as per your color scheme */
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05); /* Subtle shadow for depth */
+    margin-top: 20px; /* Ensure it's not too close to the navbar */
+}
+
+.create-internship-content h2 {
+    text-align: center;
+    margin-bottom: 30px; /* More space below the title for clarity */
+    color: #333; /* Title color */
+}
+
+.internship-form .form-group {
+    margin-bottom: 15px; /* Consistent space between form fields */
+}
+
+.internship-form .btn-primary {
+    width: 100%; /* Full-width button for a modern look */
+    padding: 10px; /* Larger button for easier clicking */
+    margin-top: 20px; /* Space above the button */
+}

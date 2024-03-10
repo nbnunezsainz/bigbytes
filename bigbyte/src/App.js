@@ -11,6 +11,7 @@ import  UserProfile from './AuthenticatedPages/UserProfile';
 import ReactDOM from "react-dom/client";
 import MentorSearch from './AuthenticatedPages/MentorSearch.js';
 import MentorProfile from './AuthenticatedPages/MentorProfile.js';
+import CreateInternship from './AuthenticatedPages/CreateInternships.js';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "./AuthContext.js"; 
 
@@ -52,6 +53,7 @@ function App() {
         <Route path="/InternShips" element={<Internships />} />
         <Route path="/Resume" element={<Resume />} />
         <Route path="/ResumeReviwer" element={<ResumesViewer />} />
+        <Route path="/CreateInternship" element={<CreateInternship />} />
         
          <Route path="/MentorSearch" element={<MentorSearch />} /> 
          <Route path="/MentorProfile" element={<MentorProfile />} />
