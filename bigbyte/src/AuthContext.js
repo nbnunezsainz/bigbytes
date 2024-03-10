@@ -1,4 +1,5 @@
 import { createContext, useContext, useState, useEffect } from "react";
+
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
@@ -28,10 +29,14 @@ export function AuthProvider({ children }) {
     return signInWithEmailAndPassword(auth, email, password);
   }
 
-  function logout() {
-    return signOut(auth);
-  }
 
+  function logout() {
+    signOut(auth).then(() => {
+    }).catch((error) => {
+      // An error happened.
+      setError("Failed to log out");
+    });
+  }
   function updateUserProfile(user, profile) {
     return updateProfile(user, profile);
   }
