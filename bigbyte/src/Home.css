@@ -6,12 +6,10 @@
 }
 
 body {
-    font-family: Arial, sans-serif;
     background-color: #f0f0f0;
     margin: 0;
     padding: 0;
     background: #fccb90;
-    background: -webkit-linear-gradient(to right, #ee7724, #d8363a, #dd3675, #b44593);
     background: linear-gradient(to right, #a1bfff,#80a4f2, #2453d3, #1d4ccf);
 }
 .text {
@@ -52,27 +50,6 @@ nav ul li a:hover {
     background-color: #555;
 }
 
-/* Style for the main content
-.container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 80vh;
-    padding: 20px;
-} */
-
-.content {
-    text-align: center;
-}
-
-h1 {
-    font-size: 3rem;
-    margin-bottom: 20px;
-}
-
-p {
-    font-size: 1.2rem;
-}
 
 /* App.css */
 
@@ -87,10 +64,7 @@ p {
     background-color: #eee;
   }
   
-  .container {
-    padding: 2rem;
-  }
-  
+
   .card {
     border-radius: 0.5rem;
   }
@@ -150,28 +124,11 @@ p {
     color: #6c757d;
   }
   
-  .btn-outline-danger {
-    color: #dc3545;
-    background-color: transparent;
-    background-image: none;
-    border-color: #dc3545;
-  }
-  
-  .btn-outline-danger:hover {
-    color: #fff;
-    background-color: #dc3545;
-    border-color: #dc3545;
-  }
-  
+ 
   .text-white {
     color: #fff;
   }
   
-  .gradient-custom-2 {
-    background: #fccb90;
-    background: -webkit-linear-gradient(to right, #ee7724, #d8363a, #dd3675, #b44593);
-    background: linear-gradient(to right, #5a6c92,#4365b0, #2453d3, #1d4ccf);
-  }
   
   @media (min-width: 768px) {
     .gradient-form {
@@ -186,23 +143,86 @@ p {
     }
   }
 
-  .container {
+  .background-layer {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background-image: url('https://media.nbclosangeles.com/2022/01/107003183-1642607336012-gettyimages-1236648722-873689_LA-ME-UCLA-FACULTY-STRIKE_16_ALS.jpeg');
+    background-size: cover;
+    background-position: center bottom;
+    /* By doing the background image, I needed to lower the brightness, I needed to reduce the brightness of the header */
+    filter: brightness(70%); 
+    /* Wanted to make sure that the background does not effect the design of the other components */
+    z-index: -1;
+  }
+  
+  .content {
+    position: relative; 
+    z-index: 1; 
     display: flex;
+    align-items: center;
     justify-content: space-between;
-    background-color: white;
+    padding: 20px;
+    color: #fff;
+  }
+
+  .left-side {
+    flex: 1;
+  }
+  
+  .right-side {
+    margin-left: 20px;
+  }
+
+.custom-button {
+  background-color: #0041a9;
+  color: #fff;
+  border: none;
+  padding: 15px 30px;
+  border-radius: 7px;
+  font-size: 18px;
+  font-weight: bold;
+  text-transform: uppercase;
 }
 
-.content {
-    display: flex;
-    align-items: center; /* Vertically center the content */
-    width: 100%; /* Ensure the content takes up the full width */
-   
+.custom-button:hover {
+  background-color: transparent; 
+    color: #fff;
+    border: 2px solid #fff; 
+    padding: 15px 30px;
+    border-radius: 10px;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
 }
 
-.left-side {
-    flex: 1; /* Grow to fill available space */
+
+.h1{
+  font-family: 'Arial', sans-serif;
+  font-weight: bold;
+  font-size: 50px;
 }
 
-.right-side {
-    margin-left: 20px; /* Add space between left and right sides */
+.p{
+  font-family: 'Arial', sans-serif; 
+  font-weight: bold;
+  font-size: 25px;
+}
+
+.boxes {
+  display: flex;
+  justify-content: space-between;
+}
+
+.box {
+  background-color: #fff;
+  padding: 20px;
+  width: calc(50% - 20px); 
+}
+
+.image{
+  width: 40px;
 }
