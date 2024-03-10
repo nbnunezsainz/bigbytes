@@ -2,6 +2,7 @@ const { getFirestore, Timestamp, FieldValue, Filter, collection, getDocs } = req
 const { db, admin } = require('../FireBaseSetUp.js');
 const Constants = require('./databaseConstant.js');
 const { queryCollection, deleteDocument, getDocument } = require('./databaseFunctions.js');
+const { param } = require('../routes/InternShipRoutes.js');
 
 // create and initialize a database reference to the "Internship" collection
 const InternshipRef = db.collection(Constants.COLLECTION_INTERNSHIP);
@@ -41,15 +42,17 @@ exports.addInternship = async (req, res) => {
   }
 };
 
+
 //query ALL Internships based on a specific field, filtering technique, and target value --> returns dictionary of ALL internship IDs to their data
 exports.getAllInternships = async (req, res) => {
   try {
     let data = await InternshipRef.get();
 
-    let internshipData = [];
+    let internshipData = {};
 
     data.forEach(internship => {
-      internshipData.push({ id: internship.id, ...internship.data() });
+      internshipData[internship.id] = internship.data();
+      //internshipData.push({ id: internship.id, ...internship.data() });
     });
 
     res.status(200).json({ success: true, message: 'Internship has been found', internshipData: internshipData });
@@ -62,14 +65,39 @@ exports.getAllInternships = async (req, res) => {
   }
 }
 
-//query internships based on a specific field, filtering technique, and target value --> returns dictionary of internship ID to their data
+
+/*compount/complex querying of internships based on a specific field(s), filtering technique(s), and target value(s) --> returns dictionary of internship IDs to their data
+body for the request should be in the following format:
+{
+  "some key 1": {"field": enter_value, "filter": enter_value, "target": enter_value},
+  "some key 2": {"field": enter_value, "filter": enter_value, "target": enter_value},
+  ...
+}
+
+Please refer to the project structure document for the field, filter, and target restrictions
+*/
 exports.queryInternships = async (req, res) => {
   try {
 
-    queryDict = await queryCollection(InternshipRef, req.body);
+    const paramList = req.body;
+    const keyNames = Object.keys(paramList);
+    let queryDict = {};
+
+    if (keyNames.length == 0) {
+      queryDict = getAllInternships(req, res);
+    } else {
+      queryDict = await queryCollection(InternshipRef, paramList[keyNames[0]]);
+
+      for (let i = 1; i < keyNames.length; i++) {
+        const currKey = keyNames[i]
+        const query = paramList[currKey];
+        let q = await queryCollection(InternshipRef, query);
+        queryDict = deDupeQueries(queryDict, q);
+      }
+      res.status(200).json({ success: true, message: 'Internships have been found' });
+    }
 
     console.log("Success- internships have been found!");
-    res.status(200).json({ success: true, message: 'Internships have been found' });
     return queryDict;
 
   } catch (error) {
@@ -78,20 +106,16 @@ exports.queryInternships = async (req, res) => {
   }
 };
 
-//deletes an internship based on their ID
-// THIS CODE IS ESSENTIALLY USELESS NOW! TO ENSURE OUR DATA IS SECURE, WE HAVE COMMENTED THE deleteDocument() FUNCTION
-exports.deleteInternship = async (req, res) => {
-  try {
-    let internshipID = req.body.id;
-
-    //const result = await deleteDocument(InternshipRef, internshipID);
-    console.log("Success- internship deleted!");
-    res.status(200).json({ success: true, message: 'Internship deleted successfully' });
-  } catch (error) {
-    console.log("There was some error when deleting internship", error);
-    res.status(500).json({ success: false, message: 'Error deleting internship' });
+const deDupeQueries = (fullDict, newDict) => {
+  for (const internshipID in fullDict) {
+    if (!newDict.hasOwnProperty(internshipID)) {
+      delete fullDict[internshipID];
+    }
   }
+  return fullDict;
 };
+
+
 
 // find and return an internship dictionary that relates their ID to thier data
 exports.getInternship = async (req, res) => {
@@ -106,6 +130,22 @@ exports.getInternship = async (req, res) => {
   } catch (error) {
     console.log("RAN INTO PROBLEM LOOKING FOR INTERNSHIP", error);
     res.status(500).json({ success: false, message: 'Error when getting internship' });
+  }
+};
+
+
+//deletes an internship based on their ID
+// THIS CODE IS ESSENTIALLY USELESS NOW! TO ENSURE OUR DATA IS SECURE, WE HAVE COMMENTED THE deleteDocument() FUNCTION
+exports.deleteInternship = async (req, res) => {
+  try {
+    let internshipID = req.body.id;
+
+    //const result = await deleteDocument(InternshipRef, internshipID);
+    console.log("Success- internship deleted!");
+    res.status(200).json({ success: true, message: 'Internship deleted successfully' });
+  } catch (error) {
+    console.log("There was some error when deleting internship", error);
+    res.status(500).json({ success: false, message: 'Error deleting internship' });
   }
 };
 

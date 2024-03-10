@@ -38,7 +38,7 @@ async function getDocument(colRef, docID) {
     if (!doc.exists) {
         return null;
     } else {
-        
+
         return { [doc.id]: doc.data() };
     }
 }
@@ -46,17 +46,3 @@ async function getDocument(colRef, docID) {
 module.exports = {
     queryCollection, deleteDocument, getDocument
 };
-
-/*
-
-const user = UserRef.doc(userID);
-        let userData = (await user.get()).data();
-        console.log(userData)
-        await user.update(
-            {
-                MonthlyRefferalCount: userData.MonthlyRefferalCount - 1,
-                TotalRefferalCount: userData.TotalRefferalCount + 1
-            }
-        );
-
-*/
