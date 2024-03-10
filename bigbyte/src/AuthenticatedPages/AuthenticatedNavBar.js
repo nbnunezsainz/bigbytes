@@ -2,6 +2,7 @@
 import React, {useState,useEffect} from 'react';
 import { Outlet, Link } from "react-router-dom";
 import auth from "../fb.js"
+ import '../Styling/AuthNavBar.css';
 
 function AuthNavbar() {
     const [userStatus, setUserStatus] = useState(null);
@@ -41,43 +42,36 @@ function AuthNavbar() {
     
       fetchData();
     }, []);
-    
-
     return (
       <nav className='fixed-top'>
-        <ul>
-          <img
-            src="https://1000logos.net/wp-content/uploads/2017/11/UCLA-Logo.png"
-            style={{ width: "100px" }}
-            alt="logo"
-          />
-  
-          <li> 
-            
-            <Link to="/Internships">Internships</Link>
-            <Link to="/ResumeReviwer">Resume Reviewer</Link> 
-            <Link to="/Home">Logout</Link>
-
-            {userStatus === null ? (
-                // Render nothing or a loader while user status is unknown
-                <div>Loading user info...</div>
-            ) : userStatus ? (
-                // pages only a student can view
-                <li>
-                <Link to="/UserProfile">My Profile</Link>
-                <Link to="/Resume">Upload Resume</Link> 
-                <Link to="/MentorSearch">Mentors</Link>
-                </li>
-            ) : (
-                // User is a mentor and they can view these pages
-                <li>
-                <Link to="/MentorProfile">My Profile</Link>
-                </li>
-            )}
-          </li>
-  
-        </ul>
+          <img src="https://1000logos.net/wp-content/uploads/2017/11/UCLA-Logo.png" alt="logo" style ={{"width":"100px"}}/>
+          <ul className="nav-links">
+              <li><Link to="/Internships">Internships</Link></li>
+              <li><Link to="/ResumeReviwer">Resume Reviewer</Link></li>
+              {/* Only show Create Internships for mentors in the center */}
+              {!userStatus && <li><Link to="/CreateInternship">Create Internship</Link></li>}
+          </ul>
+          {userStatus === null ? (
+              <div className="right-links">Loading user info...</div>
+          ) : (
+              <div className="right-links">
+                   <Link to="/MentorProfile">My Profile</Link>
+                  {userStatus ? (
+                      <>
+                          <Link to="/UserProfile">My Profile</Link>
+                          <Link to="/Resume">Upload Resume</Link>
+                          <Link to="/MentorSearch">Mentors</Link>
+                      </>
+                  ) : (
+                      <>
+                         
+                          <Link to="/Home">Logout</Link>
+                      </>
+                  )}
+              </div>
+          )}
       </nav>
-    );
-  
-} export default AuthNavbar;
+  );
+};
+
+export default AuthNavbar;
