@@ -3,9 +3,22 @@ import React, {useState,useEffect} from 'react';
 import { Outlet, Link } from "react-router-dom";
 import auth from "../fb.js"
  import '../Styling/AuthNavBar.css';
+ import { useNavigate} from 'react-router-dom';
+
+import { useAuth } from ".././AuthContext.js";
+
 
 function AuthNavbar() {
     const [userStatus, setUserStatus] = useState(null);
+    const { logout} = useAuth();
+    const navigate = useNavigate();
+
+    const logoutUser = () =>
+    {
+      logout();
+      navigate("/");
+
+    }
     useEffect(() => {
       const fetchData = async () => {
         try {
@@ -65,7 +78,7 @@ function AuthNavbar() {
                   ) : (
                       <>
                          
-                          <Link to="/Home">Logout</Link>
+                          <button onClick={logoutUser}>Logout</button>
                       </>
                   )}
               </div>

@@ -5,6 +5,7 @@ import { Container, Row, Col, Button, Form } from 'react-bootstrap';
 import AuthNavbar from './AuthenticatedNavBar';
 import auth from "../fb.js";
 import '../Styling/CreateInternship.css';
+
 //import './CreateInternship.css'; // Make sure to create this CSS file for styles
 
 const CreateInternship = () => {
