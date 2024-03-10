@@ -12,6 +12,7 @@ const JobDetail = () => {
   const [filterMajor, setFilterMajor] = useState('');
   const [filterPay, setFilterPay] = useState('');
   const [filterLocation, setFilterLocation] = useState('');
+  const [allLocations, setAllLocations] = useState(new Set());
 
   const applyFilters = async () => {
     setLoading(true); // Start loading
@@ -77,6 +78,26 @@ const JobDetail = () => {
 
         const data = await response.json();
         setJobs(data.internshipData); // Assuming the response JSON structure matches our state
+
+        //get all internship locations
+        let allInternshipLocations;
+        let allLocations;
+
+        //if data.internshipData exists, extract all locations
+        if (data.internshipData){
+          allInternshipLocations = Object.values(data.internshipData);
+          allLocations = [...new Set(allInternshipLocations.map(job => job.Location))];
+          setAllLocations(allLocations)
+        }
+        else {
+          allLocations = new Set();
+        }
+
+
+
+        console.log(allLocations)
+
+
       } catch (error) {
         console.error("Error fetching data:", error);
       } finally {
@@ -123,11 +144,20 @@ const JobDetail = () => {
               <Form.Group className="mb-3">
                 <Form.Label>Location</Form.Label>
                 <Form.Control
-                  type="text"
-                  placeholder="Enter location"
-                  value={filterLocation}
-                  onChange={(e) => setFilterLocation(e.target.value)}
-                />
+                    as="select"
+                    value={filterLocation}
+                    onChange={(e) => setFilterLocation(e.target.value)} >
+
+                  <option value="">Select Location</option> {/*test*/}
+                  {Array.from(allLocations).map((location) => (
+                      <option key={location} value={location}>
+                        {location}
+                      </option>
+                  ))}
+
+
+                </Form.Control>
+
               </Form.Group>
               {<Button variant="primary" onClick={applyFilters}>Apply Filters</Button>}
             </Form>
