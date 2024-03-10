@@ -12,8 +12,10 @@ const JobDetail = () => {
   const [filterMajor, setFilterMajor] = useState('');
   const [filterPay, setFilterPay] = useState('');
   const [filterLocation, setFilterLocation] = useState('');
+  const [filterCompany, setFilterCompany] = useState('');
   const [allCompany, setCompany] = useState('');
   const [allLocations, setAllLocations] = useState(new Set());
+  const [allCategory, setCategory] = useState(new Set());
 
   const applyFilters = async () => {
     setLoading(true); // Start loading
@@ -27,7 +29,7 @@ const JobDetail = () => {
         major: filterMajor,
         pay: filterPay,
         location: filterLocation,
-       // company: filterCompany //added
+        company: filterCompany
       }).toString();
 
       const payloadHeader = {
@@ -81,8 +83,8 @@ const JobDetail = () => {
         const data = await response.json();
         setJobs(data.internshipData); // Assuming the response JSON structure matches our state
 
-        console.log("okay")
         console.log(data.internshipData)
+
 
         //get all internship locations
         let allInternshipLocations;
@@ -112,14 +114,22 @@ const JobDetail = () => {
           setCompany(allCompanies)
         }
 
-        //console.log(allCompanies)
+        //get all Categories
+        //get all companies
+        let allCategory;
+        //if data.internshipData exists, extract all locations
+        if (data.internshipData){
+          allCategory = Object.values(data.internshipData);
+          allCategory = [...new Set(allCategory.map(job => job.Category))];
+          setCategory(allCategory)
+        }
+        else {
+          allCategory = new Set();
+          setCategory(allCategory) }
 
 
 
-
-
-
-        //console.log(allLocations)
+        console.log(allCategory)
 
 
       } catch (error) {
@@ -147,6 +157,57 @@ const JobDetail = () => {
             {/* Filter Section */}
             <h5>Filters</h5>
             <Form>
+              {/* Category */}
+              {/*<Form.Group className="mb-3">*/}
+              {/*  <Form.Label>Category</Form.Label>*/}
+              {/*  <Form.Control*/}
+              {/*      as="select"*/}
+              {/*      value={allCategory}*/}
+              {/*      onChange={(e) => setCategory(e.target.value)} >*/}
+
+              {/*    <option value="">Select Category </option> /!*test*!/*/}
+              {/*    {Array.from(allCategory).map((cat) => (*/}
+              {/*        <option key={cat} value={cat}>*/}
+              {/*          {cat}*/}
+              {/*        </option>*/}
+              {/*    ))}*/}
+              {/*  </Form.Control>*/}
+              {/*</Form.Group>*/}
+              <Form.Group className="mb-3">
+                <Form.Label>Category</Form.Label>
+                <Form.Control
+                    as="select"
+                    value={allCategory}
+                    onChange={(e) => setCategory(e.target.value)}
+                >
+                  <option value="">Select Category</option>
+                  {Array.from(allCategory).map((category, index) => (
+                      <option key={index} value={category[1]}>
+                        {category[1]}
+                      </option>
+                  ))}
+                </Form.Control>
+              </Form.Group>
+
+
+              {/* Company */}
+              <Form.Group className="mb-3">
+                <Form.Label>Company</Form.Label>
+                <Form.Control
+                    as="select"
+                    value={filterCompany}
+                    onChange={(e) => setFilterCompany(e.target.value)} >
+
+                  <option value="">Select Company </option> {/*test*/}
+                  {Array.from(allCompany).map((location) => (
+                      <option key={location} value={location}>
+                        {location}
+                      </option>
+                  ))}
+                </Form.Control>
+              </Form.Group>
+
+
               <Form.Group className="mb-3">
                 <Form.Label>Major</Form.Label>
                 <Form.Control
@@ -184,24 +245,6 @@ const JobDetail = () => {
 
               </Form.Group>
 
-              <Form.Group className="mb-3">
-                <Form.Label>Company</Form.Label>
-                <Form.Control
-                    as="select"
-                    value={allCompany}
-                    onChange={(e) => setCompany(e.target.value)} >
-
-                  <option value="">Select Company </option> {/*test*/}
-                  {Array.from(allCompany).map((location) => (
-                      <option key={location} value={location}>
-                        {location}
-                      </option>
-                  ))}
-
-
-                </Form.Control>
-
-              </Form.Group>
               {<Button variant="primary" onClick={applyFilters}>Apply Filters</Button>}
             </Form>
           </Col>
