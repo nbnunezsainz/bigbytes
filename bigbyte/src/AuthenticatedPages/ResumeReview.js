@@ -18,10 +18,10 @@ const ResumeReviewer = () => {
                 }
             })
             .catch(error => console.error('Error fetching resumes:', error));
-    }, []);
+    }, [resumes]);
 
 
-    console.log(resumes, "resume data is here");
+    // console.log(resumes, "resume data is here");
     return (
         <>
             <AuthNavbar />

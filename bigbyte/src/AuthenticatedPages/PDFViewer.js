@@ -52,9 +52,9 @@ function ResumeViewer({ resumeUrl, resumeUID, resumeComments}) {
         } catch (error) {
             // Log network or other errors to the console
             console.error('Error submitting comment:', error);
-        }
-    
 
+
+        }
     };
 
     return (
@@ -76,18 +76,12 @@ function ResumeViewer({ resumeUrl, resumeUID, resumeComments}) {
                         {resumeComments.length > 0 ? (
                             resumeComments.map((resComment, index) => (
                                 <div key={index}>
-                                    <h2>User: {resumeUID}</h2>
-                                    <p
-                                        value={resComment} 
-                                    />
+                                    <p>{resComment.resumeUID} : {resComment.comment} </p>
                                 </div>
                             ))
                         ) : (
-                            <p>Loading resumes or no resumes available...</p>
+                            <p>No comments yet.</p>
                         )}
-                            {comments.map((comment, index) => (
-                                <div key={index}>{comment}</div>
-                            ))}
                     </div>
                     <div>
                         <textarea
