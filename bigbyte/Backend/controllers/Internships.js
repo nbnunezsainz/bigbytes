@@ -76,7 +76,6 @@ exports.queryInternships = async (req, res) => {
     let queryDict = {};
     let paramList = cleanQuery(req.query);
     const keyNames = Object.keys(paramList);
-    console.log(paramList + " with this many parameters passed: " + keyNames.length)
 
 
     if (keyNames.length == 0) {
@@ -92,8 +91,6 @@ exports.queryInternships = async (req, res) => {
     }
 
     res.status(200).json({ success: true, message: 'Internships have been found', internshipData: queryDict });
-    console.log(Object.keys(queryDict).length + ", and this marks the end of test");
-
     return queryDict;
 
   } catch (error) {
@@ -176,7 +173,6 @@ exports.deleteInternship = async (req, res) => {
     res.status(500).json({ success: false, message: 'Error deleting internship' });
   }
 };
-
 
 
 /*
