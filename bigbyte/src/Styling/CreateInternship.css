@@ -1,29 +1,50 @@
 .create-internship-container {
-    padding-top: 20px; /* Adjust based on your navbar height */
-    padding-bottom: 40px; /* Extra space at the bottom */
+    /* Extra space on both top and bottom */
+    margin-top: 500px; 
+    margin-bottom: 300px;
+    padding: 0 150px; 
+    padding-bottom: 40px;
+    display: flex;
     justify-content: center;
+    font-family: "Montserrat", sans-serif;
+    font-style: bold;
 }
 
 .create-internship-content {
-    background: #fff; /* Change this as per your color scheme */
+    background-color: #ffffff; /* White background */
     padding: 20px;
     border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05); /* Subtle shadow for depth */
-    margin-top: 20px; /* Ensure it's not too close to the navbar */
+    box-shadow: 10px 10px 8px rgba(6, 4, 4, 0.631); /* Slightly increased shadow */
+    margin-top: 20px; /* Added margin top */
+    width: 700px; /* Maximum width */
 }
 
 .create-internship-content h2 {
     text-align: center;
-    margin-bottom: 30px; /* More space below the title for clarity */
-    color: #333; /* Title color */
+    margin-bottom: 30px;
+    color: #333333; /* Darker text color */
 }
 
 .internship-form .form-group {
-    margin-bottom: 15px; /* Consistent space between form fields */
+    margin-bottom: 20px; /* Increased margin bottom */
 }
 
 .internship-form .btn-primary {
-    width: 100%; /* Full-width button for a modern look */
-    padding: 10px; /* Larger button for easier clicking */
-    margin-top: 20px; /* Space above the button */
+    width: 100%; /* Full width button */
+    padding: 12px; /* Increased padding */
+    margin-top: 20px; /* Added margin top */
+    width: 25%;
+    padding: 10px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    align-items: center;
+    font-weight: bold;
 }
+
+.internship-form .btn-primary:hover {
+    background-color: #0e59a9;
+}
+

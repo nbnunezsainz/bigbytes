@@ -78,7 +78,7 @@ function UserDetailsForm() {
       }
 
     return (
-        <div>
+        <div >
             <h1>Select Your Role</h1>
             <Button onClick={() => handleButtonClick('student')} variant="primary">Student</Button>{' '}
             <Button onClick={() => handleButtonClick('mentor')} variant="success">Mentor</Button>{' '}

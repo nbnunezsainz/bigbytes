@@ -23,6 +23,8 @@ const NavBar = () => {
             <Link to="BackendTesting">Backend Testing</Link> */}
             <Link className= "right-li" to="/Login">Login</Link>
             <Link to="/SignUp">Sign Up</Link>
+            {/* Want to see its css but access it due to sign up  */}
+
             
           </li>
   
