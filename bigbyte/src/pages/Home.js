@@ -1,13 +1,17 @@
 import React from 'react';
 import '../Home.css';
-import { Outlet, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import NavBar from './VisitNavBar';
+
+import Footer from './Footer';
+
 
 function Home() {
   return (
     <>
       <NavBar />
       <MainContent />
+      <Footer />
     </>
   )
 } export default Home;
@@ -21,7 +25,7 @@ function MainContent() {
         <div className="background-layer"></div>
         <div className="content">
           <div className="left-side">
-            <h1 className="text-in-container, h1">Refer a Bruin</h1>
+            <h1 className="text-in-container, h1">Refer a Bruin.</h1>
             <p className="text-in-container, p">An app that provides opportunities to all Bruins in search of internships.</p>
           </div>
           <div className="right-side">
@@ -32,7 +36,7 @@ function MainContent() {
           </div>
         </div>
         {/* by attaching the id of the end of the header, the button will scroll down to the info  */}
-        <a href="#end-of-header" className="learn-more-button"></a>
+        <a href="#end-of-header" className="learn-more-button"> </a>
       </header>
        {/* Ending of Header */}
       <div id="end-of-header"></div>
