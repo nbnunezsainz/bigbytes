@@ -33,6 +33,10 @@ const MentorSearch = () => {
         }
   
         const data = await response.json();
+
+        console.log("mentor data: ");
+        console.log(data.mentorData);
+
         setMentors(data.mentorData); // Assuming the response JSON structure matches our state
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -60,6 +64,14 @@ const MentorSearch = () => {
               <Card.Body>
                 <Card.Title>{Mentor.title}</Card.Title>
                 <Card.Text><strong>Company:</strong> {Mentor.Company}</Card.Text>
+                <Card.Text><strong>Name:</strong> {Mentor.FirstName} {Mentor.LastName}</Card.Text>
+                <Card.Text><strong>Bio:</strong> {Mentor.Bio} </Card.Text>
+                <Card.Text>
+                  <strong>LinkedIn:</strong>{" "}
+                  <a href={`https://${Mentor.LinkedIn}`} target="_blank" rel="noopener noreferrer">
+                    {Mentor.LinkedIn}
+                  </a>
+                </Card.Text>
                 <Card.Text><strong>Date Posted:</strong> {Mentor.datePosted}</Card.Text>
                 <Card.Text>{Mentor.Description}</Card.Text>
                 <Button variant="primary">Apply</Button>
