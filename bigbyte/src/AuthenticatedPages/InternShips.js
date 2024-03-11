@@ -64,6 +64,113 @@ const JobDetail = () => {
     }
   };
 
+  const fetchData = async () => {
+
+    try {
+      // Fetching the auth token
+      const user = auth.currentUser;
+      const token = user && (await user.getIdToken());
+
+      const payloadHeader = {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      };
+
+      // Using the token to fetch internships
+      const response = await fetch('http://localhost:3001/api/v1/internship/GetAllInternships', payloadHeader);
+      if (!response.ok) {
+        throw new Error('Failed to fetch');
+      }
+
+      const data = await response.json();
+      setJobs(data.internshipData); // Assuming the response JSON structure matches our state
+
+      console.log(data.internshipData)
+
+
+      //get all internship locations
+      let allInternshipLocations;
+      let allLocations;
+
+      //if data.internshipData exists, extract all locations
+      if (data.internshipData) {
+        allInternshipLocations = Object.values(data.internshipData);
+        allLocations = [...new Set(allInternshipLocations.map(job => job.Location))];
+        setAllLocations(allLocations)
+      }
+      else {
+        allLocations = new Set();
+        setAllLocations(allLocations)
+      }
+
+      //get all companies
+      let allCompanies;
+      //if data.internshipData exists, extract all locations
+      if (data.internshipData) {
+        allCompanies = Object.values(data.internshipData);
+        allCompanies = [...new Set(allCompanies.map(job => job.Company))];
+        setCompany(allCompanies)
+      }
+      else {
+        allCompanies = new Set();
+        setCompany(allCompanies)
+      }
+
+      //get all Categories
+      //get all companies
+      let allCategory;
+      //if data.internshipData exists, extract all locations
+      if (data.internshipData) {
+        allCategory = Object.values(data.internshipData);
+        allCategory = [...new Set(allCategory.map(job => job.Category))];
+        setCategory(allCategory)
+      }
+      else {
+        allCategory = new Set();
+        setCategory(allCategory)
+      }
+
+
+      //iterate through all categories and subcategories. creating a hash map
+      const hashMapforCategories = {};
+      console.log("hello")
+      for (let i = 0; i < allCategory.length; i++) {
+        const mainCategory = allCategory[i][1];
+        const subCategory = allCategory[i][0];
+
+
+        //if main category doesnt exist,
+        if (!hashMapforCategories[mainCategory]) {
+          hashMapforCategories[mainCategory] = new Set([subCategory]);
+        } else {
+          hashMapforCategories[mainCategory].add(subCategory);
+        }
+        setCategory(hashMapforCategories);
+
+
+        // Perform operations with mainCategory and subCategory
+        // console.log(`Main Category: ${mainCategory}, Sub Category: ${subCategory}`);
+        console.log(hashMapforCategories);
+      }
+
+      //console.log(allCategory)
+
+
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    } finally {
+      setLoading(false); // Ensure loading is set to false after the fetch operation completes
+    }
+  };
+
+
+  const resetFilters = () =>
+  {
+    fetchData();
+  }
+
 
 
 
@@ -71,107 +178,7 @@ const JobDetail = () => {
   useEffect(() => {
     // Define the asynchronous function inside the useEffect hook
 
-    const fetchData = async () => {
-
-      try {
-        // Fetching the auth token
-        const user = auth.currentUser;
-        const token = user && (await user.getIdToken());
-
-        const payloadHeader = {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        };
-
-        // Using the token to fetch internships
-        const response = await fetch('http://localhost:3001/api/v1/internship/GetAllInternships', payloadHeader);
-        if (!response.ok) {
-          throw new Error('Failed to fetch');
-        }
-
-        const data = await response.json();
-        setJobs(data.internshipData); // Assuming the response JSON structure matches our state
-
-        console.log(data.internshipData)
-
-
-        //get all internship locations
-        let allInternshipLocations;
-        let allLocations;
-
-        //if data.internshipData exists, extract all locations
-        if (data.internshipData) {
-          allInternshipLocations = Object.values(data.internshipData);
-          allLocations = [...new Set(allInternshipLocations.map(job => job.Location))];
-          setAllLocations(allLocations)
-        }
-        else {
-          allLocations = new Set();
-          setAllLocations(allLocations)
-        }
-
-        //get all companies
-        let allCompanies;
-        //if data.internshipData exists, extract all locations
-        if (data.internshipData) {
-          allCompanies = Object.values(data.internshipData);
-          allCompanies = [...new Set(allCompanies.map(job => job.Company))];
-          setCompany(allCompanies)
-        }
-        else {
-          allCompanies = new Set();
-          setCompany(allCompanies)
-        }
-
-        //get all Categories
-        //get all companies
-        let allCategory;
-        //if data.internshipData exists, extract all locations
-        if (data.internshipData) {
-          allCategory = Object.values(data.internshipData);
-          allCategory = [...new Set(allCategory.map(job => job.Category))];
-          setCategory(allCategory)
-        }
-        else {
-          allCategory = new Set();
-          setCategory(allCategory)
-        }
-
-
-        //iterate through all categories and subcategories. creating a hash map
-        const hashMapforCategories = {};
-        console.log("hello")
-        for (let i = 0; i < allCategory.length; i++) {
-          const mainCategory = allCategory[i][1];
-          const subCategory = allCategory[i][0];
-
-
-          //if main category doesnt exist,
-          if (!hashMapforCategories[mainCategory]) {
-            hashMapforCategories[mainCategory] = new Set([subCategory]);
-          } else {
-            hashMapforCategories[mainCategory].add(subCategory);
-          }
-          setCategory(hashMapforCategories);
-
-
-          // Perform operations with mainCategory and subCategory
-          // console.log(`Main Category: ${mainCategory}, Sub Category: ${subCategory}`);
-          console.log(hashMapforCategories);
-        }
-
-        //console.log(allCategory)
-
-
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      } finally {
-        setLoading(false); // Ensure loading is set to false after the fetch operation completes
-      }
-    };
-
+   
     // Call the fetchData function
     fetchData();
   }, []); // Empty dependency array means this effect runs once on mount
@@ -291,6 +298,7 @@ const JobDetail = () => {
               </Form.Group>
 
               {<Button variant="primary" onClick={applyFilters}>Apply Filters</Button>}
+              {<Button variant="secondary" onClick={resetFilters}> Reset Filters</Button>}
             </Form>
           </Col>
           <Col md={9}>
