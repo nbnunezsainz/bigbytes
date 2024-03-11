@@ -77,34 +77,42 @@ export default function Login() {
 
     return (
       <>
-        <NavBar />
+      <NavBar />
+      {/*Created a class name for full page container in order to find a way to create a background for login page */}
+      <div className='full-page-container'>
+        {/*Login*/}
         <div className="Login">
             <div className="form-elements">
-              <h2>Welcome Back!</h2>
+              <h2 className='label'> Welcome Back!</h2>
               <div>
+                {/*Username*/}
                   <label htmlFor="username">Username:</label>
                   <input
                       type="text"
                       id="username"
                       value={username}
+                      placeholder='e.g. joebruin@ucla.edu '
                       onChange={(e) => setUsername(e.target.value)}
                   />
               </div>
               <div>
+                {/*Password*/}
                   <label htmlFor="password">Password:</label>
                   <input
                       type="password"
                       id="password"
                       value={password}
+                      placeholder='e.g. Cafe1919! '
                       onChange={(e) => setPassword(e.target.value)}
                   />
               </div>
               <div className = "form-group">
+                {/*Log-in */}
               <Button className = "login-btn" onClick={handleLogin2}>Log in</Button>
             </div>
             </div>
         </div>
+      </div>
       </>
     );
 }
-

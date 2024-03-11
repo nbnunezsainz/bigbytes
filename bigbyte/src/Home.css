@@ -5,11 +5,13 @@
   box-sizing: border-box;
 }
 
+
+
 body {
-  background-color: #f0f0f0;
+  background-color: #a1bfff;
   margin: 0;
   padding: 0;
-  background: #fccb90;
+  background: #072472;
   background: linear-gradient(to right, #a1bfff,#80a4f2, #2453d3, #1d4ccf);
 }
 .text {
