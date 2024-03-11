@@ -77,7 +77,7 @@ const UserProfile = () => {
         <Col md={12}>
           <Card style={{ width: '18rem', margin: 'auto' }}>
             <Card.Body>
-              <Card.Title>{User.FirstName}</Card.Title>
+              <Card.Title>{User.FirstName} {User.LastName}</Card.Title>
               <Card.Subtitle className="mb-2 text-muted">{User.Major}</Card.Subtitle>
               <Card.Text>
                 {User.Year}<br/>
@@ -85,7 +85,7 @@ const UserProfile = () => {
               </Card.Text>
               <Button variant="primary">View Resume</Button>
               <Card.Text className="mt-3">
-                {User.bio}
+                {User.Bio}
               </Card.Text>
             </Card.Body>
           </Card>

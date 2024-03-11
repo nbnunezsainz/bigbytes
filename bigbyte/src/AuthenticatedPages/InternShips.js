@@ -320,7 +320,7 @@ const JobDetail = () => {
 
               </Form.Group>
 
-              {<Button variant="primary" onClick={applyFilters}>Apply Filters</Button>}
+              {<Button className="me-2" variant="primary" onClick={applyFilters}>Apply Filters</Button>}
               {<Button variant="secondary" onClick={resetFilters}> Reset Filters</Button>}
             </Form>
           </Col>
