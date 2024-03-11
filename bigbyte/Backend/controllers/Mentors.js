@@ -6,7 +6,7 @@ const { addInternship } = require('./Internships.js');
 
 // create and initialize a database reference to the "Internship" collection
 const MentorRef = db.collection(Constants.COLLECTION_MENTORS);
-
+const MentorNotificationsRef = db.collection(Constants.COLLECTION_MENTORS_NOTIFICATIONS);
 //add a Mentor --> takes mentorData in json format (FirstName: John, LastName: Smith)
 exports.addMentor = async (req, res) => {
   try {
@@ -47,6 +47,41 @@ exports.queryMentors = async (req, res) => {
     res.status(500).json({ success: false, message: 'Error querying mentors' });
   }
 };
+
+
+exports.CheckReferals = async (req, res) => {
+  try {
+    const mentorID = req.user.uid;
+    console.log(mentorID);
+    const mentorNotificationsSnapshot = await MentorNotificationsRef.where('mentorID', '==', mentorID).get();
+
+    if(!mentorNotificationsSnapshot)
+    {
+      res.json({message:"currently no request made"}).status(200);
+    }
+
+    console.log(mentorNotificationsSnapshot, "hello");
+    
+     // Array to store notifications
+     const notifications = [];
+
+     // Iterate over each notification document and add it to the notifications array
+     mentorNotificationsSnapshot.forEach(doc => {
+         notifications.push({
+             ...doc.data() // All other fields of the notification document
+         });
+     });
+
+     console.log(notifications, "notify");
+  
+  res.status(200).json({ success: true, notifications: notifications});
+    }
+     catch (error) {
+        console.error('Error fetching mentor notifications:', error);
+        res.status(500).json({ success: false, message: 'Error fetching mentor notifications' });
+    }
+};
+
 
 //deletes a mentor based on their ID
 // THIS CODE IS ESSENTIALLY USELESS NOW! TO ENSURE OUR DATA IS SECURE, WE HAVE COMMENTED THE deleteDocument() FUNCTION
