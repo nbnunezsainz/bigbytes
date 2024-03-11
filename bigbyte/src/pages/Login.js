@@ -14,6 +14,7 @@ export default function Login() {
     const [redirectToUserData, setRedirectToUserData] = useState(false);
     const { currentUser, login, setError } = useAuth();
 
+    const [failedLogin, setFailedLogin] = useState(false);
     // useEffect(() => {
     //     if (currentUser) {
     //     setRedirectToUserData(true)
@@ -28,9 +29,11 @@ export default function Login() {
           //setLoading(true);
           await login(username, password);
           setRedirectToUserData(true);
+          setFailedLogin(false);
         } catch (e) {
           //setError("Failed to login");
           setRedirectToUserData(false);
+          setFailedLogin(true);
         }
       }
 
@@ -106,6 +109,11 @@ export default function Login() {
                       onChange={(e) => setPassword(e.target.value)}
                   />
               </div>
+              {failedLogin && 
+              <div className='mt-4'>
+                <p style={{color: "red"}}>Incorrect email or password.</p>
+              </div>
+              }
               <div className = "form-group">
                 {/*Log-in */}
               <Button className = "login-btn" onClick={handleLogin2}>Log in</Button>
