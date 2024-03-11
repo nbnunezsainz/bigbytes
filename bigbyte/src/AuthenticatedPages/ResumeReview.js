@@ -9,7 +9,7 @@ const ResumeReviewer = () => {
     function handleDataFromChild (data) {
         setSubmitted(data);
     }
-    
+
     useEffect(() => {
         fetch('http://localhost:3001/api/v1/Resume/GetAllResumesWithComments')
             .then(response => response.json())
