@@ -73,11 +73,14 @@ exports.getUser = async (req, res) => {
     try{
     let userID = req.user.uid;
 
+    console.log(userID);
     //const user = await getDocument(UserRef, userID); cant use this because dont want to send USer UID back, secuirty hazard
     let user;
     const doc = await UserRef.doc(userID).get();
 
-    if (!doc.exists) {
+    console.log(doc, "doc");
+
+    if (!doc) {
         res.status(500).json({ success: false, message: 'Error when getting user' });
         return;
     } else {
@@ -86,6 +89,8 @@ exports.getUser = async (req, res) => {
         delete user.uid; //removes the uid form data
         
     }
+    res.status(200).json({ success: true, user:user});
+
 }
 catch{
 return res.status(500).json({ success: false, message: 'Error when getting user', error: error.message });
