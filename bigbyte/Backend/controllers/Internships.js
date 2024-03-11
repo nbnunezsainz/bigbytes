@@ -74,10 +74,9 @@ Please refer to the project structure document for the field, filter, and target
 exports.queryInternships = async (req, res) => {
   try {
     let queryDict = {};
-
-    let paramList = cleanQuery(req.query)
+    let paramList = cleanQuery(req.query);
     const keyNames = Object.keys(paramList);
-    //console.log(paramList + " with size of " + keyNames.length)
+    console.log(paramList + " with this many parameters passed: " + keyNames.length)
 
 
     if (keyNames.length == 0) {
@@ -93,6 +92,7 @@ exports.queryInternships = async (req, res) => {
     }
 
     res.status(200).json({ success: true, message: 'Internships have been found', internshipData: queryDict });
+    console.log(Object.keys(queryDict).length + ", and this marks the end of test");
 
     return queryDict;
 

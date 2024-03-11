@@ -32,6 +32,7 @@ const JobDetail = () => {
 
       // Construct query parameters from state
       let queryParams = new URLSearchParams({
+        //possibly more filters based on demand
         company: filterCompany,
         category: selectedCategory,
         pay: filterPay,
