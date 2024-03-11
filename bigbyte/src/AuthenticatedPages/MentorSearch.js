@@ -42,7 +42,7 @@ const MentorSearch = () => {
 
       const data = await response.json();
 
-      //console.log(data.internshipData)
+      console.log(data.internshipData)
 
      // setJobs(data.mentorData);
     } catch (error) {

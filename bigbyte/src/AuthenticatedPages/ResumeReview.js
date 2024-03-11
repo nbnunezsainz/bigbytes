@@ -11,6 +11,7 @@ const ResumeReviewer = () => {
     }
 
     useEffect(() => {
+        console.log("mee2p");
         fetch('http://localhost:3001/api/v1/Resume/GetAllResumesWithComments')
             .then(response => response.json())
             .then(data => {
@@ -26,6 +27,9 @@ const ResumeReviewer = () => {
     }, []);
 
     useEffect(() => {
+        if(submitted)
+        {
+            console.log("meep");
         fetch('http://localhost:3001/api/v1/Resume/GetAllResumesWithComments')
             .then(response => response.json())
             .then(data => {
@@ -38,6 +42,8 @@ const ResumeReviewer = () => {
                 }
             })
             .catch(error => console.error('Error fetching resumes:', error));
+        }
+         
     }, [submitted]);
 
     // console.log(resumes, "resume data is here");
