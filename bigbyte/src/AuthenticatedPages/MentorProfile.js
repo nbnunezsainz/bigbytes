@@ -63,32 +63,24 @@ const MentProfile = () => {
         <>
         <AuthNavbar />
         <div style={{padding: "120px"}}>
-          <Card style={{ width: '100%' , height: '600px'}}>
-            <Container>
+          <Card style={{ width: '100%', height: '600px', display: 'flex', flexDirection: 'column', padding: '20px', borderRadius: '10px', boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.1)' }}>
+            <Container style={{ flex: '1', display: 'flex', flexDirection: 'column' }}>
               <Row>
                 <Col>
-                  <Card.Title className='mt-4 mb-3'> {mentor.FirstName} {mentor.LastName} </Card.Title>
-                  <Card.Subtitle className="mb-2 text-muted">Mentor</Card.Subtitle>
-                  <Card.Subtitle className=''> {mentor.Company} </Card.Subtitle>
-                  <Card.Link href={mentor.LinkedIn}> View LinkedIn </Card.Link>
-                  <Card.Text className='mt-5'> {mentor.Bio} </Card.Text>
+                  <h1 className='mt-4 mb-2' style={{ fontSize: '24px', fontWeight: 'bold', color: '#333' }}>{mentor.FirstName} {mentor.LastName}</h1>
+                  <h5 className="mb-1" style={{ color: '#666' }}>Mentor</h5>
+                  <h6 className='' style={{ color: '#888' }}>{mentor.Company}</h6>
+                  <a href={mentor.LinkedIn} style={{ color: '#007bff', textDecoration: 'none' }}>View LinkedIn</a>
+                  <p className='mt-4' style={{ fontSize: '16px', lineHeight: '1.5', color: '#555' }}>{mentor.Bio}</p>
                 </Col>
-                <Col>
-                  <Button>Edit</Button>
-                </Col>
-              </Row>
+                </Row>
+                <Row style={{ marginTop: 'auto' }}>
+                  <Col className="d-flex justify-content-end">
+                    <Button className='mt-4' style={{ backgroundColor: '#007bff', color: '#fff', border: 'none', borderRadius: '5px', padding: '8px 16px' }}>Edit</Button>
+                  </Col>
+                </Row>
             </Container>
           </Card>
-            {/* <div className='mt-3'>
-                <h1>{mentor.FirstName}</h1>
-                <h2>{mentor.LastName}</h2>
-                <h3>Mentor</h3>
-                <h3>{mentor.Company}</h3>
-                <h3>{mentor.Linkedin}</h3>
-            </div>
-            <div className='mb-2'>
-                <p>{mentor.Bio}</p>
-            </div> */}
         </div>
         </>
     );
