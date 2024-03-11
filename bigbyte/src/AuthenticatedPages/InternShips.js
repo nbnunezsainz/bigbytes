@@ -53,6 +53,9 @@ const JobDetail = () => {
       }
 
       const data = await response.json();
+
+      console.log(data.internshipData)
+
       setJobs(data.internshipData);
     } catch (error) {
       console.error("Error fetching data:", error);
