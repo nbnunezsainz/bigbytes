@@ -3,7 +3,7 @@ import '../Footer.css';
 // Creating a footer to have for contact the developers 
 const Footer = () => {
   return (
-    <footer className="footer">
+    <footer className="footer" style={{width: "100vw", position: "absolute", left: "0"}}>
       <div className="footer-content">
         {/* Title */}
         <div className="footer-title">#Refer a Bruin</div>
