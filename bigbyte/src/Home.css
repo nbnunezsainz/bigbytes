@@ -246,3 +246,15 @@ width: 40px;
    /* It needs to be in the middle  */
   transform: translateX(-50%);
 }
+
+.custom-box {
+  background-color: #fff; 
+  padding-right: 50px; 
+  padding-left: 50px; 
+  border-radius: 10px; 
+  box-shadow: 10px 10px 0.5px rgba(176, 209, 255, 0.973); /* Add drop shadow */
+  margin-bottom: 20px; /* Add margin at the bottom for spacing */
+  margin-left: 25%;
+  justify-content: center;
+  position:center;
+}
