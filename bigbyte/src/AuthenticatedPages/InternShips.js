@@ -17,6 +17,12 @@ const JobDetail = () => {
   const [allLocations, setAllLocations] = useState(new Set());
   const [allCategory, setCategory] = useState(new Set());
 
+
+  const [selectedCategory, setSelectedCategory] = useState('');
+  const [selectedSubcategory, setSelectedSubcategory] = useState('');
+  const [allSubcategories, setAllSubcategories] = useState('');
+
+
   const applyFilters = async () => {
     setLoading(true); // Start loading
 
@@ -128,8 +134,29 @@ const JobDetail = () => {
           setCategory(allCategory) }
 
 
+        //iterate through all categories and subcategories. creating a hash map
+        const hashMapforCategories = {};
+        console.log("hello")
+        for (let i = 0; i < allCategory.length; i++) {
+          const mainCategory = allCategory[i][1];
+          const subCategory = allCategory[i][0];
 
-        console.log(allCategory)
+
+          //if main category doesnt exist,
+          if (!hashMapforCategories[mainCategory]) {
+            hashMapforCategories[mainCategory] = new Set([subCategory]);
+          } else {
+            hashMapforCategories[mainCategory].add(subCategory);
+          }
+          setCategory(hashMapforCategories);
+
+
+          // Perform operations with mainCategory and subCategory
+         // console.log(`Main Category: ${mainCategory}, Sub Category: ${subCategory}`);
+          console.log(hashMapforCategories);
+        }
+
+        //console.log(allCategory)
 
 
       } catch (error) {
@@ -157,40 +184,8 @@ const JobDetail = () => {
             {/* Filter Section */}
             <h5>Filters</h5>
             <Form>
-              {/* Category */}
-              {/*<Form.Group className="mb-3">*/}
-              {/*  <Form.Label>Category</Form.Label>*/}
-              {/*  <Form.Control*/}
-              {/*      as="select"*/}
-              {/*      value={allCategory}*/}
-              {/*      onChange={(e) => setCategory(e.target.value)} >*/}
 
-              {/*    <option value="">Select Category </option> /!*test*!/*/}
-              {/*    {Array.from(allCategory).map((cat) => (*/}
-              {/*        <option key={cat} value={cat}>*/}
-              {/*          {cat}*/}
-              {/*        </option>*/}
-              {/*    ))}*/}
-              {/*  </Form.Control>*/}
-              {/*</Form.Group>*/}
-              <Form.Group className="mb-3">
-                <Form.Label>Category</Form.Label>
-                <Form.Control
-                    as="select"
-                    value={allCategory}
-                    onChange={(e) => setCategory(e.target.value)}
-                >
-                  <option value="">Select Category</option>
-                  {Array.from(allCategory).map((category, index) => (
-                      <option key={index} value={category[1]}>
-                        {category[1]}
-                      </option>
-                  ))}
-                </Form.Control>
-              </Form.Group>
-
-
-              {/* Company */}
+              {/* company */ }
               <Form.Group className="mb-3">
                 <Form.Label>Company</Form.Label>
                 <Form.Control
@@ -206,6 +201,50 @@ const JobDetail = () => {
                   ))}
                 </Form.Control>
               </Form.Group>
+              <Form.Group className="mb-3">
+                <Form.Label>Category</Form.Label>
+                <Form.Control
+                    as="select"
+                    value={selectedCategory}
+                    onChange={(e) => {
+                      setSelectedCategory(e.target.value);
+                    }}
+                >
+                  {/* main category */ }
+                  <option value="">Select Category</option>
+                  {Object.keys(allCategory).map((categoryKey) => (
+                      <option key={categoryKey} value={categoryKey}>
+                        {categoryKey}
+                      </option>
+                  ))}
+
+                  console.log(setSelectedCategory)
+
+                </Form.Control>
+              </Form.Group>
+
+              {selectedCategory && (
+                  <Form.Group className="mb-3">
+                    <Form.Label>Subcategory</Form.Label>
+                    <Form.Control
+                        as="select"
+                        value={selectedSubcategory}
+                        onChange={(e) => setSelectedSubcategory(e.target.value)}
+
+                    >
+                      <option value="">Select Subcategory</option>
+
+
+                      {/* need help here - thought inserting 'selectedCategory' should work*/ }
+                      {Object.values(allCategory).map((subcategory) => (
+                          <option key={subcategory} value={subcategory}>
+                            {subcategory}
+                          </option>
+                      ))}
+                    </Form.Control>
+                  </Form.Group>
+              )}
+
 
 
               <Form.Group className="mb-3">
