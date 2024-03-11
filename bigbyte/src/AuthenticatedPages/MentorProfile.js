@@ -14,8 +14,33 @@ const MentProfile = () => {
     const [loading, setLoading] = useState([]);
 
     const [mentor, setMentor] = useState([]);
+    const [notifications, setNotifications] = useState([]);
+
+    const CheckReferals = async( ) =>
+    {
+      const user = auth.currentUser;
+              const token = user && (await user.getIdToken());
+      
+              const payloadHeader = {
+                headers: {
+                  "Content-Type": "application/json",
+                  Authorization: `Bearer ${token}`,
+                },
+              };
+            const response = await fetch('http://localhost:3001/api/v1/mentor/RequestedReferals', payloadHeader)
+            if (!response.ok) {
+              throw new Error('Failed to fetch');
+            }
+            
+              const data = await response.json();
+
+              console.log(data, "dataa");
+      
+
+    }
     useEffect(() => {
         // Define the asynchronous function inside the useEffect hook
+
 
         const fetchData = async () => {
 
@@ -32,36 +57,37 @@ const MentProfile = () => {
               };
       
               // // Using the token to fetch internships
-              // const response = await fetch('http://localhost:3001/api/v1/mentor/GetMentor', payloadHeader);
-              // if (!response.ok) {
-              //   throw new Error('Failed to fetch');
-              // }
+               const response = await fetch('http://localhost:3001/api/v1/mentor/GetMentor', payloadHeader);
+               if (!response.ok) {
+                throw new Error('Failed to fetch');
+              }
       
-              // const data = await response.json();
-              // setMentor(data.user);
+              const data = await response.json();
+              setMentor(data.user);
               // console.log(data.user,"data");
-              const mentorResponsePromise = fetch('http://localhost:3001/api/v1/mentor/GetMentor', payloadHeader)
-              .then(response => response.ok ? response.json() : null)
-              .catch(error => null);
+            //   const mentorResponsePromise = fetch('http://localhost:3001/api/v1/mentor/GetMentor', payloadHeader)
+            //   .then(response => response.ok ? response.json() : null)
+            //   .catch(error => null);
       
-            const notificationsResponsePromise = fetch('http://localhost:3001/api/v1/mentor/RequestedReferals', payloadHeader)
-              .then(response => response.ok ? response.json() : null)
-              .catch(error => null);
+            // const notificationsResponsePromise = fetch('http://localhost:3001/api/v1/mentor/RequestedReferals', payloadHeader)
+            //   .then(response => response.ok ? response.json() : null)
+            //   .catch(error => null);
       
-            const [mentorData, notificationsData] = await Promise.race([
-              mentorResponsePromise,
-              notificationsResponsePromise
-            ]);
+            // const [mentorData, notificationsData] = await Promise.race([
+            //   mentorResponsePromise,
+            //   notificationsResponsePromise
+            // ]);
       
-            if (mentorData) {
-              setMentor(mentorData.user);
-              console.log(mentorData.user, "mentor data");
-            }
+            // if (mentorData) {
+            //   setMentor(mentorData.user);
+            //    console.log(mentorData.user, "mentor data");
+            //  }
       
-            if (notificationsData) {
-              // Handle notifications data
-              console.log(notificationsData, "notifications data");
-            }
+            // if (notificationsData) {
+            //   setNotifications(notificationsData)
+            //   // Handle notifications data
+            //   console.log(notificationsData, "notifications data");
+            // }
       
 
             //   set(data.internshipData); // Assuming the response JSON structure matches our state
@@ -100,6 +126,7 @@ const MentProfile = () => {
                 <Row style={{ marginTop: 'auto' }}>
                   <Col className="d-flex justify-content-end">
                     <Button className='mt-4' style={{ backgroundColor: '#007bff', color: '#fff', border: 'none', borderRadius: '5px', padding: '8px 16px' }}>Edit</Button>
+                    <Button onClick= {CheckReferals} className='mt-4' style={{ backgroundColor: '#007bff', color: '#fff', border: 'none', borderRadius: '5px', padding: '8px 16px' }}> Check Referals</Button>
                   </Col>
                 </Row>
             </Container>
