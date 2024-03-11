@@ -107,7 +107,7 @@ const MentProfile = () => {
         return <div>Loading...</div>; // Render a loading page or spinner here
     }
     
-    console.log(mentor);
+    console.log("mentor" , mentor);
     return (
         <>
         <AuthNavbar />
@@ -125,7 +125,7 @@ const MentProfile = () => {
                 </Row>
                 <Row style={{ marginTop: 'auto' }}>
                   <Col className="d-flex justify-content-end">
-                    <Button className='mt-4' style={{ backgroundColor: '#007bff', color: '#fff', border: 'none', borderRadius: '5px', padding: '8px 16px' }}>Edit</Button>
+                    <Button className='mt-4 me-4' style={{ backgroundColor: '#007bff', color: '#fff', border: 'none', borderRadius: '5px', padding: '8px 16px' }}>Edit</Button>
                     <Button onClick= {CheckReferals} className='mt-4' style={{ backgroundColor: '#007bff', color: '#fff', border: 'none', borderRadius: '5px', padding: '8px 16px' }}> Check Referals</Button>
                   </Col>
                 </Row>

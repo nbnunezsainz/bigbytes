@@ -76,9 +76,11 @@ function AuthNavbar() {
           <ul className="right-links ml-2 mt-1 mb-1">
               {userStatus ? (
                   <>
+
                       <li>
                           <Link to="/UserProfile">My Profile</Link>
                       </li>
+
                       <Button onClick={logoutUser}>Logout</Button>
                   </>
               ) : (
@@ -90,6 +92,7 @@ function AuthNavbar() {
           </ul>
       )}
   </nav>
+
   );
 };
 
