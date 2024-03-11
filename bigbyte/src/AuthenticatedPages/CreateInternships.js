@@ -11,6 +11,7 @@ import Confetti from 'react-dom-confetti';
 
 
 const CreateInternship = () => {
+    const [success,setSuccess]= useState(false);
   const [internshipData, setInternshipData] = useState({
     title: '',
     company: '',
@@ -20,14 +21,12 @@ const CreateInternship = () => {
     category: '',
     url: '',
     referralLimit: '',
-    mentorID: '', // Assuming this will come from authenticated user context or similar
+     // Assuming this will come from authenticated user context or similar
 });
     const [loading, setLoading] = useState(true); // State to manage loading status
     const [showConfetti, setShowConfetti] = useState(false); // Want to add the js.confetti so when someone submits a posting, they are rewarded for it 
-    useEffect(() => {
-      // Define the asynchronous function inside the useEffect hook
-  
-      const fetchData = async () => {
+ 
+      const SubmitInternship = async () => {
   
         try {
           // Fetching the auth token
@@ -35,10 +34,12 @@ const CreateInternship = () => {
           const token = user && (await user.getIdToken());
   
           const payloadHeader = {
+            method: 'POST',
             headers: {
               "Content-Type": "application/json",
               Authorization: `Bearer ${token}`,
             },
+            body: JSON.stringify(internshipData), // Include the internship data in the request body
           };
   
           // Using the token to fetch internships
@@ -48,20 +49,19 @@ const CreateInternship = () => {
           }
   
           const data = await response.json();
+          console.log(data.success,"hi");
+          setSuccess(data.success);
+          setShowConfetti(data.success);
+          console.log(success);
         } catch (error) {
         } finally {
           setLoading(false); // Ensure loading is set to false after the fetch operation completes
         }
       };
   
-      // Call the fetchData function
-      fetchData();
-    }, []); // Empty dependency array means this effect runs once on mount
   
   
-    if (loading) {
-      return <div>Loading...</div>; // Render a loading page or spinner here
-    }
+  
       
         const handleChange = (e) => {
             setInternshipData({ ...internshipData, [e.target.name]: e.target.value });
@@ -84,7 +84,9 @@ const CreateInternship = () => {
              who otherwise wouldn't have had the chance. A stepping stone in their bright future and we cannot thank you enough for it. </p>
                   </div>
                 </header>
+                <Confetti active={showConfetti} />
                 <Container className="create-internship-container">
+                <Confetti active={showConfetti} />
                     <Row className="justify-content-center">
                         <Col sm ={12}>
                             <div className="create-internship-content">
@@ -92,6 +94,7 @@ const CreateInternship = () => {
                                 {/* Form starts here */}
                                 <Form onSubmit={handleSubmit} className="internship-form">
                                     <Form.Group className="mb-3" controlId="formTitle">
+                                    <Confetti active={showConfetti} />
                                         <Form.Label>Title</Form.Label>
                                         <Form.Control
                                             type="text"
@@ -111,6 +114,7 @@ const CreateInternship = () => {
                                             placeholder="Enter company name"
                                         />
                                     </Form.Group>
+                                    <Confetti active={showConfetti} />
                                     <Form.Group className="mb-3" controlId="formDescription">
                                         <Form.Label>Description</Form.Label>
                                         <Form.Control
@@ -122,6 +126,7 @@ const CreateInternship = () => {
                                             placeholder="Enter internship description"
                                         />
                                     </Form.Group>
+                                    <Confetti active={showConfetti} />
                                     <Form.Group className="mb-3" controlId="formLocation">
                                         <Form.Label>Location</Form.Label>
                                         <Form.Control
@@ -132,6 +137,7 @@ const CreateInternship = () => {
                                             placeholder="Enter location"
                                         />
                                     </Form.Group>
+                                    <Confetti active={showConfetti} />
                                     <Form.Group className="mb-3" controlId="formPay">
                                         <Form.Label>Pay (optional)</Form.Label>
                                         <Form.Control
@@ -142,6 +148,7 @@ const CreateInternship = () => {
                                             placeholder="Enter pay"
                                         />
                                     </Form.Group>
+                                    <Confetti active={showConfetti} />
                                     <Form.Group className="mb-3" controlId="formCategory">
                                         <Form.Label>Category</Form.Label>
                                         <Form.Control
@@ -152,6 +159,7 @@ const CreateInternship = () => {
                                             placeholder="Enter category (e.g., Engineering, Marketing)"
                                         />
                                     </Form.Group>
+                                    <Confetti active={showConfetti} />
                                     <Form.Group className="mb-3" controlId="formURL">
                                         <Form.Label>Application URL</Form.Label>
                                         <Form.Control
@@ -162,6 +170,7 @@ const CreateInternship = () => {
                                             placeholder="Enter application URL"
                                         />
                                     </Form.Group>
+                                    <Confetti active={showConfetti} />
                                     <Form.Group className="mb-3" controlId="formReferralLimit">
                                         <Form.Label>Referral Limit (optional)</Form.Label>
                                         <Form.Control
@@ -173,7 +182,7 @@ const CreateInternship = () => {
                                         />
                                     </Form.Group>
                                     {/* Form ends here */}
-                                    <Button variant="primary" type="submit">
+                                    <Button onClick= {SubmitInternship}variant="primary" type="submit">
                                         Submit
                                     </Button>
                                 </Form>
@@ -182,7 +191,9 @@ const CreateInternship = () => {
                     </Row>
                 </Container>
                  {/* Once submitted, call active showConfetti */}
+               
                 <Confetti active={showConfetti} />
+                 
             </div>
         );
     };
