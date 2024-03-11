@@ -4,6 +4,7 @@ import Button from 'react-bootstrap/Button';
 //import { FaComment } from 'react-icons/fa'; // Assuming you're using react-icons for the comment icon
 import 'react-pdf/dist/Page/TextLayer.css';
 import 'react-pdf/dist/Page/AnnotationLayer.css';
+import '../Styling/PDFViewer.css';
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
 
 
@@ -62,13 +63,13 @@ function ResumeViewer({sendDataToParent, resumeUrl, resumeUID, resumeComments}) 
     };
 
     return (
-        <div>
-            <Document
+        <>
+            <Document 
                 file={resumeUrl}
-                onLoadError={console.error}
                 
             >
-                <Page pageNumber={1} width={600} />
+                <Page className ="react-pdf__Page__canvas" size ="A4" pageNumber={1}  renderTextLayer = {false} renderAnnotationLayer ={false}
+        />
             </Document>
             <Button className='mt-2 mb-2' value={resumeUID} onClick={toggleComments}>
     comments
@@ -97,7 +98,7 @@ function ResumeViewer({sendDataToParent, resumeUrl, resumeUID, resumeComments}) 
                     </div>
                 </div>
             )}
-        </div>
+        </>
     );
 }
 
