@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Row, Col, Button, Card } from 'react-bootstrap';
+import { Outlet, Link } from "react-router-dom";
+import {Card, Button} from 'react-bootstrap';
+import {Container, Row, Col} from 'react-bootstrap';
 import AuthNavbar from './AuthenticatedNavBar';
-import auth from "../fb.js";
+import auth from "../fb.js"
 
 
 const UserProfile = () => {
@@ -68,10 +70,11 @@ const UserProfile = () => {
   }
 
   return (
+    <>
+    <AuthNavbar />
     <Container>
-    <Row className="mt-5">
-      <Col md={12}>
-        {User ? (
+      <Row className="mt-5">
+        <Col md={12}>
           <Card style={{ width: '18rem', margin: 'auto' }}>
             <Card.Body>
               <Card.Title>{User.FirstName}</Card.Title>
@@ -86,16 +89,13 @@ const UserProfile = () => {
               </Card.Text>
             </Card.Body>
           </Card>
-        ) : (
-          <div>No user data available.</div>
-        )}
-      </Col>
-    </Row>
-  </Container>
-);
+        </Col>
+      </Row>
+    </Container>
+    </>
+    
+  );
 };
 
 
 export default UserProfile;
-
-

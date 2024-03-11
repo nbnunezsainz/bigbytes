@@ -68,9 +68,7 @@ function AuthNavbar() {
               <div className="right-links">Loading user info...</div>
           ) : (
               <ul className="right-links ml-2 mt-1 mb-1">
-                <ul className='nav-links'>
-                  <li><Link to="/MentorProfile">My Profile</Link></li>
-                </ul>
+                
                   {userStatus ? (
                       <li>
                           <Link to="/UserProfile">My Profile</Link>
@@ -78,11 +76,14 @@ function AuthNavbar() {
                           <Link to="/MentorSearch">Mentors</Link>
                       </li>
                   ) : (
-                      <>
-                         
-                          <Button onClick={logoutUser}>Logout</Button>
-                      </>
+                      
+                      <ul className='nav-links'>
+                        <li><Link to="/MentorProfile">My Profile</Link></li>
+                      </ul>
+                      
                   )}
+
+                <Button onClick={logoutUser}>Logout</Button>
               </ul>
           )}
       </nav>
