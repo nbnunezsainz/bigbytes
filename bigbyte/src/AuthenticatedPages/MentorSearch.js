@@ -13,6 +13,58 @@ const MentorSearch = () => {
   const [filterCompany, setFilterCompany] = useState('');
 
 
+  const fetchData = async () => {
+     
+    try {
+      // Fetching the auth token
+      const user = auth.currentUser ;
+      const token = user && (await user.getIdToken());
+
+      const payloadHeader = {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      };
+
+      // Using the token to fetch internships
+      const response = await fetch('http://localhost:3001/api/v1/mentor/GetAllMentors', payloadHeader);
+      if (!response.ok) {
+        throw new Error('Failed to fetch');
+      }
+
+      const data = await response.json();
+
+      console.log("mentor data: ");
+      console.log(data.mentorData);
+
+      setMentors(data.mentorData); // Assuming the response JSON structure matches our state
+
+      let mentorCompany;
+      //if data.internshipData exists, extract all locations
+      if (data.mentorData) {
+        mentorCompany = Object.values(data.mentorData);
+        mentorCompany = [...new Set(mentorCompany.map(job => job.Company))];
+        setAllCompanies(mentorCompany)
+      }
+      else {
+        mentorCompany = new Set();
+        setAllCompanies(mentorCompany)
+      }
+
+
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    } finally {
+      setLoading(false); // Ensure loading is set to false after the fetch operation completes
+    }
+  };
+
+  const ResetFilters = async () =>
+  {
+    fetchData();
+
+  }
   //apply filters
   const applyFilters = async () => {
     setLoading(true); // Start loading
@@ -55,54 +107,6 @@ const MentorSearch = () => {
 
   useEffect(() => {
     // Define the asynchronous function inside the useEffect hook
-    
-    const fetchData = async () => {
-     
-      try {
-        // Fetching the auth token
-        const user = auth.currentUser ;
-        const token = user && (await user.getIdToken());
-  
-        const payloadHeader = {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        };
-  
-        // Using the token to fetch internships
-        const response = await fetch('http://localhost:3001/api/v1/mentor/GetAllMentors', payloadHeader);
-        if (!response.ok) {
-          throw new Error('Failed to fetch');
-        }
-  
-        const data = await response.json();
-
-        console.log("mentor data: ");
-        console.log(data.mentorData);
-
-        setMentors(data.mentorData); // Assuming the response JSON structure matches our state
-
-        let mentorCompany;
-        //if data.internshipData exists, extract all locations
-        if (data.mentorData) {
-          mentorCompany = Object.values(data.mentorData);
-          mentorCompany = [...new Set(mentorCompany.map(job => job.Company))];
-          setAllCompanies(mentorCompany)
-        }
-        else {
-          mentorCompany = new Set();
-          setAllCompanies(mentorCompany)
-        }
-
-
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      } finally {
-        setLoading(false); // Ensure loading is set to false after the fetch operation completes
-      }
-    };
-  
     // Call the fetchData function
     fetchData();
   }, []); // Empty dependency array means this effect runs once on mount
@@ -135,6 +139,7 @@ const MentorSearch = () => {
 
           </Form.Group>
           {<Button variant="primary" onClick={applyFilters}>Apply Filters</Button>}
+          {<Button variant="primary" onClick={ResetFilters}> Reset Filters</Button>}
         </Form>
 
         {/*</Form>*/}
