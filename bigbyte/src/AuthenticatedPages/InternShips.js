@@ -22,11 +22,6 @@ const JobDetail = () => {
   const [selectedSubcategory, setSelectedSubcategory] = useState('');
   const [allSubcategories, setAllSubcategories] = useState('');
 
-  //const [selectedMainCategory, setSelectedMainCategory] = useState(null); //delete maybe
-
-  // const handleMainCategorySelect = (mainCategory) => {
-  //   setSelectedMainCategory(mainCategory);
-  // };
 
   const applyFilters = async () => {
     setLoading(true); // Start loading
