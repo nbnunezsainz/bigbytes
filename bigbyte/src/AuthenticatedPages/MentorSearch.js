@@ -10,7 +10,49 @@ const MentorSearch = () => {
   const [Mentors, setMentors] = useState([]); // State to store internship data
   const [loading, setLoading] = useState(true); // State to manage loading status
   const [allCompanies, setAllCompanies] = useState(new Set());
-  
+  const [filterCompany, setFilterCompany] = useState('');
+
+
+  //apply filters
+  const applyFilters = async () => {
+    setLoading(true); // Start loading
+
+    try {
+      const user = auth.currentUser;
+      const token = user && (await user.getIdToken());
+
+      // Construct query parameters from state
+      let queryParams = new URLSearchParams({
+        company: filterCompany,
+
+      }).toString();
+
+      const payloadHeader = {
+        method: 'GET',
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      };
+
+      const response = await fetch(`http://localhost:3001/api/v1/mentor/QueryMentors?${queryParams}`, payloadHeader);
+      if (!response.ok) {
+        throw new Error('Failed to fetch');
+      }
+
+      const data = await response.json();
+
+      //console.log(data.internshipData)
+
+     // setJobs(data.mentorData);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    } finally {
+      setLoading(false); // Stop loading regardless of outcome
+    }
+  };
+
+
   useEffect(() => {
     // Define the asynchronous function inside the useEffect hook
     
@@ -79,7 +121,8 @@ const MentorSearch = () => {
           <Form.Group className="mb-3">
             <Form.Label>Company</Form.Label>
             <Form.Control
-                as="select">
+                as="select" value={filterCompany}
+                onChange={(e) => setFilterCompany(e.target.value)}>
 
               {/* Options for companies */}
               <option value="">Select Company</option>
@@ -91,7 +134,7 @@ const MentorSearch = () => {
             </Form.Control>
 
           </Form.Group>
-          {<Button variant="primary">Apply Filters</Button>}
+          {<Button variant="primary" onClick={applyFilters}>Apply Filters</Button>}
         </Form>
 
         {/*</Form>*/}
