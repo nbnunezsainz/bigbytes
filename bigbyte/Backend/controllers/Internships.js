@@ -74,11 +74,8 @@ Please refer to the project structure document for the field, filter, and target
 exports.queryInternships = async (req, res) => {
   try {
     let queryDict = {};
-
-    let paramList = cleanQuery(req.query)
+    let paramList = cleanQuery(req.query);
     const keyNames = Object.keys(paramList);
-    //console.log(paramList + " with size of " + keyNames.length)
-
 
     if (keyNames.length == 0) {
       queryDict = getAllInternships(req, res);
@@ -93,7 +90,6 @@ exports.queryInternships = async (req, res) => {
     }
 
     res.status(200).json({ success: true, message: 'Internships have been found', internshipData: queryDict });
-
     return queryDict;
 
   } catch (error) {
@@ -176,7 +172,6 @@ exports.deleteInternship = async (req, res) => {
     res.status(500).json({ success: false, message: 'Error deleting internship' });
   }
 };
-
 
 
 /*
