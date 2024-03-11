@@ -67,7 +67,7 @@ function AuthNavbar() {
           {/* Only show Create Internships for mentors in the center */}
           {!userStatus && <li><Link to="/CreateInternship">Create Internship</Link></li>}
           { userStatus  && <li><Link to="/Resume">Upload Resume</Link>  </li>}
-          { userStatus  && <li><Link to="/MentorSearch">Mentors</Link> </li>}
+          <li><Link to="/MentorSearch">Mentors</Link> </li>
           
       </ul>
       {userStatus === null ? (

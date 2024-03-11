@@ -6,6 +6,8 @@ import 'react-pdf/dist/Page/TextLayer.css';
 import 'react-pdf/dist/Page/AnnotationLayer.css';
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
 
+
+
 function ResumeViewer({sendDataToParent, resumeUrl, resumeUID, resumeComments}) {
     const [showComments, setShowComments] = useState(false);
     const [comments, setComments] = useState([]);
@@ -13,11 +15,12 @@ function ResumeViewer({sendDataToParent, resumeUrl, resumeUID, resumeComments}) 
     const [currentResumeUID, setCurrentResumeUID] = useState(null); // Add this line
     
     const toggleComments = (e) => {
-        setShowComments(!showComments);
-        setCurrentResumeUID(e.target.value);
-     // This will log the value of the button (resumeUID)
-    }
+       setShowComments(!showComments);
+         setCurrentResumeUID(e.target.value);
+    //  // This will log the value of the button (resumeUID)
+     }
 
+   
     const submitComment = async() => {
         
         if (newComment.trim()) { // Avoid adding empty comments
