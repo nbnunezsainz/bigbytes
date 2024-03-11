@@ -1,6 +1,7 @@
 import React, { useState,useEffect  } from 'react';
 import Button from 'react-bootstrap/Button';
 import '../Login.css';
+import NavBar from './VisitNavBar.js';
 import {Link, Navigate } from 'react-router-dom';
 
 import { useAuth } from ".././AuthContext.js";
@@ -75,6 +76,8 @@ export default function Login() {
        }
 
     return (
+      <>
+        <NavBar />
         <div className="Login">
             <div className="form-elements">
               <h2>Welcome Back!</h2>
@@ -101,6 +104,7 @@ export default function Login() {
             </div>
             </div>
         </div>
+      </>
     );
 }
 

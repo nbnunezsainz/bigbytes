@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import '../Signup.css';
+import NavBar from './VisitNavBar.js';
+import {Container, Form, Row, Col, Card, Button} from 'react-bootstrap';
 import { Navigate } from 'react-router-dom';
 import { useAuth } from ".././AuthContext.js";
 
@@ -73,25 +75,48 @@ if (redirectToUserData) {
   return <Navigate to="/UserData" />;
 }
     return (
-        <div>
-        <label htmlFor="username">Email:</label>
-        <input 
-            type="text" 
-            id="username" 
-            value={email} 
-            onChange={handleEmailChange} 
-            placeholder="Place your email here" 
-        />
-        <label htmlFor="password">Password:</label>
-        <input 
-            type="password" 
-            id="password" 
-            value={password} 
-            onChange={handlePasswordChange} 
-            placeholder="Enter your password" 
-        />
-         <button onClick={SignUserUp} type="submit">Sign Up</button>
-    </div>
+      <>
+        <NavBar />
+        <Container className="d-flex justify-content-center align-items-center vh-100">
+            <Row>
+                <Col xs={12} md={8} lg={6}>
+                    <Card style={{ width: '500px', padding: '30px', borderRadius: '10px', boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.1)' }}>
+                      <Card.Title  className='mb-3' style={{fontSize: '32px'}}>Sign Up</Card.Title>
+                        <div>
+                            <Form>
+                                <Form.Group controlId="username">
+                                    <Form.Label>Email:</Form.Label>
+                                    <Form.Control 
+                                        type="text" 
+                                        value={email} 
+                                        onChange={handleEmailChange} 
+                                        placeholder="Enter your email" 
+                                    />
+                                </Form.Group>
+                                <Form.Group controlId="password">
+                                    <Form.Label className='mt-2'>Password:</Form.Label>
+                                    <Form.Control 
+                                        type="password" 
+                                        value={password} 
+                                        onChange={handlePasswordChange} 
+                                        placeholder="Enter your password" 
+                                    />
+                                </Form.Group>
+                                <Button 
+                                    className='mt-4'
+                                    onClick={SignUserUp} 
+                                    type="submit" 
+                                    style={{ width: '100%', backgroundColor: '#007bff', color: '#fff', border: 'none', borderRadius: '5px', padding: '10px', cursor: 'pointer' }}
+                                >
+                                    Sign Up
+                                </Button>
+                            </Form>
+                        </div>
+                    </Card>
+                </Col>
+            </Row>
+        </Container>
+      </>
     );
 }
 
