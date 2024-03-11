@@ -86,7 +86,7 @@ export default function Login() {
               <h2 className='label'> Welcome Back!</h2>
               <div>
                 {/*Username*/}
-                  <label htmlFor="username">Username:</label>
+                  <label htmlFor="username">Email:</label>
                   <input
                       type="text"
                       id="username"
