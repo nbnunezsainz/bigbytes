@@ -8,7 +8,7 @@ const Footer = () => {
         {/* Title */}
         <div className="footer-title">#Refer a Bruin</div>
         {/* UCLA Logo  */}
-        <img src="https://www.pngall.com/wp-content/uploads/13/Ucla-Logo-PNG-Pic.png" alt="Logo" className="footer-logo" />
+        <img src="https://1000logos.net/wp-content/uploads/2017/11/UCLA-Logo.png" alt="Logo" className="footer-logo" />
         <div className="footer-contact">
           {/* Connect with email; email is being displayed as support gmail but it is just my email */}
           <h4 className="footer-contact" >Connect With Us! </h4>
