@@ -74,11 +74,19 @@ const CreateInternship = () => {
           
             <div>
                 <AuthNavbar />
+                <header className="container">
+                <div className="background-layer-ci"></div>
+             <div className="title-mentor">
+             <h1 className="text-in-container, h1">Create an Internship</h1>
+             <p className="text-in-container, p">As a mentor, you are able to provide infinite possibilities to students
+             who otherwise wouldn't have had the chance. A stepping stone in their bright future and we cannot thank you enough for it. </p>
+                  </div>
+                </header>
                 <Container className="create-internship-container">
                     <Row className="justify-content-center">
                         <Col sm ={12}>
                             <div className="create-internship-content">
-                                <h2>Create New Internship</h2>
+                                {/* <h2>Create New Internship</h2> */}
                                 <Form onSubmit={handleSubmit} className="internship-form">
                                     <Form.Group className="mb-3" controlId="formTitle">
                                         <Form.Label>Title</Form.Label>

@@ -86,9 +86,3 @@ export default function Resume() {
 );
 }
 
-
-// for those who are doing backend to the resume, 
-// you need to create the endpoint 
-// modify the react component i created so that when the yser clicks teh submit button, you receive it 
-
-// i need to learn more about being able to change the UI when its finally uploaded 
