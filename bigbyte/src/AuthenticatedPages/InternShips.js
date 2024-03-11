@@ -32,16 +32,15 @@ const JobDetail = () => {
 
       // Construct query parameters from state
       let queryParams = new URLSearchParams({
-        //possibly more filters based on demand
-        company: filterCompany,
-        category: selectedCategory,
-        pay: filterPay,
-        location: filterLocation,
+        //possibly more filters based on demand --> have not yet added subcategories
+        Company: filterCompany,
+        Category: selectedCategory,
+        Pay: filterPay,
+        Location: filterLocation,
 
       }).toString();
 
       const payloadHeader = {
-        method: 'GET',
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,

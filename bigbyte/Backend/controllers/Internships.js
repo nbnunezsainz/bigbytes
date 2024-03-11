@@ -77,7 +77,6 @@ exports.queryInternships = async (req, res) => {
     let paramList = cleanQuery(req.query);
     const keyNames = Object.keys(paramList);
 
-
     if (keyNames.length == 0) {
       queryDict = getAllInternships(req, res);
     } else {

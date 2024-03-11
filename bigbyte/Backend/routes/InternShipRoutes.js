@@ -11,6 +11,7 @@ router.route('/QueryInternships').get(AuthenticationController.verifyToken, Inte
 router.route('/DeleteInternship').delete(InternshipController.deleteInternship);
 router.route('/GetInternship').get(InternshipController.getInternship);
 
+
 // TO TEST USER DATASE WITH RANDOM MENTORS
 //router.route('/GenerateInternshipTestData').post(InternshipController.generateTestInternsip);
 
