@@ -32,20 +32,22 @@ const JobDetail = () => {
 
       // Construct query parameters from state
       let queryParams = new URLSearchParams({
-        major: filterMajor,
+        company: filterCompany,
+        category: selectedCategory,
         pay: filterPay,
         location: filterLocation,
-        company: filterCompany
+
       }).toString();
 
       const payloadHeader = {
+        method: 'GET',
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
       };
 
-      const response = await fetch(`http://localhost:3001/api/v1/internship/GetFilteredInternships?${queryParams}`, payloadHeader);
+      const response = await fetch(`http://localhost:3001/api/v1/internship/QueryInternships?${queryParams}`, payloadHeader);
       if (!response.ok) {
         throw new Error('Failed to fetch');
       }
@@ -97,7 +99,7 @@ const JobDetail = () => {
         let allLocations;
 
         //if data.internshipData exists, extract all locations
-        if (data.internshipData){
+        if (data.internshipData) {
           allInternshipLocations = Object.values(data.internshipData);
           allLocations = [...new Set(allInternshipLocations.map(job => job.Location))];
           setAllLocations(allLocations)
@@ -110,7 +112,7 @@ const JobDetail = () => {
         //get all companies
         let allCompanies;
         //if data.internshipData exists, extract all locations
-        if (data.internshipData){
+        if (data.internshipData) {
           allCompanies = Object.values(data.internshipData);
           allCompanies = [...new Set(allCompanies.map(job => job.Company))];
           setCompany(allCompanies)
@@ -124,14 +126,15 @@ const JobDetail = () => {
         //get all companies
         let allCategory;
         //if data.internshipData exists, extract all locations
-        if (data.internshipData){
+        if (data.internshipData) {
           allCategory = Object.values(data.internshipData);
           allCategory = [...new Set(allCategory.map(job => job.Category))];
           setCategory(allCategory)
         }
         else {
           allCategory = new Set();
-          setCategory(allCategory) }
+          setCategory(allCategory)
+        }
 
 
         //iterate through all categories and subcategories. creating a hash map
@@ -152,7 +155,7 @@ const JobDetail = () => {
 
 
           // Perform operations with mainCategory and subCategory
-         // console.log(`Main Category: ${mainCategory}, Sub Category: ${subCategory}`);
+          // console.log(`Main Category: ${mainCategory}, Sub Category: ${subCategory}`);
           console.log(hashMapforCategories);
         }
 
@@ -185,37 +188,37 @@ const JobDetail = () => {
             <h5>Filters</h5>
             <Form>
 
-              {/* company */ }
+              {/* company */}
               <Form.Group className="mb-3">
                 <Form.Label>Company</Form.Label>
                 <Form.Control
-                    as="select"
-                    value={filterCompany}
-                    onChange={(e) => setFilterCompany(e.target.value)} >
+                  as="select"
+                  value={filterCompany}
+                  onChange={(e) => setFilterCompany(e.target.value)} >
 
                   <option value="">Select Company </option> {/*test*/}
                   {Array.from(allCompany).map((location) => (
-                      <option key={location} value={location}>
-                        {location}
-                      </option>
+                    <option key={location} value={location}>
+                      {location}
+                    </option>
                   ))}
                 </Form.Control>
               </Form.Group>
               <Form.Group className="mb-3">
                 <Form.Label>Category</Form.Label>
                 <Form.Control
-                    as="select"
-                    value={selectedCategory}
-                    onChange={(e) => {
-                      setSelectedCategory(e.target.value);
-                    }}
+                  as="select"
+                  value={selectedCategory}
+                  onChange={(e) => {
+                    setSelectedCategory(e.target.value);
+                  }}
                 >
-                  {/* main category */ }
+                  {/* main category */}
                   <option value="">Select Category</option>
                   {Object.keys(allCategory).map((categoryKey) => (
-                      <option key={categoryKey} value={categoryKey}>
-                        {categoryKey}
-                      </option>
+                    <option key={categoryKey} value={categoryKey}>
+                      {categoryKey}
+                    </option>
                   ))}
 
                   console.log(setSelectedCategory)
@@ -224,25 +227,25 @@ const JobDetail = () => {
               </Form.Group>
 
               {selectedCategory && (
-                  <Form.Group className="mb-3">
-                    <Form.Label>Subcategory</Form.Label>
-                    <Form.Control
-                        as="select"
-                        value={selectedSubcategory}
-                        onChange={(e) => setSelectedSubcategory(e.target.value)}
+                <Form.Group className="mb-3">
+                  <Form.Label>Subcategory</Form.Label>
+                  <Form.Control
+                    as="select"
+                    value={selectedSubcategory}
+                    onChange={(e) => setSelectedSubcategory(e.target.value)}
 
-                    >
-                      <option value="">Select Subcategory</option>
+                  >
+                    <option value="">Select Subcategory</option>
 
 
-                      {/* need help here - thought inserting 'selectedCategory' should work*/ }
-                      {Object.values(allCategory).map((subcategory) => (
-                          <option key={subcategory} value={subcategory}>
-                            {subcategory}
-                          </option>
-                      ))}
-                    </Form.Control>
-                  </Form.Group>
+                    {/* need help here - thought inserting 'selectedCategory' should work*/}
+                    {Object.values(allCategory).map((subcategory) => (
+                      <option key={subcategory} value={subcategory}>
+                        {subcategory}
+                      </option>
+                    ))}
+                  </Form.Control>
+                </Form.Group>
               )}
 
 
@@ -268,15 +271,15 @@ const JobDetail = () => {
               <Form.Group className="mb-3">
                 <Form.Label>Location</Form.Label>
                 <Form.Control
-                    as="select"
-                    value={filterLocation}
-                    onChange={(e) => setFilterLocation(e.target.value)} >
+                  as="select"
+                  value={filterLocation}
+                  onChange={(e) => setFilterLocation(e.target.value)} >
 
                   <option value="">Select Location</option> {/*test*/}
                   {Array.from(allLocations).map((location) => (
-                      <option key={location} value={location}>
-                        {location}
-                      </option>
+                    <option key={location} value={location}>
+                      {location}
+                    </option>
                   ))}
 
 
