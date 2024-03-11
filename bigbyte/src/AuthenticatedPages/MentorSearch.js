@@ -94,7 +94,6 @@ const MentorSearch = () => {
           {<Button variant="primary">Apply Filters</Button>}
         </Form>
 
-
         {/*</Form>*/}
         <Row className="mt-5" style={{paddingTop: "30px"}}>
           {Mentors.map((Mentor) => (
