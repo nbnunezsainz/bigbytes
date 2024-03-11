@@ -5,8 +5,9 @@ const mentors = [
             "firstName": "Alfredo",
             "lastName": "Kapoor",
             "company": "Apple",
-            "bio": "Some creative bio",
-            "linkedIn": "www.linkedin.com/alfredokapoor"
+            "bio": "I work at the Apple Bakery creating my world famous cakes",
+            "linkedIn": "www.linkedin.com/alfredokapoor",
+            "industry": "Consumer Goods"
         }
     },
     {
@@ -16,7 +17,8 @@ const mentors = [
             "lastName": "Nguyen",
             "company": "Google",
             "bio": "Passionate about technology and innovation",
-            "linkedIn": "www.linkedin.com/eleanornguyen"
+            "linkedIn": "www.linkedin.com/eleanornguyen",
+            "industry": "Consulting"
         }
     },
     {
@@ -25,8 +27,9 @@ const mentors = [
             "firstName": "Carlos",
             "lastName": "Martinez",
             "company": "Microsoft",
-            "bio": "Building the future with software",
-            "linkedIn": "www.linkedin.com/carlosmartinez"
+            "bio": "Building the future with software in the energy sector",
+            "linkedIn": "www.linkedin.com/carlosmartinez",
+            "industry": "Energy (Oil & Gas)"
         }
     },
     {
@@ -36,7 +39,8 @@ const mentors = [
             "lastName": "Johnson",
             "company": "Amazon",
             "bio": "Innovating in the e-commerce space",
-            "linkedIn": "www.linkedin.com/sophiejohnson"
+            "linkedIn": "www.linkedin.com/sophiejohnson",
+            "industry": "Consumer Goods"
         }
     },
     {
@@ -46,7 +50,8 @@ const mentors = [
             "lastName": "Brown",
             "company": "Tesla",
             "bio": "Engineering the future of electric vehicles",
-            "linkedIn": "www.linkedin.com/haroldbrown"
+            "linkedIn": "www.linkedin.com/haroldbrown",
+            "industry": "Energy (Oil & Gas)"
         }
     },
     {
@@ -56,7 +61,8 @@ const mentors = [
             "lastName": "Taylor",
             "company": "Apple",
             "bio": "Exploring space exploration and technology",
-            "linkedIn": "www.linkedin.com/isabellataylor"
+            "linkedIn": "www.linkedin.com/isabellataylor",
+            "industry": "Technology"
         }
     },
     {
@@ -66,7 +72,8 @@ const mentors = [
             "lastName": "Chen",
             "company": "Facebook",
             "bio": "Connecting people through social technology",
-            "linkedIn": "www.linkedin.com/victorchen"
+            "linkedIn": "www.linkedin.com/victorchen",
+            "industry": "Technology"
         }
     },
     {
@@ -76,7 +83,8 @@ const mentors = [
             "lastName": "Gomez",
             "company": "Google",
             "bio": "Creating innovative solutions for a better future",
-            "linkedIn": "www.linkedin.com/miagomez"
+            "linkedIn": "www.linkedin.com/miagomez",
+            "industry": "Technology"
         }
     },
     {
@@ -86,7 +94,8 @@ const mentors = [
             "lastName": "Johnson",
             "company": "Microsoft",
             "bio": "Passionate about software development",
-            "linkedIn": "www.linkedin.com/williamjohnson"
+            "linkedIn": "www.linkedin.com/williamjohnson",
+            "industry": "Technology"
         }
     },
     {
@@ -96,7 +105,8 @@ const mentors = [
             "lastName": "Ferguson",
             "company": "Google",
             "bio": "Contributing to the future of technology",
-            "linkedIn": "www.linkedin.com/emmaferguson"
+            "linkedIn": "www.linkedin.com/emmaferguson",
+            "industry": "Technology"
         }
     },
     {
@@ -106,7 +116,8 @@ const mentors = [
             "lastName": "Carter",
             "company": "Apple",
             "bio": "Innovating in the world of marketing",
-            "linkedIn": "www.linkedin.com/liamcarter"
+            "linkedIn": "www.linkedin.com/liamcarter",
+            "industry": "Marketing"
         }
     },
     {
@@ -116,7 +127,8 @@ const mentors = [
             "lastName": "Clark",
             "company": "Google",
             "bio": "Exploring the beauty of numbers",
-            "linkedIn": "www.linkedin.com/abigailclark"
+            "linkedIn": "www.linkedin.com/abigailclark",
+            "industry": "Business"
         }
     },
     {
@@ -126,7 +138,8 @@ const mentors = [
             "lastName": "Taylor",
             "company": "Microsoft",
             "bio": "Building the future through engineering",
-            "linkedIn": "www.linkedin.com/logantaylor"
+            "linkedIn": "www.linkedin.com/logantaylor",
+            "industry": "Technology"
         }
     },
     {
@@ -136,7 +149,8 @@ const mentors = [
             "lastName": "Evans",
             "company": "Amazon",
             "bio": "Immersed in the world of literature",
-            "linkedIn": "www.linkedin.com/jamesevans"
+            "linkedIn": "www.linkedin.com/jamesevans",
+            "industry": "Public Health"
         }
     },
     {
@@ -146,7 +160,8 @@ const mentors = [
             "lastName": "Baker",
             "company": "SpaceX",
             "bio": "Exploring chemical processes and innovation",
-            "linkedIn": "www.linkedin.com/avabaker"
+            "linkedIn": "www.linkedin.com/avabaker",
+            "industry": "Technology"
         }
     },
     {
@@ -156,7 +171,8 @@ const mentors = [
             "lastName": "Ferguson",
             "company": "Twitter",
             "bio": "Understanding societal structures and dynamics",
-            "linkedIn": "www.linkedin.com/harperferguson"
+            "linkedIn": "www.linkedin.com/harperferguson",
+            "industry": "Law"
         }
     },
     {
@@ -166,7 +182,8 @@ const mentors = [
             "lastName": "Martinez",
             "company": "Apple",
             "bio": "Passionate about interpreting visual culture",
-            "linkedIn": "www.linkedin.com/ellamartinez"
+            "linkedIn": "www.linkedin.com/ellamartinez",
+            "industry": "Technology"
         }
     },
     {
@@ -176,7 +193,8 @@ const mentors = [
             "lastName": "Williams",
             "company": "Google",
             "bio": "Integrating mechanical and electrical systems",
-            "linkedIn": "www.linkedin.com/carterwilliams"
+            "linkedIn": "www.linkedin.com/carterwilliams",
+            "industry": "Technology"
         }
     },
     {
@@ -186,7 +204,8 @@ const mentors = [
             "lastName": "Collins",
             "company": "Microsoft",
             "bio": "Studying the complexities of the brain",
-            "linkedIn": "www.linkedin.com/gracecollins"
+            "linkedIn": "www.linkedin.com/gracecollins",
+            "industry": "Public Health"
         }
     },
     {
@@ -196,7 +215,8 @@ const mentors = [
             "lastName": "Lopez",
             "company": "Google",
             "bio": "Building the next generation of computing systems",
-            "linkedIn": "www.linkedin.com/sebastianlopez"
+            "linkedIn": "www.linkedin.com/sebastianlopez",
+            "industry": "Technology"
         }
     },
     {
@@ -206,7 +226,8 @@ const mentors = [
             "lastName": "Young",
             "company": "Amazon",
             "bio": "Advocating for sustainable policies",
-            "linkedIn": "www.linkedin.com/scarlettyoung"
+            "linkedIn": "www.linkedin.com/scarlettyoung",
+            "industry": "Politics"
         }
     },
     {
@@ -216,7 +237,8 @@ const mentors = [
             "lastName": "Gomez",
             "company": "Tesla",
             "bio": "Navigating global diplomacy",
-            "linkedIn": "www.linkedin.com/leogomez"
+            "linkedIn": "www.linkedin.com/leogomez",
+            "industry": "Politics"
         }
     },
     {
@@ -226,7 +248,8 @@ const mentors = [
             "lastName": "Ward",
             "company": "Google",
             "bio": "Expressing creativity through visual communication",
-            "linkedIn": "www.linkedin.com/stellaward"
+            "linkedIn": "www.linkedin.com/stellaward",
+            "industry": "Marketing"
         }
     },
     {
@@ -236,7 +259,8 @@ const mentors = [
             "lastName": "Harrison",
             "company": "Microsoft",
             "bio": "Promoting community well-being",
-            "linkedIn": "www.linkedin.com/nathanharrison"
+            "linkedIn": "www.linkedin.com/nathanharrison",
+            "industry": "Public Health"
         }
     },
     {
@@ -246,7 +270,8 @@ const mentors = [
             "lastName": "Turner",
             "company": "Netflix",
             "bio": "Transforming the entertainment industry",
-            "linkedIn": "www.linkedin.com/sophiaturner"
+            "linkedIn": "www.linkedin.com/sophiaturner",
+            "industry": "Business"
         }
     }
 ];
