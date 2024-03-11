@@ -4,6 +4,7 @@ const router = express.Router();
 
 const AuthenticationController = require('../controllers/Authentication');
 const UserController = require('../controllers/Users');
+const ResumeController = require('../controllers/Resume');
 
 
 // AUTHENTICATION ROUTES
@@ -19,7 +20,7 @@ router.route('/SignOut').post(AuthenticationController.SignOut, AuthenticationCo
 router.route('/AddUser').post(UserController.addUser);
 router.route('/QueryUsers').get(UserController.queryUsers);
 router.route('/DeleteUser').delete(UserController.deleteUser);
-router.route('/GetUser').get(AuthenticationController.verifyToken, UserController.getUser);
+router.route('/GetUser').get(AuthenticationController.verifyToken, UserController.getUser,ResumeController.getResume);
 router.route('/GetUserType').get(AuthenticationController.verifyToken, AuthenticationController.DetermineuserType);
 
 router.route('/ApplyToInternship').post(UserController.applyForInternship);

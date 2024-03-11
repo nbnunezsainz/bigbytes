@@ -41,17 +41,15 @@ req must contain the following:
 */
 exports.getResume = async (req, res) => {
     try {
-        let pathName = Constants.STORAGE_RESUME + req.body.userID;
-        console.log(pathName)
+        userData =req.userData;
+        let pathName = Constants.STORAGE_RESUME + req.user.uid;
         const resumeRef = ref(storage, pathName);
         const URL = await getDownloadURL(resumeRef);
 
-        res.status(200).json({ success: true, message: 'Succes when getting resume' });
-        return URL;
+        res.status(200).json({ URL: URL, success: true, user:userData });
 
     } catch (error) {
-        console.log("an error happened:");
-        console.log(error);
+
         res.status(500).json({ success: false, message: 'Error getting resume' });
     }
 }
