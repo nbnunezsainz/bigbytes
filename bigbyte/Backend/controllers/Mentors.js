@@ -20,6 +20,7 @@ exports.addMentor = async (req, res) => {
       Company: mentorData.company,
       Bio: mentorData.bio || null,
       LinkedIn: mentorData.linkedIn || null,
+      Industry: mentorData.industry
     };
 
     await MentorRef.doc(mentorID).set(data);
@@ -73,16 +74,16 @@ exports.getMentor = async (req, res) => {
     if (!doc.exists) {
       res.status(500).json({ success: false, message: 'Error when getting user' });
       return;
-  } else {
-      
-     user= doc.data() ;
-     delete user.uid; //removes the uid form data
-  }
+    } else {
+
+      user = doc.data();
+      delete user.uid; //removes the uid form data
+    }
 
     // let mentorID = req.body.id;
     // const mentor = await getDocument(MentorRef, mentorID);
 
-    res.status(200).json({ success: true, user:user });
+    res.status(200).json({ success: true, user: user });
     // return mentor;
 
   } catch (error) {
