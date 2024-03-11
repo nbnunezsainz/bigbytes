@@ -3,6 +3,7 @@ const { db, admin } = require('../FireBaseSetUp.js');
 const Constants = require('./databaseConstant.js');
 const { queryCollection, deleteDocument, getDocument } = require('./databaseFunctions.js');
 const { param } = require('../routes/InternShipRoutes.js');
+const { query } = require('express');
 
 // create and initialize a database reference to the "Internship" collection
 const InternshipRef = db.collection(Constants.COLLECTION_INTERNSHIP);
@@ -52,7 +53,6 @@ exports.getAllInternships = async (req, res) => {
 
     data.forEach(internship => {
       internshipData[internship.id] = internship.data();
-      //internshipData.push({ id: internship.id, ...internship.data() });
     });
 
     res.status(200).json({ success: true, message: 'Internship has been found', internshipData: internshipData });
@@ -67,37 +67,33 @@ exports.getAllInternships = async (req, res) => {
 
 
 /*compount/complex querying of internships based on a specific field(s), filtering technique(s), and target value(s) --> returns dictionary of internship IDs to their data
-body for the request should be in the following format:
-{
-  "some key 1": {"field": enter_value, "filter": enter_value, "target": enter_value},
-  "some key 2": {"field": enter_value, "filter": enter_value, "target": enter_value},
-  ...
-}
+ALL parameters of query should be passed (Company, Category, Pay, Location). Empty values will be disregarded.
 
 Please refer to the project structure document for the field, filter, and target restrictions
 */
 exports.queryInternships = async (req, res) => {
   try {
-
-    const paramList = req.body;
-    const keyNames = Object.keys(paramList);
     let queryDict = {};
+
+    let paramList = cleanQuery(req.query)
+    const keyNames = Object.keys(paramList);
+    //console.log(paramList + " with size of " + keyNames.length)
+
 
     if (keyNames.length == 0) {
       queryDict = getAllInternships(req, res);
     } else {
       queryDict = await queryCollection(InternshipRef, paramList[keyNames[0]]);
-
       for (let i = 1; i < keyNames.length; i++) {
         const currKey = keyNames[i]
         const query = paramList[currKey];
         let q = await queryCollection(InternshipRef, query);
         queryDict = deDupeQueries(queryDict, q);
       }
-      res.status(200).json({ success: true, message: 'Internships have been found' });
     }
 
-    console.log("Success- internships have been found!");
+    res.status(200).json({ success: true, message: 'Internships have been found', internshipData: queryDict });
+
     return queryDict;
 
   } catch (error) {
@@ -115,7 +111,39 @@ const deDupeQueries = (fullDict, newDict) => {
   return fullDict;
 };
 
+const cleanQuery = (query) => {
+  let updatedQuery = query;
+  const keyNames = Object.keys(updatedQuery);
 
+  for (let i = 0; i < keyNames.length; i++) {
+    let currKey = keyNames[i];
+    let q = updatedQuery[currKey];
+    if ((currKey == "Location" && q.length == 0) || (q == '')) {
+      delete updatedQuery[currKey];
+    }
+  }
+
+  Object.keys(updatedQuery).forEach((key) => {
+
+    let tar = updatedQuery[key];
+    let fil = "==";
+
+    if (key == "Category") {
+      fil = "array-contains"
+    }
+    if (key == "Pay") {
+      fil = ">=";
+      tar = parseInt(tar);
+    }
+
+    updatedQuery[key] = {
+      field: key,
+      filter: fil,
+      target: tar,
+    };
+  });
+  return updatedQuery;
+}
 
 // find and return an internship dictionary that relates their ID to thier data
 exports.getInternship = async (req, res) => {
