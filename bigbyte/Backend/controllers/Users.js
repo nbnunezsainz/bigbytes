@@ -6,6 +6,7 @@ const { queryCollection, deleteDocument, getDocument } = require('./databaseFunc
 // create and initialize a database reference to the "Internship" collection
 const UserRef = db.collection(Constants.COLLECTION_USERS);
 
+
 //add a User --> takes userData in json format (FirstName: John, LastName: Smith)
 exports.addUser = async (req, res) => {
     try {
@@ -68,19 +69,15 @@ exports.deleteUser = async (req, res) => {
 };
 
 // find and return an user dictionary that relates their ID to their data --> used by front end
-exports.getUser = async (req, res) => {
+exports.getUser = async (req, res,next) => {
 
     try{
     let userID = req.user.uid;
 
-    console.log(userID);
-    //const user = await getDocument(UserRef, userID); cant use this because dont want to send USer UID back, secuirty hazard
     let user;
     const doc = await UserRef.doc(userID).get();
 
-    console.log(doc, "doc");
-
-    if (!doc) {
+    if (!doc.exists) {
         res.status(500).json({ success: false, message: 'Error when getting user' });
         return;
     } else {
@@ -89,11 +86,15 @@ exports.getUser = async (req, res) => {
         delete user.uid; //removes the uid form data
         
     }
-    res.status(200).json({ success: true, user:user});
+   
+
+    req.userData = user;
+    next(); 
+    //pass on to getResume
 
 }
 catch{
-return res.status(500).json({ success: false, message: 'Error when getting user', error: error.message });
+return res.status(500).json({ success: false, message: 'Error when getting user'});
 }
     
 
