@@ -13,6 +13,10 @@ exports.addInternship = async (req, res) => {
   try {
     // initialize the body of response data to become the data
     const internshipData = req.body;
+    const  MentorID = req.user.uid;
+
+    console.log("hi");
+
     const data = {
       //input all data from req.body json object
       Title: internshipData.title,
@@ -23,8 +27,8 @@ exports.addInternship = async (req, res) => {
       Category: internshipData.category || [],
       URL: internshipData.url,
       ReferalLimit: internshipData.referralLimit,
-      MentorID: internshipData.mentorID,
-
+      MentorID:MentorID, //how we link internships to a mentor
+     
       //not provided by entered data
       ApplicationCounter: 0,
       Display: true,
@@ -32,14 +36,15 @@ exports.addInternship = async (req, res) => {
     };
 
     // add the internship with a random ID
-    await InternshipRef.add(data);
+    await InternshipRef.doc(MentorID).set(data);
 
-    console.log("Success- a new internship has been added!");
+    res.status(200).json({ message: 'Internship has been created', success:true});
 
     // unneccesary as the only result needed is from generateInternship in Mentors.js (which this function is solely called from)
     //res.status(200).json({ success: true, message: 'Internship added successfully' });
   } catch (error) {
-    console.log("There was some error when adding internship", error);
+    
+    res.status(500).json({ message: 'Internship was not created', success:false});
   }
 };
 
