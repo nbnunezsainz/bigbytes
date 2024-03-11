@@ -12,7 +12,7 @@ const NavBar = () => {
             alt="logo"
           />
   
-          <li><Link to="/Home">Home</Link></li>
+          <li className='ps-4'><Link to="/Home">Home</Link></li>
           {/*Commented out About and Contact in hopes of being cleared by team to remove since they are in home page*/}
           {/* <li><a href="#">About</a></li>
           <li><a href="#">Contact</a></li> */}
