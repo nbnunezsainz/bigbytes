@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Document, Page, pdfjs } from 'react-pdf';
+import Button from 'react-bootstrap/Button';
 //import { FaComment } from 'react-icons/fa'; // Assuming you're using react-icons for the comment icon
 import 'react-pdf/dist/Page/TextLayer.css';
 import 'react-pdf/dist/Page/AnnotationLayer.css';
@@ -62,14 +63,14 @@ function ResumeViewer({sendDataToParent, resumeUrl, resumeUID, resumeComments}) 
             <Document
                 file={resumeUrl}
                 onLoadError={console.error}
-                //style={{ width: '50%' }}
+                
             >
-                <Page pageNumber={1} width={1000} />
+                <Page pageNumber={1} width={600} />
             </Document>
-            <button value={resumeUID} onClick={toggleComments}>
+            <Button className='mt-2 mb-2' value={resumeUID} onClick={toggleComments}>
     comments
     {/* <FaComment /> Comments */}
-</button>
+</Button>
             {showComments && (
                 <div>
                     <div>
