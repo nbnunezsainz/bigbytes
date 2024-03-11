@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Outlet, Link } from "react-router-dom";
+import {Card, Button} from 'react-bootstrap';
+import {Container, Row, Col} from 'react-bootstrap';
 import AuthNavbar from './AuthenticatedNavBar';
 import auth from "../fb.js"
 
@@ -55,12 +57,29 @@ const MentProfile = () => {
     if (loading) {
         return <div>Loading...</div>; // Render a loading page or spinner here
     }
-      
+    
+    console.log(mentor);
     return (
         <>
         <AuthNavbar />
         <div style={{padding: "120px"}}>
-            <div className='mt-3'>
+          <Card style={{ width: '100%' , height: '600px'}}>
+            <Container>
+              <Row>
+                <Col>
+                  <Card.Title className='mt-4 mb-3'> {mentor.FirstName} {mentor.LastName} </Card.Title>
+                  <Card.Subtitle className="mb-2 text-muted">Mentor</Card.Subtitle>
+                  <Card.Subtitle className=''> {mentor.Company} </Card.Subtitle>
+                  <Card.Link href={mentor.LinkedIn}> View LinkedIn </Card.Link>
+                  <Card.Text className='mt-5'> {mentor.Bio} </Card.Text>
+                </Col>
+                <Col>
+                  <Button>Edit</Button>
+                </Col>
+              </Row>
+            </Container>
+          </Card>
+            {/* <div className='mt-3'>
                 <h1>{mentor.FirstName}</h1>
                 <h2>{mentor.LastName}</h2>
                 <h3>Mentor</h3>
@@ -69,7 +88,7 @@ const MentProfile = () => {
             </div>
             <div className='mb-2'>
                 <p>{mentor.Bio}</p>
-            </div>
+            </div> */}
         </div>
         </>
     );

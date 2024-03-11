@@ -1,10 +1,10 @@
 //this will hold the links to pages, need to check if student/mentor bc students should not be ble to create internships only view them
 import React, {useState,useEffect} from 'react';
+import Button from 'react-bootstrap/Button'
 import { Outlet, Link } from "react-router-dom";
 import auth from "../fb.js"
  import '../Styling/AuthNavBar.css';
  import { useNavigate} from 'react-router-dom';
-
 import { useAuth } from ".././AuthContext.js";
 
 
@@ -78,7 +78,7 @@ function AuthNavbar() {
                   ) : (
                       <>
                          
-                          <button onClick={logoutUser}>Logout</button>
+                          <Button onClick={logoutUser}>Logout</Button>
                       </>
                   )}
               </div>
