@@ -54,7 +54,6 @@ const JobDetail = () => {
 
       const data = await response.json();
 
-      console.log(data.internshipData)
 
       setJobs(data.internshipData);
     } catch (error) {
@@ -86,8 +85,8 @@ const JobDetail = () => {
 
       const data = await response.json();
       setJobs(data.internshipData); // Assuming the response JSON structure matches our state
-
-      console.log(data.internshipData)
+      console.log(data.internshipData, "hod");
+     
 
 
       //get all internship locations
@@ -135,7 +134,7 @@ const JobDetail = () => {
 
       //iterate through all categories and subcategories. creating a hash map
       const hashMapforCategories = {};
-      console.log("hello")
+     
       for (let i = 0; i < allCategory.length; i++) {
         const mainCategory = allCategory[i][1];
         const subCategory = allCategory[i][0];
@@ -152,7 +151,7 @@ const JobDetail = () => {
 
         // Perform operations with mainCategory and subCategory
         // console.log(`Main Category: ${mainCategory}, Sub Category: ${subCategory}`);
-        console.log(hashMapforCategories);
+        // console.log(hashMapforCategories);
       }
 
       //console.log(allCategory)
@@ -173,7 +172,31 @@ const JobDetail = () => {
 
 
 
+  const handleReferal = async (event) => {
 
+    const user = auth.currentUser;
+    const token = user && (await user.getIdToken());
+    
+    const payloadHeader = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    };
+    const internshipID = event.target.value;
+    try {
+      const response = await fetch(`http://localhost:3001/api/v1/internship/RequestReferal?internshipID=${internshipID}`, payloadHeader);
+      if (!response.ok) {
+        throw new Error('Failed to request referral');
+      }
+      // Handle successful response here
+      console.log("looks semi good mate");
+      
+    } catch (error) {
+      console.error('Error requesting referral:', error);
+      // Handle error
+    }
+  };
 
   useEffect(() => {
     // Define the asynchronous function inside the useEffect hook
@@ -312,7 +335,7 @@ const JobDetail = () => {
                       <Card.Text><strong>Company:</strong> {job.Company}</Card.Text>
                       <Card.Text><strong>Date Posted:</strong> {job.datePosted}</Card.Text>
                       <Card.Text>{job.Description}</Card.Text>
-                      <Button variant="primary">Apply</Button>
+                      <Button variant="primary" value= {internshipID} onClick={handleReferal}>Apply</Button>
                     </Card.Body>
                   </Card>
                 </Col>

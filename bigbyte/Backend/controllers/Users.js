@@ -70,6 +70,7 @@ exports.deleteUser = async (req, res) => {
 // find and return an user dictionary that relates their ID to their data --> used by front end
 exports.getUser = async (req, res) => {
 
+    try{
     let userID = req.user.uid;
 
     //const user = await getDocument(UserRef, userID); cant use this because dont want to send USer UID back, secuirty hazard
@@ -83,6 +84,45 @@ exports.getUser = async (req, res) => {
 
         user = doc.data();
         delete user.uid; //removes the uid form data
+        
+    }
+}
+catch{
+return res.status(500).json({ success: false, message: 'Error when getting user', error: error.message });
+}
+    
+
+};
+
+exports.getUserAndResume = async (req, res,next) => {
+
+    let userID = req.user.uid;
+    
+    let pathName = Constants.STORAGE_RESUME + userID;
+        const resumeRef = ref(storage, pathName);
+        const URL = await getDownloadURL(resumeRef);
+
+
+    //const user = await getDocument(UserRef, userID); cant use this because dont want to send USer UID back, secuirty hazard
+    let user;
+    const doc = await UserRef.doc(userID).get();
+
+    if (!doc.exists) {
+        res.status(500).json({ success: false, message: 'Error when getting user' });
+        return;
+    } else {
+
+        user = doc.data();
+        const userData = {
+            Major: user.Major,
+            Year: user.Year,
+            Organizations: user.Organizations,
+            Bio: user.Bio,
+            Resume: URL
+        };        
+         req.student = userData;
+        // req.UserResume = URL;
+        next();
     }
     res.status(200).json({ success: true, user: user });
 

@@ -7,6 +7,9 @@ const { query } = require('express');
 
 // create and initialize a database reference to the "Internship" collection
 const InternshipRef = db.collection(Constants.COLLECTION_INTERNSHIP);
+const MentorRef = db.collection(Constants.COLLECTION_MENTORS);
+const MentorNotificationsRef = db.collection(Constants.COLLECTION_MENTORS_NOTIFICATIONS);
+const UserRef = db.collection(Constants.COLLECTION_USERS);
 
 // add an internship taking in a request --> SHOULD ONLY BE CALLED VIA generateInternship FROM MENTORS.JS
 exports.addInternship = async (req, res) => {
@@ -14,8 +17,6 @@ exports.addInternship = async (req, res) => {
     // initialize the body of response data to become the data
     const internshipData = req.body;
     const  MentorID = req.user.uid;
-
-    console.log("hi");
 
     const data = {
       //input all data from req.body json object
@@ -36,9 +37,11 @@ exports.addInternship = async (req, res) => {
     };
 
     // add the internship with a random ID
-    await InternshipRef.doc(MentorID).set(data);
+    const newInternshipRef = InternshipRef.doc();
+    await newInternshipRef.set(data);
 
     res.status(200).json({ message: 'Internship has been created', success:true});
+    return;
 
     // unneccesary as the only result needed is from generateInternship in Mentors.js (which this function is solely called from)
     //res.status(200).json({ success: true, message: 'Internship added successfully' });
@@ -47,6 +50,46 @@ exports.addInternship = async (req, res) => {
     res.status(500).json({ message: 'Internship was not created', success:false});
   }
 };
+
+exports.requestReferal = async (req,res) =>
+{
+  let student= req.student; //get usersname, and resume, and linkdln?
+
+  console.log(student, "studenr data");
+  console.log(req.query, "random");
+
+  const internshipID = req.query.internshipID;
+
+  console.log(internshipID, "id");
+
+  const internshipDoc = await InternshipRef.doc(internshipID).get();
+
+  console.log(internshipDoc.data(), 'doc');
+  
+  if (!internshipDoc) {
+    throw new Error('Internship not found');
+  }
+  const mentorID = internshipDoc.data().MentorID;
+
+  console.log(mentorID, "mentor");
+
+     // Create a notification document for the mentor
+     const notificationData = {
+      mentorID: mentorID,
+      internshipID: internshipID,
+      InternshipTitle: internshipDoc.data().Title,
+      studentMajor: student.Major,
+      GradYear: student.Year,
+      studentOrganizations: student.Organizations,
+      studentBio: student.Bio,
+      Resume: student.Resume,
+      message: `Referral request for your internship: ${internshipDoc.data().Title}`,
+    };
+
+    const newMentorNotificationsRef = MentorNotificationsRef.doc();
+    await newMentorNotificationsRef.set(notificationData);
+ 
+}
 
 
 //query ALL Internships based on a specific field, filtering technique, and target value --> returns dictionary of ALL internship IDs to their data
@@ -69,6 +112,7 @@ exports.getAllInternships = async (req, res) => {
     res.status(500).json({ success: false, message: 'Error querying internships' });
   }
 }
+
 
 
 /*compount/complex querying of internships based on a specific field(s), filtering technique(s), and target value(s) --> returns dictionary of internship IDs to their data
