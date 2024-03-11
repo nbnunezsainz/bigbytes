@@ -4,6 +4,11 @@ import AuthNavbar from './AuthenticatedNavBar';
 
 const ResumeReviewer = () => {
     const [resumes, setResumes] = useState([]);
+    const [submitted, setSubmitted] = useState(false);
+
+    function handleDataFromChild (data) {
+        setSubmitted(data);
+    }
 
     useEffect(() => {
         fetch('http://localhost:3001/api/v1/Resume/GetAllResumesWithComments')
@@ -18,8 +23,22 @@ const ResumeReviewer = () => {
                 }
             })
             .catch(error => console.error('Error fetching resumes:', error));
-    }, [resumes]);
+    }, []);
 
+    useEffect(() => {
+        fetch('http://localhost:3001/api/v1/Resume/GetAllResumesWithComments')
+            .then(response => response.json())
+            .then(data => {
+                if (data && data.resumesWithComments) {
+                    setResumes(data.resumesWithComments);
+                }
+                else
+                {
+                    setResumes([]);
+                }
+            })
+            .catch(error => console.error('Error fetching resumes:', error));
+    }, [submitted]);
 
     // console.log(resumes, "resume data is here");
     return (
@@ -32,7 +51,7 @@ const ResumeReviewer = () => {
                         resumes.map((resume, index) => (
                             <div key={index}>
                                 <h2>User: {resume.userID}</h2>
-                                <PDFViewer resumeUrl={resume.URL} resumeUID= {resume.userID} resumeComments = {resume.comments}/>
+                                <PDFViewer sendDataToParent={handleDataFromChild} resumeUrl={resume.URL} resumeUID= {resume.userID} resumeComments = {resume.comments}/>
                             </div>
                         ))
                     ) : (

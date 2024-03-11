@@ -5,12 +5,11 @@ import 'react-pdf/dist/Page/TextLayer.css';
 import 'react-pdf/dist/Page/AnnotationLayer.css';
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
 
-function ResumeViewer({ resumeUrl, resumeUID, resumeComments}) {
+function ResumeViewer({sendDataToParent, resumeUrl, resumeUID, resumeComments}) {
     const [showComments, setShowComments] = useState(false);
     const [comments, setComments] = useState([]);
     const [newComment, setNewComment] = useState('');
     const [currentResumeUID, setCurrentResumeUID] = useState(null); // Add this line
-
     
     const toggleComments = (e) => {
         setShowComments(!showComments);
@@ -19,10 +18,11 @@ function ResumeViewer({ resumeUrl, resumeUID, resumeComments}) {
     }
 
     const submitComment = async() => {
+        
         if (newComment.trim()) { // Avoid adding empty comments
             setComments([...comments, newComment]);
             setNewComment(''); // Reset input after submission
-
+            sendDataToParent(true);   // log new comment
         }
         const requestBody = {
             resumeUID: currentResumeUID,
