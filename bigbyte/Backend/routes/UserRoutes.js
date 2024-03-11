@@ -33,6 +33,7 @@ router.route('/ApplyToInternship').post(UserController.applyForInternship);
 
 
 // TO TEST USER DATASE WITH RANDOM USERS
-//router.route('/GenerateUserTestData').post(UserController.generateTestUsers);
+
+// router.route('/GenerateUserTestData').post(UserController.generateTestUsers);
 
 module.exports = router;
