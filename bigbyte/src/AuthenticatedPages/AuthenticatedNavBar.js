@@ -56,7 +56,7 @@ function AuthNavbar() {
       fetchData();
     }, []);
     return (
-      <nav className='fixed-top'>
+      <nav className='fixed-top pl-2 pt-1 pb-1'>
           <img src="https://1000logos.net/wp-content/uploads/2017/11/UCLA-Logo.png" alt="logo" style ={{"width":"100px"}}/>
           <ul className="nav-links">
               <li><Link to="/Internships">Internships</Link></li>
@@ -67,21 +67,23 @@ function AuthNavbar() {
           {userStatus === null ? (
               <div className="right-links">Loading user info...</div>
           ) : (
-              <div className="right-links">
-                   <Link to="/MentorProfile">My Profile</Link>
+              <ul className="right-links ml-2 mt-1 mb-1">
+                <ul className='nav-links'>
+                  <li><Link to="/MentorProfile">My Profile</Link></li>
+                </ul>
                   {userStatus ? (
-                      <>
+                      <li>
                           <Link to="/UserProfile">My Profile</Link>
                           <Link to="/Resume">Upload Resume</Link>
                           <Link to="/MentorSearch">Mentors</Link>
-                      </>
+                      </li>
                   ) : (
                       <>
                          
                           <Button onClick={logoutUser}>Logout</Button>
                       </>
                   )}
-              </div>
+              </ul>
           )}
       </nav>
   );

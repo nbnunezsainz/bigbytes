@@ -23,15 +23,15 @@ const handlePasswordChange = (event) => {
 };
 
 const SignUserUp = async () => {
-  
   try {
     
     await register(email, password);
     setRedirectToUserData(true);
+
   } catch (e) {
     setError("Failed to register");
   }
-}
+};
 
 // const SignUserUp = () =>
 
@@ -77,7 +77,8 @@ if (redirectToUserData) {
     return (
       <>
         <NavBar />
-        <Container className="d-flex justify-content-center align-items-center vh-100">
+        {/* WORKING CODE FOR SIGNUP. FAILING CODE COMMENTED UNDER */}
+        {/* <Container className="d-flex justify-content-center align-items-center vh-100">
             <Row>
                 <Col xs={12} md={8} lg={6}>
                     <Card style={{ width: '500px', padding: '30px', borderRadius: '10px', boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.1)' }}>
@@ -115,7 +116,26 @@ if (redirectToUserData) {
                     </Card>
                 </Col>
             </Row>
-        </Container>
+        </Container> */}
+         <div>
+          <label htmlFor="username">Email:</label>
+          <input 
+              type="text" 
+              id="username" 
+              value={email} 
+              onChange={handleEmailChange} 
+              placeholder="Place your email here" 
+          />
+          <label htmlFor="password">Password:</label>
+          <input 
+              type="password" 
+              id="password" 
+              value={password} 
+              onChange={handlePasswordChange} 
+              placeholder="Enter your password" 
+          />
+          <button onClick={SignUserUp} type="submit">Sign Up</button>
+          </div>
       </>
     );
 }
