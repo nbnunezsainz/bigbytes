@@ -5,8 +5,10 @@ import { Container, Row, Col, Button, Form } from 'react-bootstrap';
 import AuthNavbar from './AuthenticatedNavBar';
 import auth from "../fb.js";
 import '../Styling/CreateInternship.css';
+import Confetti from 'react-dom-confetti';
 
-//import './CreateInternship.css'; // Make sure to create this CSS file for styles
+
+
 
 const CreateInternship = () => {
   const [internshipData, setInternshipData] = useState({
@@ -21,7 +23,7 @@ const CreateInternship = () => {
     mentorID: '', // Assuming this will come from authenticated user context or similar
 });
     const [loading, setLoading] = useState(true); // State to manage loading status
-  
+    const [showConfetti, setShowConfetti] = useState(false); // Want to add the js.confetti so when someone submits a posting, they are rewarded for it 
     useEffect(() => {
       // Define the asynchronous function inside the useEffect hook
   
@@ -74,11 +76,20 @@ const CreateInternship = () => {
           
             <div>
                 <AuthNavbar />
+                <header className="container">
+                <div className="background-layer-ci"></div>
+             <div className="title-mentor">
+             <h1 className="text-in-container, h1">Create an Internship</h1>
+             <p className="text-in-container, p">As a mentor, you are able to provide infinite possibilities to students
+             who otherwise wouldn't have had the chance. A stepping stone in their bright future and we cannot thank you enough for it. </p>
+                  </div>
+                </header>
                 <Container className="create-internship-container">
                     <Row className="justify-content-center">
                         <Col sm ={12}>
                             <div className="create-internship-content">
-                                <h2>Create New Internship</h2>
+                                {/* <h2>Create New Internship</h2> */}
+                                {/* Form starts here */}
                                 <Form onSubmit={handleSubmit} className="internship-form">
                                     <Form.Group className="mb-3" controlId="formTitle">
                                         <Form.Label>Title</Form.Label>
@@ -161,6 +172,7 @@ const CreateInternship = () => {
                                             placeholder="Enter referral limit"
                                         />
                                     </Form.Group>
+                                    {/* Form ends here */}
                                     <Button variant="primary" type="submit">
                                         Submit
                                     </Button>
@@ -169,6 +181,8 @@ const CreateInternship = () => {
                         </Col>
                     </Row>
                 </Container>
+                 {/* Once submitted, call active showConfetti */}
+                <Confetti active={showConfetti} />
             </div>
         );
     };
