@@ -3,6 +3,8 @@ import { Container, Row, Col, Button, Card } from 'react-bootstrap';
 import AuthNavbar from './AuthenticatedNavBar';
 import auth from "../fb.js";
 import { Form, FormControl } from 'react-bootstrap';
+import { toast,ToastContainer  } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 
 const JobDetail = () => {
@@ -185,12 +187,11 @@ const JobDetail = () => {
     const internshipID = event.target.value;
     try {
       const response = await fetch(`http://localhost:3001/api/v1/internship/RequestReferal?internshipID=${internshipID}`, payloadHeader);
+      console.log(response, "response");
       if (!response.ok) {
-        throw new Error('Failed to request referral');
+        toast.error('Resume does not exist. Please create one before proceeding.');
       }
-      // Handle successful response here
-      console.log("looks semi good mate");
-
+      
     } catch (error) {
       console.error('Error requesting referral:', error);
       // Handle error
@@ -335,6 +336,7 @@ const JobDetail = () => {
                       <Card.Text><strong>Date Posted:</strong> {job.datePosted}</Card.Text>
                       <Card.Text>{job.Description}</Card.Text>
                       <Button variant="primary" value={internshipID} onClick={handleReferal}>Apply</Button>
+                      <ToastContainer />
                     </Card.Body>
                   </Card>
                 </Col>
