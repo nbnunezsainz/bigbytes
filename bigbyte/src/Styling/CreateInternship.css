@@ -1,6 +1,6 @@
 .create-internship-container {
     /* Extra space on both top and bottom */
-    margin-top: -120px; 
+    margin-top: -400px; 
     margin-bottom: 300px;
     padding: 0 150px; 
     padding-bottom: 40px;
@@ -70,12 +70,14 @@
   /* I used a lot of home.css and tried to combine into the different text components */
   
   .h1{
-    margin-top: 0px;
+     /* If you want to change the height of the h1, its dealing with the margin top */
+    margin-top: -250px;
     font-size: 55px;
     position: relative; 
     z-index: 1; 
     display: flex;
     align-items: center;
+    margin-bottom: 30px;
     justify-content: center;
     color: #fff;
   }
@@ -86,6 +88,6 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-
+    /* margin-top: -20px; */
     color: #fff;
   }

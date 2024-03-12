@@ -83,7 +83,7 @@ const CreateInternship = () => {
              <div className="title-mentor">
              <h1 className="text-in-container, h1">Create an Internship</h1>
              <p className="text-in-container, p">As a mentor, you are able to provide infinite possibilities to students
-             who otherwise wouldn't have had the chance. A stepping stone in their bright future and we cannot thank you enough for it. </p>
+             who otherwise wouldn't have had the chance. Here, at Refer a Bruin, we cannot thank you enough for providing a hand to students, yearning to find a place at your company. </p>
                   </div>
                 </header>
                 <Confetti active={showConfetti} />
