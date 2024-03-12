@@ -68,45 +68,58 @@ exports.deleteUser = async (req, res) => {
     }
 };
 
-// find and return an user dictionary that relates their ID to their data --> used by front end
-exports.getUser = async (req, res,next) => {
+exports.getUserProfile = async (req, res) => {
+    try {
+        let userID = req.user.uid;
+        let user = await getDocument(UserRef, userID);
 
-    try{
-    let userID = req.user.uid;
+        res.status(200).json({ success: true, userData: user });
 
-    let user;
-    const doc = await UserRef.doc(userID).get();
-
-    if (!doc.exists) {
+    } catch (error) {
+        console.log("RAN INTO PROBLEM LOOKING FOR USER", error);
         res.status(500).json({ success: false, message: 'Error when getting user' });
-        return;
-    } else {
-
-        user = doc.data();
-        delete user.uid; //removes the uid form data
-        
     }
-   
-
-    req.userData = user;
-    next(); 
-    //pass on to getResume
-
 }
-catch{
-return res.status(500).json({ success: false, message: 'Error when getting user'});
-}
-    
+
+// find and return an user dictionary that relates their ID to their data --> used by front end
+exports.getUser = async (req, res, next) => {
+
+    try {
+        let userID = req.user.uid;
+
+        let user;
+        const doc = await UserRef.doc(userID).get();
+
+        if (!doc.exists) {
+            res.status(500).json({ success: false, message: 'Error when getting user' });
+            return;
+        } else {
+
+            user = doc.data();
+            delete user.uid; //removes the uid form data
+
+        }
+
+
+        req.userData = user;
+        next();
+        //pass on to getResume
+
+    }
+    catch {
+        return res.status(500).json({ success: false, message: 'Error when getting user' });
+    }
+
 
 };
 
-exports.getUserAndResume = async (req, res,next) => {
+exports.getUserAndResume = async (req, res, next) => {
 
     let userID = req.user.uid;
-    
+
     let pathName = Constants.STORAGE_RESUME + userID;
-        const resumeRef = ref(storage, pathName);
-        const URL = await getDownloadURL(resumeRef);
+    const resumeRef = ref(storage, pathName);
+    const URL = await getDownloadURL(resumeRef);
 
 
     //const user = await getDocument(UserRef, userID); cant use this because dont want to send USer UID back, secuirty hazard
@@ -125,15 +138,33 @@ exports.getUserAndResume = async (req, res,next) => {
             Organizations: user.Organizations,
             Bio: user.Bio,
             Resume: URL,
-            userID :userID 
-        };        
-         req.student = userData;
+            userID: userID
+        };
+        req.student = userData;
         // req.UserResume = URL;
         next();
     }
     res.status(200).json({ success: true, user: user });
 
 };
+
+//update specific mentor with new data
+exports.updateUser = async (req, res) => {
+
+    try {
+        let userID = req.user.uid;
+        const userUpdate = req.body;
+        await UserRef.doc(userID).update(userUpdate);
+        let user = await getDocument(UserRef, userID);
+
+        res.json({ success: true, message: 'User updated successfully', userData: user });
+
+    } catch (error) {
+        console.log(error)
+        res.json({ success: false, message: 'User NOT updated (error)' });
+
+    }
+}
 
 /*
 apply to an internship --> relates user ID to internship ID, mentor ID, and internship company
@@ -216,7 +247,7 @@ const updateInternshipData = async (internshipID, InternshipRef, internshipData)
     }
 };
 
-exports.CheckReferalStatus= async (req, res) => {
+exports.CheckReferalStatus = async (req, res) => {
     try {
       const studentID = req.user.uid;
       const userNotificationsSnapshot = await MentorNotificationsRef.where('studentID', '==', studentID ).get();
@@ -247,10 +278,10 @@ exports.CheckReferalStatus= async (req, res) => {
       res.status(200).json({ success: true, notifications: notifications });
     }
     catch (error) {
-      console.error('Error fetching mentor notifications:', error);
-      res.status(500).json({ success: false, message: 'Error fetching mentor notifications' });
+        console.error('Error fetching mentor notifications:', error);
+        res.status(500).json({ success: false, message: 'Error fetching mentor notifications' });
     }
-  };
+};
 
 /*
 below are functions for users to upload, delete, and view their resumes 
