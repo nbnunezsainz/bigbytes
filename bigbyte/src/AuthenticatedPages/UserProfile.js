@@ -132,15 +132,6 @@ const UserProfile = () => {
                             <p>Status: {referral.status}</p>
                           </Card.Text>
                           <Row className='mb-3'>
-                            <Col>
-                              {/*<Button className="resume-btn" onClick={() => handleViewResume(referral.resumeUrl)}>View Resume</Button>*/}
-                            </Col>
-                            <Col>
-                              {/*<Button className='accept-btn' onClick={() => handleAccept(referral.id)}>Accept</Button>*/}
-                            </Col>
-                            <Col>
-                              {/*<Button className='decline-btn' onClick={() => handleDecline(referral.id)}>Decline</Button>*/}
-                            </Col>
                           </Row>
                         </Card>
                       </Row>
