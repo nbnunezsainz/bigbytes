@@ -139,11 +139,20 @@ const MentProfile = () => {
                             <>
                                 <Row>
                                     <Col>
-                                        <h1 className='mt-4 mb-2' style={{ fontSize: '24px', fontWeight: 'bold', color: '#333' }}>{mentor.FirstName} {mentor.LastName}</h1>
-                                        <h5 className="mb-1" style={{ color: '#666' }}>Mentor</h5>
-                                        <h6 className='' style={{ color: '#888' }}>{mentor.Company}</h6>
-                                        <a href={mentor.LinkedIn} style={{ color: '#007bff', textDecoration: 'none' }}>View LinkedIn</a>
-                                        <p className='mt-4' style={{ fontSize: '16px', lineHeight: '1.5', color: '#555' }}>{mentor.Bio}</p>
+                                        <h1 className='mt-4 mb-2' style={{
+                                            fontSize: '24px',
+                                            fontWeight: 'bold',
+                                            color: '#333'
+                                        }}>{mentor.FirstName} {mentor.LastName}</h1>
+                                        <h5 className="mb-1" style={{color: '#666'}}>Mentor</h5>
+                                        <h6 className='' style={{color: '#888'}}>{mentor.Company}</h6>
+                                        <a href={mentor.LinkedIn} target="_blank"
+                                           rel="noopener noreferrer" style={{color: '#007bff', textDecoration: 'none'}}>View LinkedIn</a>
+                                            <p className='mt-4' style={{
+                                                fontSize: '16px',
+                                                lineHeight: '1.5',
+                                                color: '#555'
+                                            }}>{mentor.Bio}</p>
                                     </Col>
                                 </Row>
                                 <Row style={{ marginTop: 'auto' }}>
