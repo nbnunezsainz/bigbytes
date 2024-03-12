@@ -75,6 +75,7 @@ exports.requestReferal = async (req, res) => {
      const notificationData = {
       mentorID: mentorID,
       studentID: student.userID,
+      company: internshipDoc.data().company,
       internshipURL: internshipDoc.data().URL,
       InternshipTitle: internshipDoc.data().Title,
       studentMajor: student.Major,
