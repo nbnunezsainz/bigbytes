@@ -52,7 +52,7 @@ function App() {
         <Route path="/UserData" element={<UserDetailsForm />} />
         <Route path="/InternShips" element={<Internships />} />
         <Route path="/Resume" element={<Resume />} />
-        <Route path="/ResumeReviwer" element={<ResumesViewer />} />
+        <Route path="/ResumeReviewer" element={<ResumesViewer />} />
         <Route path="/CreateInternship" element={<CreateInternship />} />
         
          <Route path="/MentorSearch" element={<MentorSearch />} /> 
