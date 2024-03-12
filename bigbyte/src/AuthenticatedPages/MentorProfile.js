@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Button, Card, Container, Form, Row, Col } from 'react-bootstrap';
+import Popup from 'reactjs-popup';
 import AuthNavbar from './AuthenticatedNavBar';
 import auth from "../fb.js";
 
@@ -7,6 +8,8 @@ const MentProfile = () => {
     const [loading, setLoading] = useState(false);
     const [mentor, setMentor] = useState([]);
     const [editFields, setEditFields] = useState(false);
+    const [referals, setReferals] = useState([]);
+    const [viewReferals, setViewReferals] = useState(false)
 
     useEffect(() => {
         const fetchData = async () => {
@@ -28,7 +31,7 @@ const MentProfile = () => {
 
                 const data = await response.json();
                 setMentor(data.user);
-                console.log(data.user)
+                console.log(mentor);
 
                 //console.log(data.user)
             } catch (error) {
@@ -63,7 +66,9 @@ const MentProfile = () => {
         }
 
         const data = await response.json();
-        console.log(data, "dataa");
+        setReferals(data.notifications);
+        console.log(referals, "referals");    // COMMENT
+        setViewReferals(true);
     };
 
     const handleDone = async() => {
@@ -84,11 +89,6 @@ const MentProfile = () => {
                     "Content-Type": "application/json",
                     Authorization: `Bearer ${token}`,
                 },
-                // body: JSON.stringify({
-                //     FirstName: "NEW NAME",
-                //     LastName: "Cool",
-                //     Company: "Apple",
-                //     Bio: "PHI MY NAME IS PARKY" })
                 body: JSON.stringify(mentor)
             };
 
@@ -98,9 +98,7 @@ const MentProfile = () => {
             }
 
             const data = await response.json();
-            //console.log(data)
-            console.log("mentor")
-            console.log(mentor)
+            console.log(data)
             //setMentor(data.user);
         } catch (error) {
             console.error("Error fetching data:", error);
