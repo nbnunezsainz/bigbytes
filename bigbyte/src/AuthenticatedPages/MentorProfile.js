@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Button, Card, Container, Form, Row, Col } from 'react-bootstrap';
 import AuthNavbar from './AuthenticatedNavBar';
-import "./MentorProfile.css"
 import auth from "../fb.js";
+
+import "../Styling/MentorProfile.css"
+
 
 const MentProfile = () => {
     const [loading, setLoading] = useState(false);
@@ -68,7 +70,7 @@ const MentProfile = () => {
 
         const data = await response.json();
         setReferals(data.notifications);
-        console.log(referals, "referals");    // COMMENT
+        console.log('referals', referals)
         setViewReferals(!viewReferals);
     };
 
