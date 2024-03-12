@@ -1,7 +1,7 @@
 const { getFirestore, Timestamp, FieldValue, Filter } = require('firebase-admin/firestore');
 const { db, admin } = require('../FireBaseSetUp.js');
 const Constants = require('./databaseConstant.js');
-const { filterHelper } = require('./databaseFunctions.js');
+const { filterHelper, getDocument } = require('./databaseFunctions.js');
 const { addInternship } = require('./Internships.js');
 
 // create and initialize a database reference to the "Internship" collection
@@ -129,6 +129,19 @@ exports.deleteMentor = async (req, res) => {
   }
 };
 
+exports.getMentorProfile = async (req, res) => {
+  try {
+
+    let mentorID = req.user.uid;
+    let mentor = await getDocument(MentorRef, mentorID);
+    res.status(200).json({ success: true, mentorData: mentor });
+
+  } catch (error) {
+    console.log("RAN INTO PROBLEM LOOKING FOR MENTOR", error);
+    res.status(500).json({ success: false, message: 'Error when getting mentor' });
+  }
+}
+
 // find and return an mentor dictionary that relates their ID to their data
 exports.getMentor = async (req, res) => {
   try {
@@ -158,19 +171,18 @@ exports.getMentor = async (req, res) => {
 };
 
 //update specific mentor with new data
-exports.updateMentor = async(req,res) => {
+exports.updateMentor = async (req, res) => {
 
-  try{
-    let userID = req.user.uid;
-    console.log(userID)
-    //let user;
+  try {
+    let mentorID = req.user.uid;
+
     const mentorUpdate = req.body;
-    const doc = await MentorRef.doc(userID).update(mentorUpdate);
-    console.log(doc)
+    await MentorRef.doc(mentorID).update(mentorUpdate);
+    let mentor = await getDocument(MentorRef, mentorID);
 
-    res.json({ success: true, message: 'Mentor updated successfully' });
+    res.json({ success: true, message: 'Mentor updated successfully', mentorData: mentor });
 
-  } catch(error){
+  } catch (error) {
 
     //console.log(error)
     res.json({ success: false, message: 'Mentor NOT updated (error)' });
