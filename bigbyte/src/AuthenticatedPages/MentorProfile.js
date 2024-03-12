@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Button, Card, Container, Form, Row, Col } from 'react-bootstrap';
 import AuthNavbar from './AuthenticatedNavBar';
+import "./MentorProfile.css"
 import auth from "../fb.js";
 
 const MentProfile = () => {
@@ -8,6 +9,7 @@ const MentProfile = () => {
     const [mentor, setMentor] = useState([]);
     const [editFields, setEditFields] = useState(false);
     const [referals, setReferals] = useState([]);
+    const [refStatus, setRefStatus] = useState([]);
     const [viewReferals, setViewReferals] = useState(false)
 
     useEffect(() => {
@@ -67,7 +69,7 @@ const MentProfile = () => {
         const data = await response.json();
         setReferals(data.notifications);
         console.log(referals, "referals");    // COMMENT
-        setViewReferals(true);
+        setViewReferals(!viewReferals);
     };
 
     const handleEditFields = async () => {
@@ -105,6 +107,77 @@ const MentProfile = () => {
 
     if (loading) {
         return <div>Loading...</div>;
+    }
+
+    const handleResume = async() => {
+      // redirect to page with PDFViewer for Resume URL
+
+    }
+
+    const handleAccept = async() => {
+      // set referal status to accepted
+      setRefStatus("accept");
+
+      // MAKE BACKEND REQUEST FOR REF STATUS = ACCEPT
+    //   try {
+    //     const user = auth.currentUser;
+    //     const token = user && (await user.getIdToken());
+
+    //     const payloadHeader = {
+    //         method: 'PATCH',
+    //         headers: {
+    //             "Content-Type": "application/json",
+    //             Authorization: `Bearer ${token}`,
+    //         },
+    //         body: JSON.stringify(referal.status)
+    //     };
+
+    //     const response = await fetch('http://localhost:3001/api/v1/mentor/UpdateRefStatus', payloadHeader);
+    //     if (!response.ok) {
+    //         throw new Error('Failed to fetch');
+    //     }
+
+    //     const data = await response.json();
+    //     console.log(data)
+    //     //setMentor(data.user);
+    // } catch (error) {
+    //     console.error("Error fetching data:", error);
+    // } finally {
+    //     setLoading(false);
+    // }
+    }
+
+    const handleDecline = async() => {
+      // set referal status to declined
+      setRefStatus("decline");
+
+      // MAKE BACKEND REQUEST FOR REF STATUS = DECLINE
+    //   try {
+    //     const user = auth.currentUser;
+    //     const token = user && (await user.getIdToken());
+
+    //     const payloadHeader = {
+    //         method: 'PATCH',
+    //         headers: {
+    //             "Content-Type": "application/json",
+    //             Authorization: `Bearer ${token}`,
+    //         },
+    //         body: JSON.stringify(referal.status)
+    //     };
+
+    //     const response = await fetch('http://localhost:3001/api/v1/mentor/UpdateRefStatus', payloadHeader);
+    //     if (!response.ok) {
+    //         throw new Error('Failed to fetch');
+    //     }
+
+    //     const data = await response.json();
+    //     console.log(data)
+    //     //setMentor(data.user);
+    // } catch (error) {
+    //     console.error("Error fetching data:", error);
+    // } finally {
+    //     setLoading(false);
+    // }
     }
 
     return (
@@ -150,13 +223,48 @@ const MentProfile = () => {
                                 <Row style={{ marginTop: 'auto' }}>
                                     <Col className="d-flex justify-content-end">
                                         <Button onClick={() => setEditFields(true)} className='mt-4 me-4' style={{ backgroundColor: '#007bff', color: '#fff', border: 'none', borderRadius: '5px', padding: '8px 16px' }}>Edit</Button>
-                                        <Button onClick={CheckReferals} className='mt-4' style={{ backgroundColor: '#007bff', color: '#fff', border: 'none', borderRadius: '5px', padding: '8px 16px' }}>Check Referrals</Button>
+                                        { (!viewReferals) ? (
+                                          <Button onClick={CheckReferals} className='mt-4' style={{ backgroundColor: '#007bff', color: '#fff', border: 'none', borderRadius: '5px', padding: '8px 16px' }}>Show Referrals</Button>
+                                        ) : (
+                                          <Button onClick={CheckReferals} className='mt-4' style={{ backgroundColor: '#007bff', color: '#fff', border: 'none', borderRadius: '5px', padding: '8px 16px' }}>Hide Referrals</Button>
+                                        )}
                                     </Col>
                                 </Row>
                             </>
                         )}
                     </Container>
                 </Card>
+                
+                <div>
+                  {viewReferals && (
+                    referals.length > 0 ? (
+                        referals.map((referal, index) => (
+                          <Row key={index} className='mt-4'>
+                            <Card key={index}>
+                                <Card.Title style={{marginTop: "20px"}}>Position: {referal.InternshipTitle}</Card.Title>
+                                <Card.Text>
+                                  Applicant Bio: {referal.studentBio}
+                                </Card.Text>
+                                <Row key={index} className='mb-3'>
+                                  <Col key={index}>
+                                    <Button className="resume-btn" onClick={handleResume}> View Resume </Button>
+                                  </Col>
+                                  <Col key={index+1}>
+                                    <Button className='accept-btn' onClick={handleAccept}> Accept </Button>
+                                  </Col>
+                                  <Col key={index+2}>
+                                    <Button className='decline-btn' onClick={handleDecline}> Decline </Button>
+                                  </Col>
+                                </Row>
+                            </Card>
+                          </Row>
+                        ))
+                    ) : (
+                        <h3>Loading referrals or no referrals currently</h3>
+                    )
+                  )}
+                </div>
+
             </div>
         </>
     );

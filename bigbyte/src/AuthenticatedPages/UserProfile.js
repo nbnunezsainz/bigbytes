@@ -3,36 +3,46 @@ import { Outlet, Link } from "react-router-dom";
 import { Card, Button, Form } from 'react-bootstrap';
 import { Container, Row, Col } from 'react-bootstrap';
 import AuthNavbar from './AuthenticatedNavBar';
+import "./UserProfile.css"
 import auth from "../fb.js"
 
 
 const UserProfile = () => {
   const [User, setUser] = useState([]); // State to store student information
   const [loading, setLoading] = useState(true); // State to manage loading status
+  const [notifications, setNotifications] = useState([]);
+  const [viewReferrals, setReferrals] = useState(false);
   const [editFields, setEditFields] = useState(false);
 
 
-  const CheckReferals = async () => {
-    const User = auth.currentUser;
-    const token = User && (await User.getIdToken());
+const CheckReferals = async( ) =>
+  {
+    const user = auth.currentUser;
+            const token = user && (await user.getIdToken());
+    
+            const payloadHeader = {
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`,
+              },
+            };
+          const response = await fetch('http://localhost:3001/api/v1/user/ReferalStatus', payloadHeader)
+          if (!response.ok) {
+            throw new Error('Failed to fetch');
+          }
+          
+            const data = await response.json();
 
-    const payloadHeader = {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-    };
-    const response = await fetch('http://localhost:3001/api/v1/User/ReferalStatus', payloadHeader)
-    if (!response.ok) {
-      throw new Error('Failed to fetch');
-    }
+            if (data.success) {
+              setNotifications(data.notifications);
+            } else {
+              console.error("Failed.");
+            }
 
-    const data = await response.json();
-
-    console.log(data, "dataa");
-
-
-  }
+            console.log(notifications, "...notifications");
+           // console.log(data, "dataa");
+          setReferrals(!viewReferrals);
+   
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -149,6 +159,7 @@ const UserProfile = () => {
                     </Card.Text>
                     <Row style={{ marginTop: 'auto' }}>
                       <Col className="d-flex justify-content-end">
+                        <Button onClick={CheckReferals}> Referral Status</Button>
                         <Button onClick={() => setEditFields(true)} className='mt-4 me-4' style={{ backgroundColor: '#007bff', color: '#fff', border: 'none', borderRadius: '5px', padding: '8px 16px' }}>Edit</Button>
                       </Col>
                     </Row>
@@ -158,6 +169,47 @@ const UserProfile = () => {
             </Card>
           </Col>
         </Row>
+        {/*<Button className="resume-btn"> View Resume </Button>*/}
+        {/*<button onClick ={CheckReferals}> Referral Status</button>*/}
+        {/*{notifications.length > 0 && (*/}
+        {/*    <div>*/}
+        {/*      <h3>Referral Notifications:</h3>*/}
+        {/*      <ul>*/}
+        {/*        {notifications.map((notification, index) => (*/}
+        {/*            <li key={index}>*/}
+        {/*              <strong>Internship*/}
+        {/*                Title:</strong> {notification.InternshipTitle}, <strong>Status:</strong> {notification.status}*/}
+        {/*            </li>*/}
+        {/*        ))}*/}
+        {/*      </ul>*/}
+        {/*    </div>*/}
+        {/*)}*/}
+
+        <div>
+          {viewReferrals && (
+              notifications.length > 0 ? (
+                  notifications.map((referral, index) => (
+                      <Row key={index} className='mt-4'>
+                        <Card>
+                          <Card.Title style={{ marginTop: "20px" }}>Position: {referral.InternshipTitle}</Card.Title>
+                          <Card.Text>
+                            <p>Company: {referral.Company}</p>
+                            <p>Status: {referral.status}</p>
+                          </Card.Text>
+                          <Row className='mb-3'>
+                          </Row>
+                        </Card>
+                      </Row>
+                  ))
+              ) : (
+                  <>
+                    <p>Loading referrals or no referrals currently</p>
+                  </>
+              )
+          )}
+
+        </div>
+
       </Container>
     </>
   );

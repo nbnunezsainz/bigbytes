@@ -155,12 +155,9 @@ exports.CreateDetailsAboutUser = async (req, res) => {
     let userDetails = {
       FirstName: req.body.firstName,
       LastName: req.body.lastName,
-      Major: req.body.major,
-      Year: req.body.year,
       Bio: req.body.bio || null,
       Organizations: req.body.organizations || [],
       LinkedIn: req.body.linkedIn || null,
-      Resume: req.body.resume || null,
       //RefferalCount: 20, This is for internships
       uid:User,
       UserStatus: req.body.UserStatus, //tells us if user or student

@@ -249,31 +249,33 @@ const updateInternshipData = async (internshipID, InternshipRef, internshipData)
 
 exports.CheckReferalStatus = async (req, res) => {
     try {
-        const studentID = req.user.uid;
-        const userNotificationsSnapshot = await MentorNotificationsRef.where('studentID', '==', studentID).get();
-
-        if (!userNotificationsSnapshot) {
-            res.json({ message: "currently no request made" }).status(200);
-        }
-
-        console.log(userNotificationsSnapshot, "hello");
-
-        // Array to store notifications
-        const notifications = [];
-
-        userNotificationsSnapshot.forEach(doc => {
-            const data = doc.data();
-            console.log(doc.data(), "www");
-            const notificationData = {
-                InternshipTitle: data.InternshipTitle,
-                status: data.status,
-                // Add more fields as needed
-            };
-            notifications.push(notificationData);
-        });
-
-
-        res.status(200).json({ success: true, notifications: notifications });
+      const studentID = req.user.uid;
+      const userNotificationsSnapshot = await MentorNotificationsRef.where('studentID', '==', studentID ).get();
+  
+      if (!userNotificationsSnapshot ) {
+        res.json({ message: "currently no request made" }).status(200);
+      }
+  
+      console.log(userNotificationsSnapshot , "hello");
+  
+      // Array to store notifications
+      const notifications = [];
+  
+      userNotificationsSnapshot.forEach(doc => {
+        const data = doc.data();
+        console.log(doc.data());
+        console.log(doc.data(), "www");
+        const notificationData = {
+            InternshipTitle: data.InternshipTitle,
+            Company:data.company,
+            status:data.status,
+            // Add more fields as needed
+        };
+        notifications.push(notificationData);
+    });
+  
+  
+      res.status(200).json({ success: true, notifications: notifications });
     }
     catch (error) {
         console.error('Error fetching mentor notifications:', error);
