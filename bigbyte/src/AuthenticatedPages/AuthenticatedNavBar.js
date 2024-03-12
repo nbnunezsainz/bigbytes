@@ -60,7 +60,7 @@ function AuthNavbar() {
       <img src="https://1000logos.net/wp-content/uploads/2017/11/UCLA-Logo.png" alt="logo" style ={{"width":"100px"}}/>
       <ul className="nav-links">
           <li><Link to="/Internships">Internships</Link></li>
-          <li><Link to="/ResumeReviwer">Resume Reviewer</Link></li>
+          <li><Link to="/ResumeReviewer">Resume Reviewer</Link></li>
           
           
 
