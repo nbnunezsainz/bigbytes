@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Button, Card, Container, Form, Row, Col } from 'react-bootstrap';
 import AuthNavbar from './AuthenticatedNavBar';
+import "./MentorProfile.css"
 import auth from "../fb.js";
 
 const MentProfile = () => {
@@ -67,7 +68,7 @@ const MentProfile = () => {
         const data = await response.json();
         setReferals(data.notifications);
         console.log(referals, "referals");    // COMMENT
-        setViewReferals(true);
+        setViewReferals(!viewReferals);
     };
 
     const handleDone = async() => {
@@ -155,13 +156,50 @@ const MentProfile = () => {
                                 <Row style={{ marginTop: 'auto' }}>
                                     <Col className="d-flex justify-content-end">
                                         <Button onClick={() => setEditFields(true)} className='mt-4 me-4' style={{ backgroundColor: '#007bff', color: '#fff', border: 'none', borderRadius: '5px', padding: '8px 16px' }}>Edit</Button>
-                                        <Button onClick={CheckReferals} className='mt-4' style={{ backgroundColor: '#007bff', color: '#fff', border: 'none', borderRadius: '5px', padding: '8px 16px' }}>Check Referrals</Button>
+                                        { (!viewReferals) ? (
+                                          <Button onClick={CheckReferals} className='mt-4' style={{ backgroundColor: '#007bff', color: '#fff', border: 'none', borderRadius: '5px', padding: '8px 16px' }}>Show Referrals</Button>
+                                        ) : (
+                                          <Button onClick={CheckReferals} className='mt-4' style={{ backgroundColor: '#007bff', color: '#fff', border: 'none', borderRadius: '5px', padding: '8px 16px' }}>Hide Referrals</Button>
+                                        )}
                                     </Col>
                                 </Row>
                             </>
                         )}
                     </Container>
                 </Card>
+                
+                <div>
+                  {viewReferals && (
+                    referals.length > 0 ? (
+                        referals.map((referal, index) => (
+                          <Row key={index} className='mt-4'>
+                            <Card key={index}>
+                                <Card.Title style={{marginTop: "20px"}}>Position: {referal.InternshipTitle}</Card.Title>
+                                <Card.Text>
+                                  <p>Applicant Bio: {referal.studentBio}</p>
+                                </Card.Text>
+                                <Row key={index} className='mb-3'>
+                                  <Col key={index}>
+                                    <Button className="resume-btn"> View Resume </Button>
+                                  </Col>
+                                  <Col key={index+1}>
+                                    <Button className='accept-btn'> Accept </Button>
+                                  </Col>
+                                  <Col key={index+2}>
+                                    <Button className='decline-btn'> Decline </Button>
+                                  </Col>
+                                </Row>
+                            </Card>
+                          </Row>
+                        ))
+                    ) : (
+                      <>
+                        <p>Loading referrals or no referrals currently</p>
+                      </>
+                    )
+                  )}
+                </div>
+
             </div>
         </>
     );
