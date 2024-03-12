@@ -21,7 +21,7 @@ const UserProfile = () => {
                 Authorization: `Bearer ${token}`,
               },
             };
-          const response = await fetch('http://localhost:3001/api/v1/user/RequestedReferals', payloadHeader)
+          const response = await fetch('http://localhost:3001/api/v1/user/ReferalStatus', payloadHeader)
           if (!response.ok) {
             throw new Error('Failed to fetch');
           }
@@ -91,6 +91,7 @@ const UserProfile = () => {
           </Card>
         </Col>
       </Row>
+      <button onClick ={CheckReferals}> Referal Status</button>
     </Container>
     </>
     

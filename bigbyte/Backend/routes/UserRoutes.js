@@ -24,6 +24,7 @@ router.route('/GetUser').get(AuthenticationController.verifyToken, UserControlle
 router.route('/GetUserType').get(AuthenticationController.verifyToken, AuthenticationController.DetermineuserType);
 
 router.route('/ApplyToInternship').post(UserController.applyForInternship);
+router.route('/ReferalStatus').get(AuthenticationController.verifyToken, UserController.CheckReferalStatus);
 
 
 // // TO HANDLE RESUMES

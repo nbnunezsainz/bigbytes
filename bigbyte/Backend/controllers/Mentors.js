@@ -87,14 +87,12 @@ const cleanQuery = (query) => {
 exports.CheckReferals = async (req, res) => {
   try {
     const mentorID = req.user.uid;
-    console.log(mentorID);
     const mentorNotificationsSnapshot = await MentorNotificationsRef.where('mentorID', '==', mentorID).get();
 
     if (!mentorNotificationsSnapshot) {
       res.json({ message: "currently no request made" }).status(200);
     }
 
-    console.log(mentorNotificationsSnapshot, "hello");
 
     // Array to store notifications
     const notifications = [];
@@ -106,7 +104,6 @@ exports.CheckReferals = async (req, res) => {
       });
     });
 
-    console.log(notifications, "notify");
 
     res.status(200).json({ success: true, notifications: notifications });
   }
