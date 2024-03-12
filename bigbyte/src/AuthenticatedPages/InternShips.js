@@ -54,7 +54,6 @@ const JobDetail = () => {
 
       const data = await response.json();
 
-
       setJobs(data.internshipData);
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -84,6 +83,7 @@ const JobDetail = () => {
       }
 
       const data = await response.json();
+      console.log(data, 'data');
       setJobs(data.internshipData); // Assuming the response JSON structure matches our state
       console.log(data.internshipData, "hod");
 

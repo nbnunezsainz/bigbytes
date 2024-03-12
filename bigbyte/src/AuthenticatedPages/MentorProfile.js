@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Button, Card, Container, Form, Row, Col } from 'react-bootstrap';
 import { Navigate } from 'react-router-dom';
 import AuthNavbar from './AuthenticatedNavBar';
-// import ViewResume from './ViewResume';
+import ViewResume from './ViewResume';
 import auth from "../fb.js";
 
 import "../Styling/MentorProfile.css"
@@ -117,10 +117,10 @@ const MentProfile = () => {
         return <div>Loading...</div>;
     }
 
-    const handleResume = async(index) => {
-      // redirect to page with PDFViewer for Resume URL
-      <Navigate to="/ViewResume" target="_blank"/>
-    }
+    const handleResume = async (index) => {
+      // Navigate to ViewResume page
+      return <Navigate to="/ViewResume" />;
+    };
 
     const FetchUpdate = async(referalId, payload) => 
     {
@@ -159,7 +159,7 @@ const MentProfile = () => {
 
         await FetchUpdate(referalId, payload)
 
-        // load referrals
+        // reload referrals
         const user = auth.currentUser;
         const token = user && (await user.getIdToken());
 
@@ -193,7 +193,7 @@ const MentProfile = () => {
     await FetchUpdate(referalId, payload);
       // MAKE BACKEND REQUEST FOR REF STATUS = DECLINE
 
-      // load referrals
+      // reload referrals
       const user = auth.currentUser;
       const token = user && (await user.getIdToken());
 
@@ -296,7 +296,7 @@ const MentProfile = () => {
                               )
                           ))
                       ) : (
-                          <h3>Loading referrals or no referrals currently</h3>
+                          <h3>Loading referrals or no pending referrals currently</h3>
                       )
                   )}
               </div>

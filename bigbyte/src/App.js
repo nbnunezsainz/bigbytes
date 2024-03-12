@@ -13,7 +13,8 @@ import MentorSearch from './AuthenticatedPages/MentorSearch.js';
 import MentorProfile from './AuthenticatedPages/MentorProfile.js';
 import CreateInternship from './AuthenticatedPages/CreateInternships.js';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { AuthProvider } from "./AuthContext.js"; 
+import { AuthProvider } from "./AuthContext.js";
+import ViewResume from './AuthenticatedPages/ViewResume.js';
 
 
 
@@ -61,6 +62,7 @@ function App() {
 
 
          <Route path="/UserProfile" element={<UserProfile />} /> 
+         <Route path="/ViewResume" element={<ViewResume />} />
 
       </Routes>
      
