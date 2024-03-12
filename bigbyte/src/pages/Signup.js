@@ -117,8 +117,13 @@ if (redirectToUserData) {
                 </Col>
             </Row>
         </Container> */}
-         <div>
-          <label htmlFor="username">Email:</label>
+         <div className="right-side-img">
+         {/* <h1 className="text-in-container, h1">Welcome to Refer a Bruin.</h1>
+             <p className="text-in-container, p "> Create your account and create the network of a lifetime.</p> */}
+         </div>
+         <div className='signup-form left-side'> 
+         <h2 className='label'> Create an Account </h2>
+          <label  htmlFor="username">Email:</label>
           <input 
               type="text" 
               id="username" 
@@ -134,7 +139,7 @@ if (redirectToUserData) {
               onChange={handlePasswordChange} 
               placeholder="Enter your password" 
           />
-          <button onClick={SignUserUp} type="submit">Sign Up</button>
+          <button className = "signup-btn" onClick={SignUserUp} type="submit">Sign Up</button>
           </div>
       </>
     );

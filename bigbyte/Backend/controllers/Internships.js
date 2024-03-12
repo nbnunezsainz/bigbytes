@@ -1,7 +1,7 @@
 const { getFirestore, Timestamp, FieldValue, Filter, collection, getDocs } = require('firebase-admin/firestore');
 const { db, admin } = require('../FireBaseSetUp.js');
 const Constants = require('./databaseConstant.js');
-const { queryCollection, deleteDocument, getDocument } = require('./databaseFunctions.js');
+const { getDocument, filterHelper } = require('./databaseFunctions.js');
 const { param } = require('../routes/InternShipRoutes.js');
 const { query } = require('express');
 
@@ -16,7 +16,7 @@ exports.addInternship = async (req, res) => {
   try {
     // initialize the body of response data to become the data
     const internshipData = req.body;
-    const  MentorID = req.user.uid;
+    const MentorID = req.user.uid;
 
     const data = {
       //input all data from req.body json object
@@ -28,8 +28,8 @@ exports.addInternship = async (req, res) => {
       Category: internshipData.category || [],
       URL: internshipData.url,
       ReferalLimit: internshipData.referralLimit,
-      MentorID:MentorID, //how we link internships to a mentor
-     
+      MentorID: MentorID, //how we link internships to a mentor
+
       //not provided by entered data
       ApplicationCounter: 0,
       Display: true,
@@ -40,20 +40,19 @@ exports.addInternship = async (req, res) => {
     const newInternshipRef = InternshipRef.doc();
     await newInternshipRef.set(data);
 
-    res.status(200).json({ message: 'Internship has been created', success:true});
+    res.status(200).json({ message: 'Internship has been created', success: true });
     return;
 
     // unneccesary as the only result needed is from generateInternship in Mentors.js (which this function is solely called from)
     //res.status(200).json({ success: true, message: 'Internship added successfully' });
   } catch (error) {
-    
-    res.status(500).json({ message: 'Internship was not created', success:false});
+
+    res.status(500).json({ message: 'Internship was not created', success: false });
   }
 };
 
-exports.requestReferal = async (req,res) =>
-{
-  let student= req.student; //get usersname, and resume, and linkdln?
+exports.requestReferal = async (req, res) => {
+  let student = req.student; //get usersname, and resume, and linkdln?
 
   console.log(student, "studenr data");
   console.log(req.query, "random");
@@ -65,14 +64,13 @@ exports.requestReferal = async (req,res) =>
   const internshipDoc = await InternshipRef.doc(internshipID).get();
 
   console.log(internshipDoc.data(), 'doc');
-  
+
   if (!internshipDoc) {
     throw new Error('Internship not found');
   }
   const mentorID = internshipDoc.data().MentorID;
 
   console.log(mentorID, "mentor");
-
      // Create a notification document for the mentor
      const notificationData = {
       mentorID: mentorID,
@@ -86,9 +84,10 @@ exports.requestReferal = async (req,res) =>
       message: `Referral request for your internship: ${internshipDoc.data().Title}`,
     };
 
-    const newMentorNotificationsRef = MentorNotificationsRef.doc();
-    await newMentorNotificationsRef.set(notificationData);
- 
+
+  const newMentorNotificationsRef = MentorNotificationsRef.doc();
+  await newMentorNotificationsRef.set(notificationData);
+
 }
 
 //query ALL Internships based on a specific field, filtering technique, and target value --> returns dictionary of ALL internship IDs to their data
@@ -114,7 +113,7 @@ exports.getAllInternships = async (req, res) => {
 
 
 
-/*compount/complex querying of internships based on a specific field(s), filtering technique(s), and target value(s) --> returns dictionary of internship IDs to their data
+/*compound/complex querying of internships based on a specific field(s), filtering technique(s), and target value(s) --> returns dictionary of internship IDs to their data
 ALL parameters of query should be passed (Company, Category, Pay, Location). Empty values will be disregarded.
 
 Please refer to the project structure document for the field, filter, and target restrictions
@@ -126,15 +125,10 @@ exports.queryInternships = async (req, res) => {
     const keyNames = Object.keys(paramList);
 
     if (keyNames.length == 0) {
-      queryDict = getAllInternships(req, res);
+      queryDict = this.getAllInternships(req, res);
     } else {
-      queryDict = await queryCollection(InternshipRef, paramList[keyNames[0]]);
-      for (let i = 1; i < keyNames.length; i++) {
-        const currKey = keyNames[i]
-        const query = paramList[currKey];
-        let q = await queryCollection(InternshipRef, query);
-        queryDict = deDupeQueries(queryDict, q);
-      }
+      console.log("I am here");
+      queryDict = await filterHelper(InternshipRef, paramList);
     }
 
     res.status(200).json({ success: true, message: 'Internships have been found', internshipData: queryDict });
@@ -144,15 +138,6 @@ exports.queryInternships = async (req, res) => {
     console.log("RAN INTO PROBLEM QUERYING INTERNSHIPS", error);
     res.status(500).json({ success: false, message: 'Error querying internships' });
   }
-};
-
-const deDupeQueries = (fullDict, newDict) => {
-  for (const internshipID in fullDict) {
-    if (!newDict.hasOwnProperty(internshipID)) {
-      delete fullDict[internshipID];
-    }
-  }
-  return fullDict;
 };
 
 const cleanQuery = (query) => {

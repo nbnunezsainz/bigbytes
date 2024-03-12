@@ -1,7 +1,7 @@
 const { getFirestore, Timestamp, FieldValue, Filter } = require('firebase-admin/firestore');
 const { db, admin } = require('../FireBaseSetUp.js');
 const Constants = require('./databaseConstant.js');
-const { queryCollection, deleteDocument, getDocument } = require('./databaseFunctions.js');
+const { filterHelper } = require('./databaseFunctions.js');
 const { addInternship } = require('./Internships.js');
 
 // create and initialize a database reference to the "Internship" collection
@@ -33,14 +33,24 @@ exports.addMentor = async (req, res) => {
   }
 }
 
-//query all mentors based on a specific field, filtering technique, and target value --> returns dictionary of mentor ID to their data
+/*compound/complex querying of mentors based on a specific field(s), filtering technique(s), and target value(s) --> returns dictionary of mentor IDs to their data
+ALL parameters of query should be passed (Company, Industry). Empty values will be disregarded.
+
+Please refer to the project structure document for the field, filter, and target restrictions
+*/
 exports.queryMentors = async (req, res) => {
   try {
+    let queryDict = {};
+    let paramList = await cleanQuery(req.query);
+    const keyNames = Object.keys(paramList);
 
-    queryDict = await queryCollection(MentorRef, req.body);
+    if (keyNames.length == 0) {
+      queryDict = this.getAllMentors(req, res);
+    } else {
+      queryDict = await filterHelper(MentorRef, paramList);
+    }
 
-    console.log("Success- mentors have been found!");
-    res.status(200).json({ success: true, message: 'Mentors have been found' });
+    res.status(200).json({ success: true, message: 'Mentors have been found', mentorData: queryDict });
     return queryDict;
 
   } catch (error) {
@@ -49,38 +59,61 @@ exports.queryMentors = async (req, res) => {
   }
 };
 
+const cleanQuery = (query) => {
+  let updatedQuery = query;
+  const keyNames = Object.keys(updatedQuery);
 
+  for (let i = 0; i < keyNames.length; i++) {
+    let currKey = keyNames[i];
+    let q = updatedQuery[currKey];
+    if (q == '') {
+      delete updatedQuery[currKey];
+    }
+  }
+
+  Object.keys(updatedQuery).forEach((key) => {
+
+    let tar = updatedQuery[key];
+    let fil = "==";
+
+    updatedQuery[key] = {
+      field: key,
+      filter: fil,
+      target: tar,
+    };
+  });
+  return updatedQuery;
+}
 exports.CheckReferals = async (req, res) => {
   try {
     const mentorID = req.user.uid;
     console.log(mentorID);
     const mentorNotificationsSnapshot = await MentorNotificationsRef.where('mentorID', '==', mentorID).get();
 
-    if(!mentorNotificationsSnapshot)
-    {
-      res.json({message:"currently no request made"}).status(200);
+    if (!mentorNotificationsSnapshot) {
+      res.json({ message: "currently no request made" }).status(200);
     }
 
     console.log(mentorNotificationsSnapshot, "hello");
-    
-     // Array to store notifications
-     const notifications = [];
 
-     // Iterate over each notification document and add it to the notifications array
-     mentorNotificationsSnapshot.forEach(doc => {
-         notifications.push({
-             ...doc.data() // All other fields of the notification document
-         });
-     });
+    // Array to store notifications
+    const notifications = [];
 
-     console.log(notifications, "notify");
-  
-  res.status(200).json({ success: true, notifications: notifications});
-    }
-     catch (error) {
-        console.error('Error fetching mentor notifications:', error);
-        res.status(500).json({ success: false, message: 'Error fetching mentor notifications' });
-    }
+    // Iterate over each notification document and add it to the notifications array
+    mentorNotificationsSnapshot.forEach(doc => {
+      notifications.push({
+        ...doc.data() // All other fields of the notification document
+      });
+    });
+
+    console.log(notifications, "notify");
+
+    res.status(200).json({ success: true, notifications: notifications });
+  }
+  catch (error) {
+    console.error('Error fetching mentor notifications:', error);
+    res.status(500).json({ success: false, message: 'Error fetching mentor notifications' });
+  }
 };
 
 
@@ -127,8 +160,27 @@ exports.getMentor = async (req, res) => {
   }
 };
 
-//get all Mentors
+//update specific mentor with new data
+exports.updateMentor = async(req,res) => {
 
+  try{
+    let userID = req.user.uid;
+    console.log(userID)
+    //let user;
+    const mentorUpdate = req.body;
+    const doc = await MentorRef.doc(userID).update(mentorUpdate);
+    console.log(doc)
+
+    res.json({ success: true, message: 'Mentor updated successfully' });
+
+  } catch(error){
+
+    //console.log(error)
+    res.json({ success: false, message: 'Mentor NOT updated (error)' });
+
+  }
+}
+//get all Mentors
 exports.getAllMentors = async (req, res) => {
   try {
 
