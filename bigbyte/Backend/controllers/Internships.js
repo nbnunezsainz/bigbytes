@@ -74,6 +74,7 @@ exports.requestReferal = async (req, res) => {
      // Create a notification document for the mentor
      const notificationData = {
       mentorID: mentorID,
+      studentID: student.userID,
       internshipURL: internshipDoc.data().URL,
       InternshipTitle: internshipDoc.data().Title,
       studentMajor: student.Major,
@@ -82,6 +83,7 @@ exports.requestReferal = async (req, res) => {
       studentBio: student.Bio,
       Resume: student.Resume,
       message: `Referral request for your internship: ${internshipDoc.data().Title}`,
+      status:"pending",
     };
 
 
