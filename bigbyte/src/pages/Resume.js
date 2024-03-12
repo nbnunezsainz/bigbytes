@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { Container, Form, Button, FormGroup, FormControl, FormLabel } from 'react-bootstrap';
 import { Navigate } from 'react-router-dom';
 import AuthNavbar from '../AuthenticatedPages/AuthenticatedNavBar';
-import '../Login.css';
+import '../Styling/Login.css';
 import auth from "../fb.js";
 
 // export default function Resume() {

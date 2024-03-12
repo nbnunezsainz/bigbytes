@@ -5,6 +5,8 @@ this file holds database names that are stored in Firebase*/
 //constants for Firestore collections
 exports.COLLECTION_USERS = "User";
 exports.COLLECTION_MENTORS = "Mentor";
+exports.COLLECTION_MENTORS_NOTIFICATIONS = "MentorNotifications";
+exports.COLLECTION_USERS_NOTIFICATIONS = "UserNotifications";
 exports.COLLECTION_INTERNSHIP = "Internship";
 exports.Collection_RESUME = "Resume";
 exports.Collection_COMMENTS = "Comments";

@@ -57,35 +57,42 @@ function AuthNavbar() {
     }, []);
     return (
       <nav className='fixed-top pl-2 pt-1 pb-1'>
-          <img src="https://1000logos.net/wp-content/uploads/2017/11/UCLA-Logo.png" alt="logo" style ={{"width":"100px"}}/>
-          <ul className="nav-links">
-              <li><Link to="/Internships">Internships</Link></li>
-              <li><Link to="/ResumeReviwer">Resume Reviewer</Link></li>
-              {/* Only show Create Internships for mentors in the center */}
-              {!userStatus && <li><Link to="/CreateInternship">Create Internship</Link></li>}
-          </ul>
-          {userStatus === null ? (
-              <div className="right-links">Loading user info...</div>
-          ) : (
-              <ul className="right-links ml-2 mt-1 mb-1">
-                <ul className='nav-links'>
-                  <li><Link to="/MentorProfile">My Profile</Link></li>
-                </ul>
-                  {userStatus ? (
+      <img src="https://1000logos.net/wp-content/uploads/2017/11/UCLA-Logo.png" alt="logo" style ={{"width":"100px"}}/>
+      <ul className="nav-links">
+          <li><Link to="/Internships">Internships</Link></li>
+          <li><Link to="/ResumeReviwer">Resume Reviewer</Link></li>
+          
+          
+
+          {/* Only show Create Internships for mentors in the center */}
+          {!userStatus && <li><Link to="/CreateInternship">Create Internship</Link></li>}
+          { userStatus  && <li><Link to="/Resume">Upload Resume</Link>  </li>}
+          <li><Link to="/MentorSearch">Mentors</Link> </li>
+          
+      </ul>
+      {userStatus === null ? (
+          <div className="right-links">Loading user info...</div>
+      ) : (
+          <ul className="right-links ml-2 mt-1 mb-1">
+              {userStatus ? (
+                  <>
+
                       <li>
                           <Link to="/UserProfile">My Profile</Link>
-                          <Link to="/Resume">Upload Resume</Link>
-                          <Link to="/MentorSearch">Mentors</Link>
                       </li>
-                  ) : (
-                      <>
-                         
-                          <Button onClick={logoutUser}>Logout</Button>
-                      </>
-                  )}
-              </ul>
-          )}
-      </nav>
+
+                      <Button onClick={logoutUser}>Logout</Button>
+                  </>
+              ) : (
+                  <>
+                      <li><Link to="/MentorProfile">My Profile</Link></li>
+                      <Button onClick={logoutUser}>Logout</Button>
+                  </>
+              )}
+          </ul>
+      )}
+  </nav>
+
   );
 };
 

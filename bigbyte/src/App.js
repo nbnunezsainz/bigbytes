@@ -1,4 +1,4 @@
-import './App.css';
+import './Styling/App.css';
 import Login from './pages/Login.js';
 import Signup from './pages/Signup.js';
 import Home from './pages/Home.js';

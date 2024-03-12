@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import '../Signup.css';
+import '../Styling/Signup.css';
 import NavBar from './VisitNavBar.js';
 import {Container, Form, Row, Col, Card, Button} from 'react-bootstrap';
 import { Navigate } from 'react-router-dom';

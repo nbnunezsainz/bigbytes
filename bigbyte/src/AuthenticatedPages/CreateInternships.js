@@ -32,6 +32,8 @@ const CreateInternship = () => {
           // Fetching the auth token
           const user = auth.currentUser;
           const token = user && (await user.getIdToken());
+
+          console.log(user);
   
           const payloadHeader = {
             method: 'POST',

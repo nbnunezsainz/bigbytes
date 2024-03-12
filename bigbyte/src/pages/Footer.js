@@ -1,5 +1,5 @@
 import React from 'react';
-import '../Footer.css';
+import '../Styling/Footer.css';
 // Creating a footer to have for contact the developers 
 const Footer = () => {
   return (

@@ -1,6 +1,6 @@
 import React, { useState,useEffect  } from 'react';
 import Button from 'react-bootstrap/Button';
-import '../Login.css';
+import '../Styling/Login.css';
 import NavBar from './VisitNavBar.js';
 import {Link, Navigate } from 'react-router-dom';
 

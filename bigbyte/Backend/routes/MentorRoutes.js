@@ -12,6 +12,7 @@ router.route('/GetAllMentors').get(AuthenticationController.verifyToken,MentorCo
 router.route('/DeleteMentor').delete(MentorController.deleteMentor);
 router.route('/GetMentor').get(AuthenticationController.verifyToken, MentorController.getMentor);
 router.route('/GenerateInternship').post(MentorController.generateInternship);
+router.route('/RequestedReferals').get(AuthenticationController.verifyToken, MentorController.CheckReferals);
 
 // TO TEST USER DATASE WITH RANDOM MENTORS
 router.route('/GenerateMentorTestData').post(MentorController.generateTestMentors);
