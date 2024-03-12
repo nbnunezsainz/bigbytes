@@ -130,7 +130,7 @@ const MentProfile = () => {
                                 <Form.Label>Company</Form.Label>
                                 <Form.Control type="text" name="Company" value={mentor.Company} onChange={handleInputChange} className="me-2" />
                                 <Form.Label>LinkedIn</Form.Label>
-                                <Form.Control type="text" name="Company" value={mentor.LinkedIn} onChange={handleInputChange} className="me-2" />
+                                <Form.Control type="text" name="LinkedIn" value={mentor.LinkedIn} onChange={handleInputChange} className="me-2" />
                                 <Form.Label>Bio</Form.Label>
                                 <Form.Control type="text" name="Bio" value={mentor.Bio} onChange={handleInputChange} className="me-2" />
                                 <Button onClick={handleDone} className='mt-4'>Done</Button>
