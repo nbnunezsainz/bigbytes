@@ -119,7 +119,16 @@ exports.getUserAndResume = async (req, res, next) => {
 
     let pathName = Constants.STORAGE_RESUME + userID;
     const resumeRef = ref(storage, pathName);
-    const URL = await getDownloadURL(resumeRef);
+    let URL
+    try{
+     URL = await getDownloadURL(resumeRef);
+    }
+    catch{
+     return res.status(500).json({message:" Upload a resume first before requesting a referal", resume:false});
+
+    }
+
+  
 
 
     //const user = await getDocument(UserRef, userID); cant use this because dont want to send USer UID back, secuirty hazard

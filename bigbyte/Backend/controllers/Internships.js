@@ -54,19 +54,15 @@ exports.addInternship = async (req, res) => {
 exports.requestReferal = async (req, res) => {
   let student = req.student; //get usersname, and resume, and linkdln?
 
-  console.log(student, "studenr data");
-  console.log(req.query, "random");
-
   const internshipID = req.query.internshipID;
 
-  console.log(internshipID, "id");
 
   const internshipDoc = await InternshipRef.doc(internshipID).get();
 
-  console.log(internshipDoc.data(), 'doc');
+  
 
   if (!internshipDoc) {
-    throw new Error('Internship not found');
+    return res.status(500).json({message:"create a profile", resume:false})
   }
   const mentorID = internshipDoc.data().MentorID;
 
@@ -91,6 +87,8 @@ exports.requestReferal = async (req, res) => {
 
   const newMentorNotificationsRef = MentorNotificationsRef.doc();
   await newMentorNotificationsRef.set(notificationData);
+
+  return res.status(200).json({sucess:"sucess"})
 
 }
 
