@@ -11,6 +11,7 @@ router.route('/QueryMentors').get(AuthenticationController.verifyToken, MentorCo
 router.route('/GetAllMentors').get(AuthenticationController.verifyToken, MentorController.getAllMentors);
 router.route('/DeleteMentor').delete(MentorController.deleteMentor);
 router.route('/GetMentor').get(AuthenticationController.verifyToken, MentorController.getMentor);
+router.route('/UpdateMentor').patch(AuthenticationController.verifyToken,MentorController.updateMentor); // put .verifyToken here
 router.route('/GenerateInternship').post(MentorController.generateInternship);
 router.route('/RequestedReferals').get(AuthenticationController.verifyToken, MentorController.CheckReferals);
 
