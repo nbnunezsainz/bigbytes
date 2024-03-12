@@ -13,7 +13,6 @@ const MentProfile = () => {
     const [mentor, setMentor] = useState([]);
     const [editFields, setEditFields] = useState(false);
     const [referals, setReferals] = useState([]);
-    const [refStatus, setRefStatus] = useState([]);
     const [viewReferals, setViewReferals] = useState(false)
 
     useEffect(() => {
@@ -155,11 +154,29 @@ const MentProfile = () => {
         let referalId= referals.notifications[index].id;
        
         const payload = {
-            status: "Accecpted"
+            status: "Accepted"
         };
 
         await FetchUpdate(referalId, payload)
 
+        // load referrals
+        const user = auth.currentUser;
+        const token = user && (await user.getIdToken());
+
+        const payloadHeader = {
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`,
+            },
+        };
+
+        const response = await fetch('http://localhost:3001/api/v1/mentor/RequestedReferals', payloadHeader);
+        if (!response.ok) {
+            throw new Error('Failed to fetch');
+        }
+
+        const data = await response.json();
+        setReferals(data);
    
     }
 
@@ -175,6 +192,25 @@ const MentProfile = () => {
 
     await FetchUpdate(referalId, payload);
       // MAKE BACKEND REQUEST FOR REF STATUS = DECLINE
+
+      // load referrals
+      const user = auth.currentUser;
+      const token = user && (await user.getIdToken());
+
+      const payloadHeader = {
+          headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+          },
+      };
+
+      const response = await fetch('http://localhost:3001/api/v1/mentor/RequestedReferals', payloadHeader);
+      if (!response.ok) {
+          throw new Error('Failed to fetch');
+      }
+
+      const data = await response.json();
+      setReferals(data);
     
 }
 
@@ -235,33 +271,35 @@ const MentProfile = () => {
                 
                 <div>
                   {viewReferals && (
-                    referals.notifications.length > 0 ? (
-                        referals.notifications.map((referal, index) => (
-                          <Row key={index} className='mt-4'>
-                            <Card key={index}>
-                                <Card.Title style={{marginTop: "20px"}}>Position: {referal.data.InternshipTitle}</Card.Title>
-                                <Card.Text>
-                                  Applicant Bio: {referal.data.studentBio}
-                                </Card.Text>
-                                <Row key={index} className='mb-3'>
-                                  <Col key={index}>
-                                    <Button className="resume-btn" onClick={() => handleResume(index)}> View Resume </Button>
-                                  </Col>
-                                  <Col key={index+1}>
-                                    <Button className='accept-btn' value = {referals.id} onClick={(e) => handleAccept(index)}> Accept </Button>
-                                  </Col>
-                                  <Col key={index+2}>
-                                    <Button className='decline-btn' value = {referals.id} onClick={(e) => handleDecline(index)}> Decline </Button>
-                                  </Col>
-                                </Row>
-                            </Card>
-                          </Row>
-                        ))
-                    ) : (
-                        <h3>Loading referrals or no referrals currently</h3>
-                    )
+                      referals.notifications.length > 0 ? (
+                          referals.notifications.map((referal, index) => (
+                              referal.data.status === "pending" && ( // Add the conditional statement here
+                                  <Row key={index} className='mt-4'>
+                                      <Card key={index}>
+                                          <Card.Title style={{ marginTop: "20px" }}>Position: {referal.data.InternshipTitle}</Card.Title>
+                                          <Card.Text>
+                                              Applicant Bio: {referal.data.studentBio}
+                                          </Card.Text>
+                                          <Row key={index} className='mb-3'>
+                                              <Col key={index}>
+                                                  <Button className="resume-btn" onClick={() => handleResume(index)}> View Resume </Button>
+                                              </Col>
+                                              <Col key={index + 1}>
+                                                  <Button className='accept-btn' value={referals.id} onClick={(e) => handleAccept(index)}> Accept </Button>
+                                              </Col>
+                                              <Col key={index + 2}>
+                                                  <Button className='decline-btn' value={referals.id} onClick={(e) => handleDecline(index)}> Decline </Button>
+                                              </Col>
+                                          </Row>
+                                      </Card>
+                                  </Row>
+                              )
+                          ))
+                      ) : (
+                          <h3>Loading referrals or no referrals currently</h3>
+                      )
                   )}
-                </div>
+              </div>
 
             </div>
         </>
