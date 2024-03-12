@@ -248,7 +248,7 @@ const MentProfile = () => {
                             <Card key={index}>
                                 <Card.Title style={{marginTop: "20px"}}>Position: {referal.InternshipTitle}</Card.Title>
                                 <Card.Text>
-                                  <p>Applicant Bio: {referal.studentBio}</p>
+                                  Applicant Bio: {referal.studentBio}
                                 </Card.Text>
                                 <Row key={index} className='mb-3'>
                                   <Col key={index}>
@@ -265,9 +265,7 @@ const MentProfile = () => {
                           </Row>
                         ))
                     ) : (
-                      <>
-                        <p>Loading referrals or no referrals currently</p>
-                      </>
+                        <h3>Loading referrals or no referrals currently</h3>
                     )
                   )}
                 </div>
