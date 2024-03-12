@@ -29,6 +29,8 @@ const MentProfile = () => {
                 const data = await response.json();
                 setMentor(data.user);
                 console.log(data.user)
+
+                //console.log(data.user)
             } catch (error) {
                 console.error("Error fetching data:", error);
             } finally {
@@ -82,11 +84,12 @@ const MentProfile = () => {
                     "Content-Type": "application/json",
                     Authorization: `Bearer ${token}`,
                 },
-                body: JSON.stringify({
-                    FirstName: "Parky",
-                    LastName: "Cool",
-                    Company: "Apple",
-                    Bio: "PHI MY NAME IS PARKY" })
+                // body: JSON.stringify({
+                //     FirstName: "NEW NAME",
+                //     LastName: "Cool",
+                //     Company: "Apple",
+                //     Bio: "PHI MY NAME IS PARKY" })
+                body: JSON.stringify(mentor)
             };
 
             const response = await fetch('http://localhost:3001/api/v1/mentor/UpdateMentor', payloadHeader);
@@ -95,7 +98,9 @@ const MentProfile = () => {
             }
 
             const data = await response.json();
-            console.log(data)
+            //console.log(data)
+            console.log("mentor")
+            console.log(mentor)
             //setMentor(data.user);
         } catch (error) {
             console.error("Error fetching data:", error);
@@ -125,7 +130,7 @@ const MentProfile = () => {
                                 <Form.Label>Company</Form.Label>
                                 <Form.Control type="text" name="Company" value={mentor.Company} onChange={handleInputChange} className="me-2" />
                                 <Form.Label>LinkedIn</Form.Label>
-                                <Form.Control type="text" name="Company" value={mentor.LinkedIn} onChange={handleInputChange} className="me-2" />
+                                <Form.Control type="text" name="LinkedIn" value={mentor.LinkedIn} onChange={handleInputChange} className="me-2" />
                                 <Form.Label>Bio</Form.Label>
                                 <Form.Control type="text" name="Bio" value={mentor.Bio} onChange={handleInputChange} className="me-2" />
                                 <Button onClick={handleDone} className='mt-4'>Done</Button>
