@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Button, Card, Container, Form, Row, Col } from 'react-bootstrap';
+import { Navigate } from 'react-router-dom';
 import AuthNavbar from './AuthenticatedNavBar';
+import ViewResume from './ViewResume';
 import auth from "../fb.js";
 
 import "../Styling/MentorProfile.css"
@@ -42,36 +44,36 @@ const MentProfile = () => {
             } finally {
                 setLoading(false);
             }
+          
+          // load referrals
+          const user = auth.currentUser;
+          const token = user && (await user.getIdToken());
+
+          const payloadHeader = {
+              headers: {
+                  "Content-Type": "application/json",
+                  Authorization: `Bearer ${token}`,
+              },
+          };
+
+          const response = await fetch('http://localhost:3001/api/v1/mentor/RequestedReferals', payloadHeader);
+          if (!response.ok) {
+              throw new Error('Failed to fetch');
+          }
+
+          const data = await response.json();
+          setReferals(data);
+          console.log(data);
         };
+        
 
         fetchData();
+        
     }, []);
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
         setMentor({ ...mentor, [name]: value });
-    };
-
-    const CheckReferals = async () => {
-        const user = auth.currentUser;
-        const token = user && (await user.getIdToken());
-
-        const payloadHeader = {
-            headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${token}`,
-            },
-        };
-
-        const response = await fetch('http://localhost:3001/api/v1/mentor/RequestedReferals', payloadHeader);
-        if (!response.ok) {
-            throw new Error('Failed to fetch');
-        }
-
-        const data = await response.json();
-        setReferals(data.notifications);
-        console.log('referals', referals)
-        setViewReferals(!viewReferals);
     };
 
     const handleDone = async() => {
@@ -116,14 +118,15 @@ const MentProfile = () => {
         return <div>Loading...</div>;
     }
 
-    const handleResume = async() => {
+    const handleResume = async(index) => {
       // redirect to page with PDFViewer for Resume URL
-
+      <Navigate to="/ViewResume" target="_blank"/>
     }
 
-    const handleAccept = async() => {
+    const handleAccept = async(index) => {
       // set referal status to accepted
-      setRefStatus("accept");
+      referals[index].status = "accept";
+      console.log(referals[index].status);
 
       // MAKE BACKEND REQUEST FOR REF STATUS = ACCEPT
     //   try {
@@ -154,9 +157,9 @@ const MentProfile = () => {
     // }
     }
 
-    const handleDecline = async() => {
+    const handleDecline = async(index) => {
       // set referal status to declined
-      setRefStatus("decline");
+      referals[index].status = "decline";
 
       // MAKE BACKEND REQUEST FOR REF STATUS = DECLINE
     //   try {
@@ -231,9 +234,9 @@ const MentProfile = () => {
                                     <Col className="d-flex justify-content-end">
                                         <Button onClick={() => setEditFields(true)} className='mt-4 me-4' style={{ backgroundColor: '#007bff', color: '#fff', border: 'none', borderRadius: '5px', padding: '8px 16px' }}>Edit</Button>
                                         { (!viewReferals) ? (
-                                          <Button onClick={CheckReferals} className='mt-4' style={{ backgroundColor: '#007bff', color: '#fff', border: 'none', borderRadius: '5px', padding: '8px 16px' }}>Show Referrals</Button>
+                                          <Button onClick={() => {setViewReferals(true)}} className='mt-4' style={{ backgroundColor: '#007bff', color: '#fff', border: 'none', borderRadius: '5px', padding: '8px 16px' }}>Show Referrals</Button>
                                         ) : (
-                                          <Button onClick={CheckReferals} className='mt-4' style={{ backgroundColor: '#007bff', color: '#fff', border: 'none', borderRadius: '5px', padding: '8px 16px' }}>Hide Referrals</Button>
+                                          <Button onClick={() => {setViewReferals(false)}} className='mt-4' style={{ backgroundColor: '#007bff', color: '#fff', border: 'none', borderRadius: '5px', padding: '8px 16px' }}>Hide Referrals</Button>
                                         )}
                                     </Col>
                                 </Row>
@@ -244,8 +247,8 @@ const MentProfile = () => {
                 
                 <div>
                   {viewReferals && (
-                    referals.length > 0 ? (
-                        referals.map((referal, index) => (
+                    referals.notifications.length > 0 ? (
+                        referals.notifications.map((referal, index) => (
                           <Row key={index} className='mt-4'>
                             <Card key={index}>
                                 <Card.Title style={{marginTop: "20px"}}>Position: {referal.InternshipTitle}</Card.Title>
@@ -254,13 +257,13 @@ const MentProfile = () => {
                                 </Card.Text>
                                 <Row key={index} className='mb-3'>
                                   <Col key={index}>
-                                    <Button className="resume-btn" onClick={handleResume}> View Resume </Button>
+                                    <Button className="resume-btn" onClick={() => handleResume(index)}> View Resume </Button>
                                   </Col>
                                   <Col key={index+1}>
-                                    <Button className='accept-btn' onClick={handleAccept}> Accept </Button>
+                                    <Button className='accept-btn' onClick={() => handleAccept(index)}> Accept </Button>
                                   </Col>
                                   <Col key={index+2}>
-                                    <Button className='decline-btn' onClick={handleDecline}> Decline </Button>
+                                    <Button className='decline-btn' onClick={() => handleDecline(index)}> Decline </Button>
                                   </Col>
                                 </Row>
                             </Card>
