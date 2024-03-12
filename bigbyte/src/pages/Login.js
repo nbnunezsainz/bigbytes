@@ -87,7 +87,7 @@ export default function Login() {
         <div className="Login">
             <div className="form-elements">
               <h2 className='label'> Welcome Back!</h2>
-              <div>
+              <div className='column'>
                 {/*Username*/}
                   <label htmlFor="username">Email:</label>
                   <input
@@ -98,7 +98,7 @@ export default function Login() {
                       onChange={(e) => setUsername(e.target.value)}
                   />
               </div>
-              <div>
+              <div className='column'>
                 {/*Password*/}
                   <label htmlFor="password">Password:</label>
                   <input
@@ -110,7 +110,7 @@ export default function Login() {
                   />
               </div>
               {failedLogin && 
-              <div className='mt-4'>
+              <div>
                 <p style={{color: "red"}}>Incorrect email or password.</p>
               </div>
               }
