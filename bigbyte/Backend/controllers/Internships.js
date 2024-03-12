@@ -76,7 +76,7 @@ exports.requestReferal = async (req,res) =>
      // Create a notification document for the mentor
      const notificationData = {
       mentorID: mentorID,
-      internshipID: internshipID,
+      internshipURL: internshipDoc.data().URL,
       InternshipTitle: internshipDoc.data().Title,
       studentMajor: student.Major,
       GradYear: student.Year,
@@ -90,7 +90,6 @@ exports.requestReferal = async (req,res) =>
     await newMentorNotificationsRef.set(notificationData);
  
 }
-
 
 //query ALL Internships based on a specific field, filtering technique, and target value --> returns dictionary of ALL internship IDs to their data
 exports.getAllInternships = async (req, res) => {
