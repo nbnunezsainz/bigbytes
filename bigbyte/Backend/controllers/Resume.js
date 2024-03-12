@@ -124,44 +124,78 @@ exports.uploadResume = async (req, res) => {
 //link 1 resume to list of all comments associated with it
 exports.getAllResumesWithComments = async (req,res) => {
     try {
-        // Get all resumes
-        const resumeRef = ref(storage, Constants.STORAGE_RESUME); 
-        const allResumes = await listAll(resumeRef);
-        let resumes = [];
-        for (const itemRef of allResumes.items) {
-            let url = await getDownloadURL(itemRef);
-            // Assuming doc.name or a portion of it can act as resumeID
-            const resumeID = itemRef.name; // or however you map this to your Firestore doc IDs
-            resumes.push({ userID: resumeID, URL: url }); // Store basic resume data first
-        }
-        let resumesWithComments = [];
-        for (let resume of resumes) {
-            const commentsRef = Resume_CommentsRef.doc(resume.userID);
-            const commentsSnapshot = await commentsRef.get();
-            
-            if (commentsSnapshot.exists) {
-                const commentIDs = commentsSnapshot.data().commentIDs || [];
+        
+            // Get all resumes
+            const resumeRef = ref(storage, Constants.STORAGE_RESUME); 
+            const allResumes = await listAll(resumeRef);
+            let resumePromises = allResumes.items.map(async (itemRef) => {
+                let url = await getDownloadURL(itemRef);
+                const resumeID = itemRef.name; // Adjust according to your ID mapping
+                return { userID: resumeID, URL: url };
+            });
+            let resumes = await Promise.all(resumePromises);
+
+            // Fetch comments for all resumes in parallel
+            let resumeCommentsPromises = resumes.map(async (resume) => {
+                const commentsRef = Resume_CommentsRef.doc(resume.userID);
+                const commentsSnapshot = await commentsRef.get();
                 const comments = [];
-
-                // Fetch each comment using its ID
-                for (let commentID of commentIDs) {
-                    const commentDoc = await CommentRef.doc(commentID).get();
-                    if (commentDoc.exists) {
-                        comments.push(commentDoc.data()); // Add full comment data
-                    }
+    
+                if (commentsSnapshot.exists) {
+                    const commentIDs = commentsSnapshot.data().commentIDs || [];
+                    const commentFetchPromises = commentIDs.map(async (commentID) => {
+                        const commentDoc = await CommentRef.doc(commentID).get();
+                        return commentDoc.exists ? commentDoc.data() : null;
+                    });
+                    const fetchedComments = await Promise.all(commentFetchPromises);
+                    return { ...resume, comments: fetchedComments.filter(comment => comment !== null) };
+                } else {
+                    return resume; // No comments
                 }
+            });
+            let resumesWithComments = await Promise.all(resumeCommentsPromises);
+            console.log(resumesWithComments, "resumewithcommentss");
+            res.status(200).json({ success: true, resumesWithComments:resumesWithComments });
 
-                resumesWithComments.push({ ...resume, comments });
-            } else {
-                // If there are no comments, just add the resume info
-                resumesWithComments.push(resume);
-            }
-        }
 
-        console.log(resumesWithComments, "resumewithcommentss");
+        // // Get all resumes
+        // const resumeRef = ref(storage, Constants.STORAGE_RESUME); 
+        // const allResumes = await listAll(resumeRef);
+        // let resumes = [];
+        // for (const itemRef of allResumes.items) {
+        //     let url = await getDownloadURL(itemRef);
+        //     // Assuming doc.name or a portion of it can act as resumeID
+        //     const resumeID = itemRef.name; // or however you map this to your Firestore doc IDs
+        //     resumes.push({ userID: resumeID, URL: url }); // Store basic resume data first
+        // }
+        // let resumesWithComments = [];
+        // for (let resume of resumes) {
+        //     const commentsRef = Resume_CommentsRef.doc(resume.userID);
+        //     const commentsSnapshot = await commentsRef.get();
+            
+        //     if (commentsSnapshot.exists) {
+        //         const commentIDs = commentsSnapshot.data().commentIDs || [];
+        //         const comments = [];
+
+        //         // Fetch each comment using its ID
+        //         for (let commentID of commentIDs) {
+        //             const commentDoc = await CommentRef.doc(commentID).get();
+        //             if (commentDoc.exists) {
+        //                 comments.push(commentDoc.data()); // Add full comment data
+        //             }
+        //         }
+
+        //         resumesWithComments.push({ ...resume, comments });
+        //     } else {
+        //         // If there are no comments, just add the resume info
+        //         resumesWithComments.push(resume);
+        //     }
+        // }
+
+        //console.log(resumesWithComments, "resumewithcommentss");
 
         // Send back the data
-        res.status(200).json({ success: true, resumesWithComments:resumesWithComments });
+        //res.status(200).json({ success: true, resumesWithComments:resumesWithComments });
     } catch (error) {
         console.log("Error fetching resumes with comments:", error);
         res.status(500).json({ success: false, message: 'Error fetching resumes with comments', error: error.toString() });
