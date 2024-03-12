@@ -71,25 +71,24 @@ exports.requestReferal = async (req, res) => {
   const mentorID = internshipDoc.data().MentorID;
 
   console.log(mentorID, "mentor");
+     // Create a notification document for the mentor
+     const notificationData = {
+      mentorID: mentorID,
+      internshipURL: internshipDoc.data().URL,
+      InternshipTitle: internshipDoc.data().Title,
+      studentMajor: student.Major,
+      GradYear: student.Year,
+      studentOrganizations: student.Organizations,
+      studentBio: student.Bio,
+      Resume: student.Resume,
+      message: `Referral request for your internship: ${internshipDoc.data().Title}`,
+    };
 
-  // Create a notification document for the mentor
-  const notificationData = {
-    mentorID: mentorID,
-    internshipID: internshipID,
-    InternshipTitle: internshipDoc.data().Title,
-    studentMajor: student.Major,
-    GradYear: student.Year,
-    studentOrganizations: student.Organizations,
-    studentBio: student.Bio,
-    Resume: student.Resume,
-    message: `Referral request for your internship: ${internshipDoc.data().Title}`,
-  };
 
   const newMentorNotificationsRef = MentorNotificationsRef.doc();
   await newMentorNotificationsRef.set(notificationData);
 
 }
-
 
 //query ALL Internships based on a specific field, filtering technique, and target value --> returns dictionary of ALL internship IDs to their data
 exports.getAllInternships = async (req, res) => {
