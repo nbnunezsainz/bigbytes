@@ -239,9 +239,9 @@ const MentProfile = () => {
                         referals.notifications.map((referal, index) => (
                           <Row key={index} className='mt-4'>
                             <Card key={index}>
-                                <Card.Title style={{marginTop: "20px"}}>Position: {referal.InternshipTitle}</Card.Title>
+                                <Card.Title style={{marginTop: "20px"}}>Position: {referal.data.InternshipTitle}</Card.Title>
                                 <Card.Text>
-                                  Applicant Bio: {referal.studentBio}
+                                  Applicant Bio: {referal.data.studentBio}
                                 </Card.Text>
                                 <Row key={index} className='mb-3'>
                                   <Col key={index}>

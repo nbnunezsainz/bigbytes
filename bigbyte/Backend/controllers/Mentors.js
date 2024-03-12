@@ -117,7 +117,7 @@ exports.CheckReferals = async (req, res) => {
   }
 };
 
-exports.UpdatereferalStatus = async (req, res) => {
+exports.UpdateReferalStatus = async (req, res) => {
   try {
     //need the UID of referal Collection, passed in via req.params
     //then the status is from req.body, then update status!
