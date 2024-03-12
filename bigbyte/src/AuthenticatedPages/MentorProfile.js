@@ -63,7 +63,7 @@ const MentProfile = () => {
 
           const data = await response.json();
           setReferals(data);
-          console.log(data);
+          console.log(data, "data");
         };
         
 
@@ -123,72 +123,60 @@ const MentProfile = () => {
       <Navigate to="/ViewResume" target="_blank"/>
     }
 
-    const handleAccept = async(index) => {
-      // set referal status to accepted
-      referals[index].status = "accept";
-      console.log(referals[index].status);
+    const FetchUpdate = async(referalId, payload) => 
+    {
+    try {
+        const user = auth.currentUser;
+         const token = user && (await user.getIdToken());
 
-      // MAKE BACKEND REQUEST FOR REF STATUS = ACCEPT
-    //   try {
-    //     const user = auth.currentUser;
-    //     const token = user && (await user.getIdToken());
+         const payloadHeader = {
+            method: 'PATCH',
+            headers: {
+                "Content-Type": "application/json",
+                 Authorization: `Bearer ${token}`,
+             },
+             body: JSON.stringify(payload)
+         };
 
-    //     const payloadHeader = {
-    //         method: 'PATCH',
-    //         headers: {
-    //             "Content-Type": "application/json",
-    //             Authorization: `Bearer ${token}`,
-    //         },
-    //         body: JSON.stringify(referal.status)
-    //     };
+         const response = await fetch(`http://localhost:3001/api/v1/mentor/UpdateRefStatus?${referalId}`, payloadHeader);
+         if (!response.ok) {
+            throw new Error('Failed to fetch');
+        }
 
-    //     const response = await fetch('http://localhost:3001/api/v1/mentor/UpdateRefStatus', payloadHeader);
-    //     if (!response.ok) {
-    //         throw new Error('Failed to fetch');
-    //     }
-
-    //     const data = await response.json();
-    //     console.log(data)
+         const data = await response.json();
+         console.log(data)
     //     //setMentor(data.user);
-    // } catch (error) {
-    //     console.error("Error fetching data:", error);
-    // } finally {
-    //     setLoading(false);
-    // }
+    } catch (error) {
+        console.error("Error fetching data:", error);
+    } 
+}
+
+    const handleAccept = async(index) => {
+        let referalId= referals.notifications[index].id;
+       
+        const payload = {
+            status: "Accecpted"
+        };
+
+        await FetchUpdate(referalId, payload)
+
+   
     }
 
     const handleDecline = async(index) => {
-      // set referal status to declined
-      referals[index].status = "decline";
+        
+        let referalId= referals.notifications[index].id;
+    //   referals.notifications[index].data.status = "declined";
 
+    //   referalStatus= "declines"
+    const payload = {
+        status: "Declined"
+    };
+
+    await FetchUpdate(referalId, payload);
       // MAKE BACKEND REQUEST FOR REF STATUS = DECLINE
-    //   try {
-    //     const user = auth.currentUser;
-    //     const token = user && (await user.getIdToken());
-
-    //     const payloadHeader = {
-    //         method: 'PATCH',
-    //         headers: {
-    //             "Content-Type": "application/json",
-    //             Authorization: `Bearer ${token}`,
-    //         },
-    //         body: JSON.stringify(referal.status)
-    //     };
-
-    //     const response = await fetch('http://localhost:3001/api/v1/mentor/UpdateRefStatus', payloadHeader);
-    //     if (!response.ok) {
-    //         throw new Error('Failed to fetch');
-    //     }
-
-    //     const data = await response.json();
-    //     console.log(data)
-    //     //setMentor(data.user);
-    // } catch (error) {
-    //     console.error("Error fetching data:", error);
-    // } finally {
-    //     setLoading(false);
-    // }
-    }
+    
+}
 
     return (
         <>
@@ -260,10 +248,10 @@ const MentProfile = () => {
                                     <Button className="resume-btn" onClick={() => handleResume(index)}> View Resume </Button>
                                   </Col>
                                   <Col key={index+1}>
-                                    <Button className='accept-btn' onClick={() => handleAccept(index)}> Accept </Button>
+                                    <Button className='accept-btn' value = {referals.id} onClick={(e) => handleAccept(index)}> Accept </Button>
                                   </Col>
                                   <Col key={index+2}>
-                                    <Button className='decline-btn' onClick={() => handleDecline(index)}> Decline </Button>
+                                    <Button className='decline-btn' value = {referals.id} onClick={(e) => handleDecline(index)}> Decline </Button>
                                   </Col>
                                 </Row>
                             </Card>
