@@ -164,7 +164,7 @@ const MentorSearch = () => {
           </Form.Control>
         </Form.Group>
 
-        {<Button variant="primary" onClick={applyFilters}>Apply Filters</Button>}
+        {<Button variant="primary" onClick={applyFilters} className="me-4">Apply Filters</Button>}
         {<Button variant="primary" onClick={resetFilters}> Reset Filters</Button>}
       </Form>
 
