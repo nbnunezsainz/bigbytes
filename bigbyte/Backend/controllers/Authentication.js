@@ -99,7 +99,7 @@ exports.verifyToken = async (req, res, next) => {
    
        if(!doc2.exists) //not a mentor either
        {
-        res.status(500).json({message:"error user does not exist in system"})
+        return res.status(500).json({message:"error user does not exist in system"})
        }
        res.status(200).json({user:"mentor"});
        return;

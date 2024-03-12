@@ -87,7 +87,7 @@ const CreateInternship = () => {
                   </div>
                 </header>
                 <Confetti active={showConfetti} />
-                <Container className="create-internship-container">
+                <Container className="create-internship-container" style={{marginTop: '-220px'}}>
                 <Confetti active={showConfetti} />
                     <Row className="justify-content-center">
                         <Col sm ={12}>
