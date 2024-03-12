@@ -1,6 +1,7 @@
 .create-internship-container {
     /* Extra space on both top and bottom */
-    margin-top: -400px; 
+    margin-top: 50px; /* Adjust this value to bring the form down */
+    margin-bottom: 300px;
     margin-bottom: 300px;
     padding: 0 150px; 
     padding-bottom: 40px;
@@ -17,7 +18,7 @@
     /* Slightly increased shadow */
     box-shadow: 10px 10px 8px rgba(6, 4, 4, 0.631); 
     /* Added margin top */
-    margin-top: 20px; 
+    margin-top: -200px; 
     /* width I thought looked best  */
     width: 700px; 
 }
@@ -65,13 +66,13 @@
     filter: brightness(60%); 
     /* Wanted to make sure that the background does not effect the design of the other components */
     z-index: -1;
-    height: 600px;
+    height: 450px;
   }
   /* I used a lot of home.css and tried to combine into the different text components */
   
   .h1{
      /* If you want to change the height of the h1, its dealing with the margin top */
-    margin-top: -250px;
+    margin-top: -450px;
     font-size: 55px;
     position: relative; 
     z-index: 1; 
@@ -81,6 +82,7 @@
     justify-content: center;
     color: #fff;
   }
+
   .p{
     font-size: 20px;
     position: relative; 
