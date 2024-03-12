@@ -97,15 +97,54 @@ exports.CheckReferals = async (req, res) => {
     // Array to store notifications
     const notifications = [];
 
+  
     // Iterate over each notification document and add it to the notifications array
     mentorNotificationsSnapshot.forEach(doc => {
-      notifications.push({
-        ...doc.data() // All other fields of the notification document
-      });
-    });
+      const docId = doc.id;
+      // Get document data using doc.data()
+      const docData = doc.data();
+      
+      notifications.push({ id: docId, data: docData });
+  });
+   
 
-
+    console.log(notifications, "notify");
     res.status(200).json({ success: true, notifications: notifications });
+  }
+  catch (error) {
+    console.error('Error fetching mentor notifications:', error);
+    res.status(500).json({ success: false, message: 'Error fetching mentor notifications' });
+  }
+};
+
+exports.UpdatereferalStatus = async (req, res) => {
+  try {
+    //need the UID of referal Collection, passed in via req.params
+    //then the status is from req.body, then update status!
+    const referralId = Object.keys(req.query)[0];// Retrieve the referral ID from req.params
+    const { status } = req.body; // Retrieve the updated status from req.body
+
+
+    const referralDocRef = MentorNotificationsRef.doc(referralId); // Find the referral by ID
+    const referralDoc = await referralDocRef.get();
+    if (!referralDoc.exists) {
+      return res.status(404).json({ message: 'Referral not found' });
+    }
+   
+    await referralDocRef.update({ status });
+
+    // Array to store notifications
+    // const notifications = [];
+
+    // // Iterate over each notification document and add it to the notifications array
+    // mentorNotificationsSnapshot.forEach(doc => {
+    //   notifications.push({
+    //     ...doc.data() // All other fields of the notification document
+    //   });
+    // });
+
+
+    res.status(200).json({ success: true, message: "updated referal status"});
   }
   catch (error) {
     console.error('Error fetching mentor notifications:', error);

@@ -16,6 +16,8 @@ router.route('/UpdateMentor').patch(AuthenticationController.verifyToken, Mentor
 router.route('/GenerateInternship').post(MentorController.generateInternship);
 router.route('/RequestedReferals').get(AuthenticationController.verifyToken, MentorController.CheckReferals);
 
+router.route('/UpdateRefStatus').patch(AuthenticationController.verifyToken, MentorController.UpdatereferalStatus); 
+
 // TO TEST USER DATASE WITH RANDOM MENTORS
 //router.route('/GenerateMentorTestData').post(MentorController.generateTestMentors);
 
