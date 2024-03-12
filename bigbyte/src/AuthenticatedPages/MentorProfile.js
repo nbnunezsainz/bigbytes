@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { Button, Card, Container, Form, Row, Col } from 'react-bootstrap';
-import Popup from 'reactjs-popup';
 import AuthNavbar from './AuthenticatedNavBar';
 import auth from "../fb.js";
 
