@@ -86,7 +86,7 @@ const JobDetail = () => {
       const data = await response.json();
       setJobs(data.internshipData); // Assuming the response JSON structure matches our state
       console.log(data.internshipData, "hod");
-     
+
 
 
       //get all internship locations
@@ -134,7 +134,7 @@ const JobDetail = () => {
 
       //iterate through all categories and subcategories. creating a hash map
       const hashMapforCategories = {};
-     
+
       for (let i = 0; i < allCategory.length; i++) {
         const mainCategory = allCategory[i][1];
         const subCategory = allCategory[i][0];
@@ -165,8 +165,7 @@ const JobDetail = () => {
   };
 
 
-  const resetFilters = () =>
-  {
+  const resetFilters = () => {
     fetchData();
   }
 
@@ -176,7 +175,7 @@ const JobDetail = () => {
 
     const user = auth.currentUser;
     const token = user && (await user.getIdToken());
-    
+
     const payloadHeader = {
       headers: {
         "Content-Type": "application/json",
@@ -191,7 +190,7 @@ const JobDetail = () => {
       }
       // Handle successful response here
       console.log("looks semi good mate");
-      
+
     } catch (error) {
       console.error('Error requesting referral:', error);
       // Handle error
@@ -201,7 +200,7 @@ const JobDetail = () => {
   useEffect(() => {
     // Define the asynchronous function inside the useEffect hook
 
-   
+
     // Call the fetchData function
     fetchData();
   }, []); // Empty dependency array means this effect runs once on mount
@@ -335,7 +334,7 @@ const JobDetail = () => {
                       <Card.Text><strong>Company:</strong> {job.Company}</Card.Text>
                       <Card.Text><strong>Date Posted:</strong> {job.datePosted}</Card.Text>
                       <Card.Text>{job.Description}</Card.Text>
-                      <Button variant="primary" value= {internshipID} onClick={handleReferal}>Apply</Button>
+                      <Button variant="primary" value={internshipID} onClick={handleReferal}>Apply</Button>
                     </Card.Body>
                   </Card>
                 </Col>

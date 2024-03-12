@@ -1,5 +1,3 @@
-// change to use mentor searching, currently same as internship searching
-
 import React, { useState, useEffect } from 'react';
 import { Container, Row, Col, Button, Card } from 'react-bootstrap';
 import AuthNavbar from './AuthenticatedNavBar';
@@ -7,17 +5,21 @@ import auth from "../fb.js";
 import { Form, FormControl } from 'react-bootstrap';
 
 const MentorSearch = () => {
-  const [Mentors, setMentors] = useState([]); // State to store internship data
+  const [Mentors, setMentors] = useState([]); // State to store mentor data
   const [loading, setLoading] = useState(true); // State to manage loading status
   const [allCompanies, setAllCompanies] = useState(new Set());
+  const [allIndustries, setAllIndustries] = useState(new Set());
   const [filterCompany, setFilterCompany] = useState('');
+  const [filterIndustry, setFilterIndustry] = useState('');
+
+
 
 
   const fetchData = async () => {
-     
+
     try {
       // Fetching the auth token
-      const user = auth.currentUser ;
+      const user = auth.currentUser;
       const token = user && (await user.getIdToken());
 
       const payloadHeader = {
@@ -27,7 +29,7 @@ const MentorSearch = () => {
         },
       };
 
-      // Using the token to fetch internships
+      // Using the token to fetch mentors
       const response = await fetch('http://localhost:3001/api/v1/mentor/GetAllMentors', payloadHeader);
       if (!response.ok) {
         throw new Error('Failed to fetch');
@@ -41,7 +43,7 @@ const MentorSearch = () => {
       setMentors(data.mentorData); // Assuming the response JSON structure matches our state
 
       let mentorCompany;
-      //if data.internshipData exists, extract all locations
+      //if data.mentorData exists, extract all locations
       if (data.mentorData) {
         mentorCompany = Object.values(data.mentorData);
         mentorCompany = [...new Set(mentorCompany.map(job => job.Company))];
@@ -52,6 +54,17 @@ const MentorSearch = () => {
         setAllCompanies(mentorCompany)
       }
 
+      let mentorIndustry;
+      //if data.mentorData exists, extract all locations
+      if (data.mentorData) {
+        mentorIndustry = Object.values(data.mentorData);
+        mentorIndustry = [...new Set(mentorIndustry.map(job => job.Industry))];
+        setAllIndustries(mentorIndustry)
+      }
+      else {
+        mentorIndustry = new Set();
+        setAllIndustries(mentorIndustry)
+      }
 
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -60,8 +73,7 @@ const MentorSearch = () => {
     }
   };
 
-  const ResetFilters = async () =>
-  {
+  const resetFilters = async () => {
     fetchData();
 
   }
@@ -75,12 +87,11 @@ const MentorSearch = () => {
 
       // Construct query parameters from state
       let queryParams = new URLSearchParams({
-        company: filterCompany,
-
+        Company: filterCompany,
+        Industry: filterIndustry,
       }).toString();
 
       const payloadHeader = {
-        method: 'GET',
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
@@ -94,9 +105,8 @@ const MentorSearch = () => {
 
       const data = await response.json();
 
-      console.log(data.internshipData)
-
-     // setJobs(data.mentorData);
+      console.log(data.mentorData)
+      setMentors(data.mentorData);
     } catch (error) {
       console.error("Error fetching data:", error);
     } finally {
@@ -110,63 +120,76 @@ const MentorSearch = () => {
     // Call the fetchData function
     fetchData();
   }, []); // Empty dependency array means this effect runs once on mount
-  
+
 
   if (loading) {
     return <div>Loading...</div>; // Render a loading page or spinner here
   }
 
   return (
-      <>
-        <AuthNavbar/>
+    <>
+      <AuthNavbar />
 
-        <h5>Filters</h5>
-        <Form>
-          <Form.Group className="mb-3">
-            <Form.Label>Company</Form.Label>
-            <Form.Control
-                as="select" value={filterCompany}
-                onChange={(e) => setFilterCompany(e.target.value)}>
+      <h5>Filters</h5>
+      <Form>
+        <Form.Group className="mb-3">
+          <Form.Label>Company</Form.Label>
+          <Form.Control
+            as="select" value={filterCompany}
+            onChange={(e) => setFilterCompany(e.target.value)}>
 
-              {/* Options for companies */}
-              <option value="">Select Company</option>
-              {Array.from(allCompanies).map((location) => (
-                  <option key={location} value={location}>
-                    {location}
-                  </option>
-              ))}
-            </Form.Control>
+            {/* Options for companies */}
+            <option value="">Select Company</option>
+            {Array.from(allCompanies).map((location) => (
+              <option key={location} value={location}>
+                {location}
+              </option>
+            ))}
+          </Form.Control>
+        </Form.Group>
 
-          </Form.Group>
-          {<Button variant="primary" onClick={applyFilters}>Apply Filters</Button>}
-          {<Button variant="primary" onClick={ResetFilters}> Reset Filters</Button>}
-        </Form>
+        <Form.Group className="mb-3">
+          <Form.Label>Industry</Form.Label>
+          <Form.Control
+            as="select"
+            value={filterIndustry}
+            onChange={(e) => setFilterIndustry(e.target.value)}
+          >
+            <option value="">Select Industry</option>
+            {Array.from(allIndustries).map((industry) => (
+              <option key={industry} value={industry}>
+                {industry}
+              </option>
+            ))}
+          </Form.Control>
+        </Form.Group>
 
-        {/*</Form>*/}
-        <Row className="mt-5" style={{paddingTop: "30px"}}>
-          {Mentors.map((Mentor) => (
-              <Col md={12}>
-                <Card className="mb-3">
-                  <Card.Body>
-                    <Card.Title>{Mentor.title}</Card.Title>
-                    <Card.Text><strong>Company:</strong> {Mentor.Company}</Card.Text>
-                    <Card.Text><strong>Name:</strong> {Mentor.FirstName} {Mentor.LastName}</Card.Text>
-                    <Card.Text><strong>Bio:</strong> {Mentor.Bio} </Card.Text>
-                    <Card.Text>
-                      <strong>LinkedIn:</strong>{" "}
-                      <a href={`https://${Mentor.LinkedIn}`} target="_blank" rel="noopener noreferrer">
-                        {Mentor.LinkedIn}
-                      </a>
-                    </Card.Text>
-                    <Card.Text><strong>Date Posted:</strong> {Mentor.datePosted}</Card.Text>
-                    <Card.Text>{Mentor.Description}</Card.Text>
-                    <Button variant="primary">Apply</Button>
-                  </Card.Body>
-                </Card>
-              </Col>
-          ))}
-        </Row>
-      </>
+        {<Button variant="primary" onClick={applyFilters}>Apply Filters</Button>}
+        {<Button variant="primary" onClick={resetFilters}> Reset Filters</Button>}
+      </Form>
+
+      {/*</Form>*/}
+      <Row className="mt-5" style={{ paddingTop: "30px" }}>
+        {Object.entries(Mentors).map(([mentorID, mentor]) => (
+          <Col md={12}>
+            <Card className="mb-3">
+              <Card.Body>
+                <Card.Text><strong>Company:</strong> {mentor.Company}</Card.Text>
+                <Card.Text><strong>Name:</strong> {mentor.FirstName} {mentor.LastName}</Card.Text>
+                <Card.Text><strong>Bio:</strong> {mentor.Bio} </Card.Text>
+                <Card.Text>
+                  <strong>LinkedIn:</strong>{" "}
+                  <a href={`https://${mentor.LinkedIn}`} target="_blank" rel="noopener noreferrer">
+                    {mentor.LinkedIn}
+                  </a>
+                </Card.Text>
+                <Button variant="primary">Apply</Button>
+              </Card.Body>
+            </Card>
+          </Col>
+        ))}
+      </Row>
+    </>
   );
 };
 

@@ -24,6 +24,34 @@ async function queryCollection(colRef, reqBody) {
     return queryDict;
 }
 
+//de-dupes two dictionaries
+async function deDupeQueries(fullDict, newDict) {
+    for (const internshipID in fullDict) {
+        if (!newDict.hasOwnProperty(internshipID)) {
+            delete fullDict[internshipID];
+        }
+    }
+    return fullDict;
+};
+
+async function filterHelper(colRef, paramList) {
+
+    let queryDict = {};
+    const keyNames = Object.keys(paramList);
+
+
+    queryDict = await queryCollection(colRef, paramList[keyNames[0]]);
+    for (let i = 1; i < keyNames.length; i++) {
+        const currKey = keyNames[i]
+        const query = paramList[currKey];
+        let q = await queryCollection(colRef, query);
+        queryDict = deDupeQueries(queryDict, q);
+    }
+
+
+    return queryDict;
+}
+
 //delete a document within a collection --> takes document ID
 async function deleteDocument(colRef, docID) {
 
@@ -44,5 +72,5 @@ async function getDocument(colRef, docID) {
 }
 
 module.exports = {
-    queryCollection, deleteDocument, getDocument
+    queryCollection, deleteDocument, getDocument, deDupeQueries, filterHelper
 };
