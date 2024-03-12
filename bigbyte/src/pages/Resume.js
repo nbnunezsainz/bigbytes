@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { Container, Form, Button, FormGroup, FormControl, FormLabel } from 'react-bootstrap';
 import { Navigate } from 'react-router-dom';
 import AuthNavbar from '../AuthenticatedPages/AuthenticatedNavBar';
-import '../Styling/Login.css';
+import '../Styling/Resume.css';
 import auth from "../fb.js";
 import Confetti from 'react-dom-confetti';
 
@@ -66,31 +66,31 @@ export default function Resume() {
     return (
         <>
         <AuthNavbar />
-        <Container className="mt-5">
-            <Form>
-                <FormGroup className="mb-3" controlId="formFile">
-                    <FormLabel>Upload Your Resume (PDF only):</FormLabel>
-                    <FormControl
-                        type="file"
-                        accept=".pdf"
-                        onChange={handleFileChange}
-                    />
-                </FormGroup>
-                <Button variant="primary" onClick={handleSubmit} disabled={!resumeFile}>
-                    Submit
-                    <Confetti active={showConfetti} />
-                </Button>
-            </Form>
-            {resumeFile && (
-                <div className="mt-3">
-                    <p>Uploaded File: {resumeFile.name}</p>
-                </div>
-            )}
+        <Container className="container-resume mt-5">
+                <Form>
+                    <FormGroup controlId="formFile">
+                        <FormLabel>Upload Your Resume (PDF only):</FormLabel>
+                        <FormControl
+                            type="file"
+                            accept=".pdf"
+                            onChange={handleFileChange}
+                        />
+                    </FormGroup>
+                    <Button className ="mt-3" variant="primary" onClick={handleSubmit} disabled={!resumeFile}>
+                        Submit
+                        <Confetti active={showConfetti} />
+                    </Button>
+                </Form>
+                {resumeFile && (
+                    <div className="uploaded-file mt-3">
+                        <p>Uploaded File: {resumeFile.name}</p>
+                    </div>
+                )}
 
-            {/*{showConfetti && (*/}
-            {/*    <Confetti active={showConfetti} />*/}
-            {/*)}*/}
-        </Container>
+                {showConfetti && (
+                    <Confetti active={showConfetti} />
+                )}
+            </Container>
     </>
 );
 }

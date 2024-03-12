@@ -11,6 +11,7 @@
     padding: 15px;
     margin: auto;
     border-radius: 20px;
+    margin-top: 20px;
 
     /* for testing below */
     /* background: rgb(50,50,50) */
@@ -21,4 +22,22 @@
     margin: 5px;
     justify-content: center;
     align-items: center;
+}
+
+.mt-5{
+    background-color: rgb(255, 253, 253);
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f9f9f9; /* Change to cream color */
+    border-radius: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Add shadow */
+}
+
+.container-resume {
+    background-color: #ffffff; /* White background */
+    margin-top: 900px;
+    padding: 100px;
+    border-radius: 20px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1); /* Shadow effect */
 }
