@@ -178,12 +178,18 @@ const MentorSearch = () => {
                 <Card.Text><strong>Name:</strong> {mentor.FirstName} {mentor.LastName}</Card.Text>
                 <Card.Text><strong>Bio:</strong> {mentor.Bio} </Card.Text>
                 <Card.Text>
-                  <strong>LinkedIn:</strong>{" "}
-                  <a href={`https://${mentor.LinkedIn}`} target="_blank" rel="noopener noreferrer">
-                    {mentor.LinkedIn}
-                  </a>
+                  {/*<strong>LinkedIn:</strong>{" "}*/}
+                  {/*<a href={`https://${mentor.LinkedIn}`} target="_blank" rel="noopener noreferrer">*/}
+                  {/*  {mentor.LinkedIn}*/}
+                  {/*</a>*/}
                 </Card.Text>
-                <Button variant="primary">Apply</Button>
+
+                <a href={`https://${mentor.LinkedIn}`} target="_blank" rel="noopener noreferrer">
+                  <Button variant="primary">Contact - LinkedIn</Button>
+                </a>
+
+
+
               </Card.Body>
             </Card>
           </Col>
