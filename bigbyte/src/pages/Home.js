@@ -44,7 +44,7 @@ function MainContent() {
        <section className="about">
        <div className="box custom-box">
         <h1 className="right-side">To Bruins, By Bruins</h1>
-        <p className="left-side">Hello! We are the group BigBytes, a four-member group that CS35L has brought together! The idea of Refer a Bruin came to us as computer science majors in hopes of creating a stepping stone for all majors in pursuit of professional development. With our great mentors joining Refer a Bruin, there are numerous opportunities presented for all Bruins to find security after our Bruin years.</p>
+        <p className="left-side">Hello! We are the group BigBytes, a five-member group that CS35L has brought together! The idea of Refer a Bruin came to us as computer science majors in hopes of creating a stepping stone for all majors in pursuit of professional development. With our great mentors joining Refer a Bruin, there are numerous opportunities presented for all Bruins to find security after our Bruin years.</p>
         </div>
 
  {/* End of About Us */}
