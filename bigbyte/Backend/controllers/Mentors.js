@@ -160,6 +160,26 @@ exports.getMentor = async (req, res) => {
   }
 };
 
+//update specific mentor with new data
+exports.updateMentor = async(req,res) => {
+
+  try{
+    let userID = req.user.uid;
+    console.log(userID)
+    //let user;
+    const mentorUpdate = req.body;
+    const doc = await MentorRef.doc(userID).update(mentorUpdate);
+    console.log(doc)
+
+    res.json({ success: true, message: 'Mentor updated successfully' });
+
+  } catch(error){
+
+    //console.log(error)
+    res.json({ success: false, message: 'Mentor NOT updated (error)' });
+
+  }
+}
 //get all Mentors
 exports.getAllMentors = async (req, res) => {
   try {

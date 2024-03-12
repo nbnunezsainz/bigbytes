@@ -28,6 +28,7 @@ const MentProfile = () => {
 
                 const data = await response.json();
                 setMentor(data.user);
+                console.log(data.user)
             } catch (error) {
                 console.error("Error fetching data:", error);
             } finally {
@@ -70,38 +71,39 @@ const MentProfile = () => {
       // move this line to the data.success check
       setEditFields(false);
 
-      // MAKE BACKEND REQUEST 
+      // MAKE BACKEND REQUEST
+        try {
+            const user = auth.currentUser;
+            const token = user && (await user.getIdToken());
+
+            const payloadHeader = {
+                method: 'PATCH',
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`,
+                },
+                body: JSON.stringify({
+                    FirstName: "Parky",
+                    LastName: "Cool",
+                    Company: "Apple",
+                    Bio: "PHI MY NAME IS PARKY" })
+            };
+
+            const response = await fetch('http://localhost:3001/api/v1/mentor/UpdateMentor', payloadHeader);
+            if (!response.ok) {
+                throw new Error('Failed to fetch');
+            }
+
+            const data = await response.json();
+            console.log(data)
+            //setMentor(data.user);
+        } catch (error) {
+            console.error("Error fetching data:", error);
+        } finally {
+            setLoading(false);
+        }
       
 
-      //   const token = mentor && (await mentor.getIdToken();
-      //   fetch('http://localhost:3001/api/v1/mentor/GetMentor', {
-      //       method: 'PATCH',
-      //       headers: {
-      //           'Content-Type' : 'application/json',
-      //           Authorization: `Bearer ${token}`,
-      //       },
-      //       body: JSON.stringify(mentor)
-      //   })
-      //   .then(response => {
-      //     if(!response.ok) {
-      //         throw new Error('Network response was not ok');
-      //     }
-      //     return response.json();
-      // })
-      // .then(data => {
-      //     console.log('Response from server:', data);
-      //     // Check if signup success
-      //     if(data.success) {
-      //         // signup successful
-      //         setEditFields(false);
-      //     } else {
-      //         // Handle signup error
-      //         console.error('Signup failed: ', data.message);
-      //     }
-      // })
-      // .catch(error => {
-      //     console.error('There was a problem with your fetch operation: ', error);
-      // });
     };
 
     if (loading) {
