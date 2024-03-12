@@ -15,34 +15,33 @@ const UserProfile = () => {
   const [editFields, setEditFields] = useState(false);
 
 
-const CheckReferals = async( ) =>
-  {
+  const CheckReferals = async () => {
     const user = auth.currentUser;
-            const token = user && (await user.getIdToken());
-    
-            const payloadHeader = {
-              headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${token}`,
-              },
-            };
-          const response = await fetch('http://localhost:3001/api/v1/user/ReferalStatus', payloadHeader)
-          if (!response.ok) {
-            throw new Error('Failed to fetch');
-          }
-          
-            const data = await response.json();
+    const token = user && (await user.getIdToken());
 
-            if (data.success) {
-              setNotifications(data.notifications);
-            } else {
-              console.error("Failed.");
-            }
+    const payloadHeader = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    };
+    const response = await fetch('http://localhost:3001/api/v1/user/ReferalStatus', payloadHeader)
+    if (!response.ok) {
+      throw new Error('Failed to fetch');
+    }
 
-            console.log(notifications, "...notifications");
-           // console.log(data, "dataa");
-          setReferrals(!viewReferrals);
-   
+    const data = await response.json();
+
+    if (data.success) {
+      setNotifications(data.notifications);
+    } else {
+      console.error("Failed.");
+    }
+
+    console.log(notifications, "...notifications");
+    // console.log(data, "dataa");
+    setReferrals(!viewReferrals);
+  };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -187,25 +186,25 @@ const CheckReferals = async( ) =>
 
         <div>
           {viewReferrals && (
-              notifications.length > 0 ? (
-                  notifications.map((referral, index) => (
-                      <Row key={index} className='mt-4'>
-                        <Card>
-                          <Card.Title style={{ marginTop: "20px" }}>Position: {referral.InternshipTitle}</Card.Title>
-                          <Card.Text>
-                            <p>Company: {referral.Company}</p>
-                            <p>Status: {referral.status}</p>
-                          </Card.Text>
-                          <Row className='mb-3'>
-                          </Row>
-                        </Card>
-                      </Row>
-                  ))
-              ) : (
-                  <>
-                    <p>Loading referrals or no referrals currently</p>
-                  </>
-              )
+            notifications.length > 0 ? (
+              notifications.map((referral, index) => (
+                <Row key={index} className='mt-4'>
+                  <Card>
+                    <Card.Title style={{ marginTop: "20px" }}>Position: {referral.InternshipTitle}</Card.Title>
+                    <Card.Text>
+                      <p>Company: {referral.Company}</p>
+                      <p>Status: {referral.status}</p>
+                    </Card.Text>
+                    <Row className='mb-3'>
+                    </Row>
+                  </Card>
+                </Row>
+              ))
+            ) : (
+              <>
+                <p>Loading referrals or no referrals currently</p>
+              </>
+            )
           )}
 
         </div>
