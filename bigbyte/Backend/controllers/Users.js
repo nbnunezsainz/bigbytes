@@ -232,6 +232,7 @@ exports.CheckReferalStatus= async (req, res) => {
   
       userNotificationsSnapshot.forEach(doc => {
         const data = doc.data();
+        console.log(doc.data());
         console.log(doc.data(), "www");
         const notificationData = {
             InternshipTitle: data.InternshipTitle,

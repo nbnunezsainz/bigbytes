@@ -71,11 +71,12 @@ exports.requestReferal = async (req, res) => {
   const mentorID = internshipDoc.data().MentorID;
 
   console.log(mentorID, "mentor");
+  console.log(internshipDoc.data(), "doc")
      // Create a notification document for the mentor
      const notificationData = {
       mentorID: mentorID,
       studentID: student.userID,
-      company: internshipDoc.data().company,
+      company: internshipDoc.data().Company,
       internshipURL: internshipDoc.data().URL,
       InternshipTitle: internshipDoc.data().Title,
       studentMajor: student.Major,
