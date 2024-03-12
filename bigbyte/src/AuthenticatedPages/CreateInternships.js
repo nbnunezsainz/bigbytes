@@ -25,7 +25,8 @@ const CreateInternship = () => {
 });
     const [loading, setLoading] = useState(true); // State to manage loading status
     const [showConfetti, setShowConfetti] = useState(false); // Want to add the js.confetti so when someone submits a posting, they are rewarded for it 
- 
+    //const [successMessage, setSuccessMessage] = useState('');
+
       const SubmitInternship = async () => {
   
         try {
@@ -72,6 +73,9 @@ const CreateInternship = () => {
         const handleSubmit = async (e) => {
             e.preventDefault();
             // Add your submit logic here, e.g., sending internshipData to your backend API
+            // setShowConfetti(true);
+            // setSuccessMessage('Successfully created internship!');
+
         };
     
         return (
@@ -195,6 +199,12 @@ const CreateInternship = () => {
                  {/* Once submitted, call active showConfetti */}
                
                 <Confetti active={showConfetti} />
+
+                {/*{successMessage && (*/}
+                {/*    <div className="success-message">*/}
+                {/*        <p>{successMessage}</p>*/}
+                {/*    </div>*/}
+                {/*)}*/}
                  
             </div>
         );

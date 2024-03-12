@@ -5,6 +5,7 @@ import { Navigate } from 'react-router-dom';
 import AuthNavbar from '../AuthenticatedPages/AuthenticatedNavBar';
 import '../Login.css';
 import auth from "../fb.js";
+import Confetti from 'react-dom-confetti';
 
 // export default function Resume() {
 //     return (
@@ -20,12 +21,14 @@ import auth from "../fb.js";
 // }
 export default function Resume() {
     const [resumeFile, setResumeFile] = useState(null);
+    const [showConfetti, setShowConfetti] = useState(false);
 
     const handleFileChange = (event) => {
         const file = event.target.files[0];
         if (file && file.type === 'application/pdf') {
             setResumeFile(file);
-        } 
+        }
+
 
     };
 
@@ -55,6 +58,7 @@ export default function Resume() {
             });
     
             console.log('Submitted:', resumeFile.name);
+            setShowConfetti(true);
         }
     };
     
@@ -74,6 +78,7 @@ export default function Resume() {
                 </FormGroup>
                 <Button variant="primary" onClick={handleSubmit} disabled={!resumeFile}>
                     Submit
+                    <Confetti active={showConfetti} />
                 </Button>
             </Form>
             {resumeFile && (
@@ -81,6 +86,10 @@ export default function Resume() {
                     <p>Uploaded File: {resumeFile.name}</p>
                 </div>
             )}
+
+            {/*{showConfetti && (*/}
+            {/*    <Confetti active={showConfetti} />*/}
+            {/*)}*/}
         </Container>
     </>
 );
