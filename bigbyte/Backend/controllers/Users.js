@@ -235,6 +235,7 @@ exports.CheckReferalStatus= async (req, res) => {
         console.log(doc.data(), "www");
         const notificationData = {
             InternshipTitle: data.InternshipTitle,
+            Company:data.company,
             status:data.status,
             // Add more fields as needed
         };
