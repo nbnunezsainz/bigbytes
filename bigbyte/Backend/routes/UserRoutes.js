@@ -20,11 +20,12 @@ router.route('/SignOut').post(AuthenticationController.SignOut, AuthenticationCo
 router.route('/AddUser').post(UserController.addUser);
 router.route('/QueryUsers').get(UserController.queryUsers);
 router.route('/DeleteUser').delete(UserController.deleteUser);
-router.route('/GetUser').get(AuthenticationController.verifyToken, UserController.getUser,ResumeController.getResume);
+router.route('/GetUser').get(AuthenticationController.verifyToken, UserController.getUser, ResumeController.getResume);
+router.route('/GetUserProfile').get(AuthenticationController.verifyToken, UserController.getUserProfile, ResumeController.getResume);
 router.route('/GetUserType').get(AuthenticationController.verifyToken, AuthenticationController.DetermineuserType);
-
 router.route('/ApplyToInternship').post(UserController.applyForInternship);
 router.route('/ReferalStatus').get(AuthenticationController.verifyToken, UserController.CheckReferalStatus);
+router.route('/UpdateUser').patch(AuthenticationController.verifyToken, UserController.updateUser);
 
 
 // // TO HANDLE RESUMES

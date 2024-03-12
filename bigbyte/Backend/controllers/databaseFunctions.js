@@ -66,8 +66,8 @@ async function getDocument(colRef, docID) {
     if (!doc.exists) {
         return null;
     } else {
-
-        return { [doc.id]: doc.data() };
+        let data = await doc.data()
+        return data;
     }
 }
 
