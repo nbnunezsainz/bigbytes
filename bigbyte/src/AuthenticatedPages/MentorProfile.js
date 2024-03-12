@@ -9,6 +9,7 @@ const MentProfile = () => {
     const [mentor, setMentor] = useState([]);
     const [editFields, setEditFields] = useState(false);
     const [referals, setReferals] = useState([]);
+    const [refStatus, setRefStatus] = useState([]);
     const [viewReferals, setViewReferals] = useState(false)
 
     useEffect(() => {
@@ -113,6 +114,77 @@ const MentProfile = () => {
         return <div>Loading...</div>;
     }
 
+    const handleResume = async() => {
+      // redirect to page with PDFViewer for Resume URL
+
+    }
+
+    const handleAccept = async() => {
+      // set referal status to accepted
+      setRefStatus("accept");
+
+      // MAKE BACKEND REQUEST FOR REF STATUS = ACCEPT
+    //   try {
+    //     const user = auth.currentUser;
+    //     const token = user && (await user.getIdToken());
+
+    //     const payloadHeader = {
+    //         method: 'PATCH',
+    //         headers: {
+    //             "Content-Type": "application/json",
+    //             Authorization: `Bearer ${token}`,
+    //         },
+    //         body: JSON.stringify(referal.status)
+    //     };
+
+    //     const response = await fetch('http://localhost:3001/api/v1/mentor/UpdateRefStatus', payloadHeader);
+    //     if (!response.ok) {
+    //         throw new Error('Failed to fetch');
+    //     }
+
+    //     const data = await response.json();
+    //     console.log(data)
+    //     //setMentor(data.user);
+    // } catch (error) {
+    //     console.error("Error fetching data:", error);
+    // } finally {
+    //     setLoading(false);
+    // }
+    }
+
+    const handleDecline = async() => {
+      // set referal status to declined
+      setRefStatus("decline");
+
+      // MAKE BACKEND REQUEST FOR REF STATUS = DECLINE
+    //   try {
+    //     const user = auth.currentUser;
+    //     const token = user && (await user.getIdToken());
+
+    //     const payloadHeader = {
+    //         method: 'PATCH',
+    //         headers: {
+    //             "Content-Type": "application/json",
+    //             Authorization: `Bearer ${token}`,
+    //         },
+    //         body: JSON.stringify(referal.status)
+    //     };
+
+    //     const response = await fetch('http://localhost:3001/api/v1/mentor/UpdateRefStatus', payloadHeader);
+    //     if (!response.ok) {
+    //         throw new Error('Failed to fetch');
+    //     }
+
+    //     const data = await response.json();
+    //     console.log(data)
+    //     //setMentor(data.user);
+    // } catch (error) {
+    //     console.error("Error fetching data:", error);
+    // } finally {
+    //     setLoading(false);
+    // }
+    }
+
     return (
         <>
             <AuthNavbar />
@@ -180,13 +252,13 @@ const MentProfile = () => {
                                 </Card.Text>
                                 <Row key={index} className='mb-3'>
                                   <Col key={index}>
-                                    <Button className="resume-btn"> View Resume </Button>
+                                    <Button className="resume-btn" onClick={handleResume}> View Resume </Button>
                                   </Col>
                                   <Col key={index+1}>
-                                    <Button className='accept-btn'> Accept </Button>
+                                    <Button className='accept-btn' onClick={handleAccept}> Accept </Button>
                                   </Col>
                                   <Col key={index+2}>
-                                    <Button className='decline-btn'> Decline </Button>
+                                    <Button className='decline-btn' onClick={handleDecline}> Decline </Button>
                                   </Col>
                                 </Row>
                             </Card>
