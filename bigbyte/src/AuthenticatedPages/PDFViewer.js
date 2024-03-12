@@ -20,6 +20,7 @@ function ResumeViewer({sendDataToParent, resumeUrl, resumeUID, resumeComments}) 
          setCurrentResumeUID(e.target.value);
     //  // This will log the value of the button (resumeUID)
      }
+     const safeResumeComments = resumeComments || [];
 
    
     const submitComment = async() => {
@@ -78,7 +79,7 @@ function ResumeViewer({sendDataToParent, resumeUrl, resumeUID, resumeComments}) 
             {showComments && (
                 <div>
                     <div>
-                        {resumeComments.length > 0 ? (
+                        {(resumeComments || []).length > 0 ? (
                             resumeComments.map((resComment, index) => (
                                 <div key={index}>
                                     <p>{resComment.resumeUID} : {resComment.comment} </p>
