@@ -169,6 +169,7 @@ const UserProfile = () => {
                                 </Row>
                                 <Row style={{ marginTop: 'auto' }}>
                                     <Col className="d-flex justify-content-end">
+                                        <Button onClick={() => handleResume()} className='mt-4 me-4' style={{ backgroundColor: '#007bff', color: '#fff', border: 'none', borderRadius: '5px', padding: '8px 16px' }}>View Resume</Button>
                                         <Button onClick={() => setEditFields(true)} className='mt-4 me-4' style={{ backgroundColor: '#007bff', color: '#fff', border: 'none', borderRadius: '5px', padding: '8px 16px' }}>Edit</Button>
                                         { (!viewReferals) ? (
                                           <Button onClick={() => {setViewReferals(true)}} className='mt-4' style={{ backgroundColor: '#007bff', color: '#fff', border: 'none', borderRadius: '5px', padding: '8px 16px' }}>Show Referrals</Button>
