@@ -1,12 +1,32 @@
 .react-pdf__Page__canvas
 {
-    display: inline-block; 
+    margin-top: 1000px;
+    display: block; 
     user-select: none;
     
-    height: 900px;
+    height: 400px;
 }
 .react-pdf__Document
 {
-    height: 1000px;
+    height: 500px;
     
 }
+
+/* ResumeViewer.css */
+
+.resume-viewer-container {
+    margin-top: 20px;
+  }
+  
+  .comment-button {
+    margin-bottom: 10px;
+  }
+  
+  .comments-section {
+    margin-top: 20px;
+  }
+  
+  .comment-input {
+    margin-bottom: 10px;
+  }
+  
