@@ -110,9 +110,14 @@ const MentorSearch = () => {
       }
 
       const data = await response.json();
+      const messyMentorData = data.mentorData;
+      const cleanMentorData = Object.keys(messyMentorData).map(key => ({
+        id: key,
+        ...messyMentorData[key]
+      }));
 
-      console.log(data.mentorData)
-      setMentors(data.mentorData);
+      console.log(Object.values(cleanMentorData))
+      setMentors(Object.values(cleanMentorData));
     } catch (error) {
       console.error("Error fetching data:", error);
     } finally {
@@ -128,6 +133,7 @@ const MentorSearch = () => {
   }, []); // Empty dependency array means this effect runs once on mount
 
   const viewProfile = async (mentorID) => {
+    console.log("trying to view this mentorID: " + mentorID)
     setViewMentorProfile(true);
     try {
       const user = auth.currentUser;
@@ -169,7 +175,7 @@ const MentorSearch = () => {
 
   const MentorModal = () => {
     return (
-      <Modal class="modal-content" show={showModal} onHide={toggleModal}>
+      <Modal show={showModal} onHide={toggleModal}>
         <Modal.Header closeButton>
           <Modal.Title className="text-center"><strong>{mentorProfileData.FirstName} {mentorProfileData.LastName}'s</strong> Profile</Modal.Title>
         </Modal.Header>
@@ -286,6 +292,7 @@ const MentorSearch = () => {
           </Col>
         ))}
       </Row>
+
       <MentorModal />
 
     </>
