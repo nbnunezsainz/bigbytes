@@ -41,7 +41,7 @@ function UserDetailsForm() {
         e.preventDefault();
         console.log(userDetails);
         // Send userDetails to backend for further processing
-        if ((role === 'student' && (userDetails.firstName === '' || userDetails.lastName === '' || userDetails.year === '' || userDetails.major === '')) ||
+        if ((role === 'student' && (userDetails.firstName === '' || userDetails.lastName === '' || userDetails.gradYear === '' || userDetails.major === '')) ||
             (role === 'mentor' && (userDetails.firstName === '' || userDetails.lastName === '' || userDetails.company === ''))) {
             setFailedSignUp(true);
             console.error("Required fields are missing");
