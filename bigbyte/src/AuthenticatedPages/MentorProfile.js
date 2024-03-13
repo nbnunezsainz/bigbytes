@@ -5,6 +5,7 @@ import auth from "../fb.js";
 import {Navigate } from 'react-router-dom';
 
 import "../Styling/MentorProfile.css"
+//import {getAllInternships} from "../../Backend/controllers/Internships";
 
 
 const MentProfile = () => {
@@ -14,6 +15,8 @@ const MentProfile = () => {
     const [referals, setReferals] = useState([]);
     const [viewReferals, setViewReferals] = useState(false);
     const [IsMentor,setIsMentor]  = useState(true);
+    const [allInternships,setallInternships]  = useState([]);
+    const [condInternship,setcondInternship]  = useState(false);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -67,6 +70,17 @@ const MentProfile = () => {
 
           const data = await response.json();
           setReferals(data);
+
+
+          // //get all internships for a mentor
+          //   const response = await fetch('http://localhost:3001/api/v1/mentor/RequestedReferals', payloadHeader);
+          //   console.log(response.message, "response")
+          //   if (!response.ok) {
+          //       setIsMentor(false);
+          //   }
+          //
+          //   const data = await response.json();
+
           
         };
         
@@ -161,8 +175,74 @@ const MentProfile = () => {
     } 
 }
 
+    //handle See all internships for specific mentor
+    const allInternshipsForMentor = async() => {
+       // let referalId= referals.notifications[index].id;
+
+        const payload = {
+            status: "Accepted"
+        };
+
+        //await FetchUpdate(referalId, payload)
+
+        // reload referrals
+        const mentor = auth.currentUser;
+        const token = mentor && (await mentor.getIdToken());
+
+        const payloadHeader = {
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`,
+            },
+        };
+
+        const response = await fetch('http://localhost:3001/api/v1/internship/GetAllInternships', payloadHeader);
+        if (!response.ok) {
+            throw new Error('Failed to fetch');
+        }
+
+        //all internships for mentor
+        const allInternshipswithMentor = [];
+
+        const data = await response.json();
+
+        console.log("data-------: ", data.internshipData);
+
+        //const mentorIds = new Set(Object.values(data.internshipData).map(item => item.MentorID));
+
+        //iterate all internships and get specific internship for particular mento
+        Object.values(data.internshipData).forEach(item => {
+            if (item.MentorID === mentor.uid) {
+                // Perform actions when the MentorID matches the mentor's uid
+               // console.log('MentorID matched:', item.MentorID);
+                allInternshipswithMentor.push(item);
+            } else {
+                // Perform actions when the MentorID does not match the mentor's uid
+                //console.log('MentorID not matched:', item.MentorID);
+            }
+        });
+
+        console.log("all userId with mentor:", allInternshipswithMentor);
+
+        setallInternships(allInternshipswithMentor);
+        setcondInternship(true);
+
+        console.log(mentor.uid)
+
+
+        //for all resumes, if mentor.uid == item.MentorID
+            //
+
+        //setReferals(data);
+
+    }
+
     const handleAccept = async(index) => {
         let referalId= referals.notifications[index].id;
+
+        console.log(referalId, "referallll");
+
+        return;
        
         const payload = {
             status: "Accepted"
@@ -191,6 +271,42 @@ const MentProfile = () => {
    
     }
 
+    //delete internship button
+    const handleDeleteInternship = async(index) => {
+        // Implement logic to delete the internship with the given ID
+        let referalId= referals.notifications[index].id;
+
+        console.log("referalId-----: ", referalId);
+
+        //fetch request
+        //callDelete endpoint
+
+        try {
+            const user = auth.currentUser;
+            const token = user && (await user.getIdToken());
+
+            const payloadHeader = {
+                method: 'DELETE',
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`,
+                },
+                body: JSON.stringify(referalId)
+            };
+
+            const response = await fetch('http://localhost:3001/api/v1/internship/DeleteInternship', payloadHeader);
+            const data = await response.json();
+            console.log(data)
+            //setMentor(data.user);
+        } catch (error) {
+            console.error("Error fetching data:", error);
+        } finally {
+            setLoading(false);
+        }
+
+
+    };
+
     const handleDecline = async(index) => {
         
         let referalId= referals.notifications[index].id;
@@ -200,6 +316,7 @@ const MentProfile = () => {
     const payload = {
         status: "Declined"
     };
+
 
     await FetchUpdate(referalId, payload);
       // MAKE BACKEND REQUEST FOR REF STATUS = DECLINE
@@ -272,6 +389,29 @@ const MentProfile = () => {
                                           <Button onClick={() => {setViewReferals(true)}} className='mt-4' style={{ backgroundColor: '#007bff', color: '#fff', border: 'none', borderRadius: '5px', padding: '8px 16px' }}>Show Referrals</Button>
                                         ) : (
                                           <Button onClick={() => {setViewReferals(false)}} className='mt-4' style={{ backgroundColor: '#007bff', color: '#fff', border: 'none', borderRadius: '5px', padding: '8px 16px' }}>Hide Referrals</Button>
+                                        )}
+                                        {/*<Button onClick={allInternshipsForMentor} className='mt-4' style={{ backgroundColor: '#007bff', color: '#fff', border: 'none', borderRadius: '5px', padding: '8px 16px' }}>View Internships</Button>*/}
+                                        {/* condInternship */}
+                                        {/* Show dropdown when condInternship is true */}
+                                        {condInternship && (
+                                            <div className='mt-4'>
+                                                {/* Render list of all internships */}
+                                                <h6>All Internships</h6>
+                                                <ul>
+                                                    {allInternships.map((internship, index) => (
+                                                        <li key={index}> {internship.Company} - {internship.Title}
+
+                                                            <Button onClick={() => handleDeleteInternship(index)} className='ml-2' variant="danger">Delete</Button>
+                                                        </li>
+                                                        // <li key={index}>{internship.Company}</li>
+                                                    ))}
+                                                </ul>
+                                            </div>
+                                        )}
+
+                                        {/* Hide dropdown when condInternship is false */}
+                                        {!condInternship && (
+                                            <Button onClick={allInternshipsForMentor} className='mt-4' style={{ backgroundColor: '#007bff', color: '#fff', border: 'none', borderRadius: '5px', padding: '8px 16px' }}>View Internships</Button>
                                         )}
                                     </Col>
                                 </Row>
