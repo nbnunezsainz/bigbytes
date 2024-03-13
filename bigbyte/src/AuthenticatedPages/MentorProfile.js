@@ -380,7 +380,7 @@ const MentProfile = () => {
                                         {/* Mentor */}
                                         <h5 className="mb-1" style={{color: '#666'}}>Mentor</h5>
                                         {/* Company*/}
-                                        <h6 className='' style={{color: '#888'}}>{mentor.Company}</h6>
+                                        <h6 style={{color: '#888'}}>{mentor.Company}</h6>
                                         {/* Linked in  */}
                                         <a href={mentor.LinkedIn} target="_blank" rel="noopener noreferrer" className="linkedin-link">
                                      {/* No content I want the picture to represent */} </a>
@@ -391,14 +391,17 @@ const MentProfile = () => {
                                                 color: '#555'
                                             }}>{mentor.Bio}</p>
                                     </Col>
+                                    {/* Row for button */}
                                 </Row>
-                                <Row style={{ marginTop: 'auto' }}>
-                                    <Col className="d-flex justify-content-end">
-                                        <Button onClick={() => setEditFields(true)} className='mt-4 me-4' style={{ backgroundColor: '#007bff', color: '#fff', border: 'none', borderRadius: '5px', padding: '8px 16px' }}>Edit</Button>
+                                {/* Button for View Referals  */}
+                                <Row style={{ marginTop: 'auto',  alignItems: 'flex-end' }}>
+                                    <Col className="d-flex justify-content-end"> 
+                                    {/* Edit Button */}
+                                        <Button onClick={() => setEditFields(true)} className='mt-4 me-4 referal form-button' >Edit your Profile</Button>
                                         { (!viewReferals) ? (
-                                          <Button onClick={() => {setViewReferals(true)}} className='mt-4' style={{ backgroundColor: '#007bff', color: '#fff', border: 'none', borderRadius: '5px', padding: '8px 16px' }}>Show Referrals</Button>
+                                          <Button onClick={() => {setViewReferals(true)}} className='mt-4 form-button' >Show Referrals</Button>
                                         ) : (
-                                          <Button onClick={() => {setViewReferals(false)}} className='mt-4' style={{ backgroundColor: '#007bff', color: '#fff', border: 'none', borderRadius: '5px', padding: '8px 16px' }}>Hide Referrals</Button>
+                                          <Button onClick={() => {setViewReferals(false)}} className='mt-4 form-button' >Hide Referrals</Button>
                                         )}
                                         {/*<Button onClick={allInternshipsForMentor} className='mt-4' style={{ backgroundColor: '#007bff', color: '#fff', border: 'none', borderRadius: '5px', padding: '8px 16px' }}>View Internships</Button>*/}
                                         {/* condInternship */}
@@ -420,8 +423,9 @@ const MentProfile = () => {
                                         )}
 
                                         {/* Hide dropdown when condInternship is false */}
+                                        {/* button for View Internships  */}
                                         {!condInternship && (
-                                            <Button onClick={allInternshipsForMentor} className='mt-4' style={{ backgroundColor: '#007bff', color: '#fff', border: 'none', borderRadius: '5px', padding: '8px 16px' }}>View Internships</Button>
+                                            <Button onClick={allInternshipsForMentor} className='mt-4 form-button left-button' >View Internships</Button>
                                         )}
                                     </Col>
                                 </Row>
@@ -431,6 +435,7 @@ const MentProfile = () => {
                 </Card>
                 
                 <div>
+                    {/* button for See Referals (Accept, Declione, etc)   */}
                   {viewReferals && (
                       referals.notifications.length > 0 ? (
                           referals.notifications.map((referal, index) => (
