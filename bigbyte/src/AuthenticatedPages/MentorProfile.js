@@ -77,7 +77,7 @@ const MentProfile = () => {
 
     if(!IsMentor)
             {
-                return <Navigate to ="/Intenrships"></Navigate>
+                return <Navigate to ="/Error"></Navigate>
             }
 
     const handleInputChange = (e) => {
