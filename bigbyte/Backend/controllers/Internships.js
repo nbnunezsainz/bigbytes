@@ -85,8 +85,8 @@ exports.requestReferal = async (req, res) => {
 
   const newMentorNotificationsRef = MentorNotificationsRef.doc();
   await newMentorNotificationsRef.set(notificationData);
-
-  return res.status(200).json({sucess:"sucess"})
+  
+  res.status(200).json({sucess:"sucess"})
 
 }
 
