@@ -66,27 +66,38 @@ export default function Resume() {
     return (
         <>
         <AuthNavbar />
+        {/*Title*/}
+        <h1 className= "resume-title"> Share your resume today.</h1>
         <Container className="container-resume mt-5">
                 <Form>
+                    {/*Heading of the resume form*/}
                     <FormGroup controlId="formFile">
-                        <FormLabel>Upload Your Resume (PDF only):</FormLabel>
+                        <FormLabel className = "label">Upload Your Resume (PDF only):</FormLabel>
+                         {/* Divider */}
+                         <div className="divider"></div>
+                        {/* Image */}
+                         <img src="https://cdn-icons-png.flaticon.com/512/8101/8101319.png" alt="Resume-Icon" className="upload-icon" />
+                        {/*Title of submitted title */}
+                            <div className = "uploaded-title">
+                            {resumeFile && (
+                             <div className="uploaded-file mt-3">
+                                 <p>Uploaded File: {resumeFile.name}</p>
+                             </div>
+                             )}
+                </div>
                         <FormControl
                             type="file"
                             accept=".pdf"
                             onChange={handleFileChange}
                         />
                     </FormGroup>
+                    {/*Submit Button*/}
                     <Button className ="mt-3" variant="primary" onClick={handleSubmit} disabled={!resumeFile}>
-                        Submit
+                        Upload file
                         <Confetti active={showConfetti} />
                     </Button>
                 </Form>
-                {resumeFile && (
-                    <div className="uploaded-file mt-3">
-                        <p>Uploaded File: {resumeFile.name}</p>
-                    </div>
-                )}
-
+                {/*We wanted confetti to show up */}
                 {showConfetti && (
                     <Confetti active={showConfetti} />
                 )}
