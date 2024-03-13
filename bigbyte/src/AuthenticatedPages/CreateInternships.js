@@ -33,8 +33,6 @@ const CreateInternship = () => {
             const user = auth.currentUser;
             const token = user && (await user.getIdToken());
 
-            console.log(user);
-
             const payloadHeader = {
                 method: 'POST',
                 headers: {
@@ -53,7 +51,6 @@ const CreateInternship = () => {
             const data = await response.json();
             setSuccess(data.success);
             setShowConfetti(data.success);
-            console.log(success);
         } catch (error) {
         } finally {
             setLoading(false); // Ensure loading is set to false after the fetch operation completes
