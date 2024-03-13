@@ -14,7 +14,7 @@ import MentorProfile from './AuthenticatedPages/MentorProfile.js';
 import CreateInternship from './AuthenticatedPages/CreateInternships.js';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "./AuthContext.js";
-
+import ErrorPage from './pages/Error.js';
 
 
 
@@ -61,6 +61,7 @@ function App() {
 
 
          <Route path="/UserProfile" element={<UserProfile />} /> 
+         <Route path="/Error" element={<ErrorPage />} /> 
 
       </Routes>
      
