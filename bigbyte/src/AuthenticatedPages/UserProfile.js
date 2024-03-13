@@ -158,6 +158,7 @@ const UserProfile = () => {
                                         }}>{User.FirstName} {User.LastName}</h1>
                                         <h5 className="mb-1" style={{color: '#666'}}>Student : Class of {User.GradYear}</h5>
                                         <h6 className='' style={{color: '#888'}}>Major: {User.Major}</h6>
+                                        <h6 className='' style={{color: '#888'}}>Referals Left: {User.MonthlyRefferalCount}</h6>
                                         <a href={User.LinkedIn} target="_blank"
                                            rel="noopener noreferrer" style={{color: '#007bff', textDecoration: 'none'}}>View LinkedIn</a>
                                             <p className='mt-4' style={{

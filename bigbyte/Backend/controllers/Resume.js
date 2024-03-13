@@ -8,6 +8,7 @@ const { queryCollection, deleteDocument, getDocument } = require('./databaseFunc
 const ResumeRef = db.collection(Constants.Collection_RESUME );
 const CommentRef = db.collection(Constants.Collection_COMMENTS);
 const Resume_CommentsRef = db.collection(Constants.Collection_RESUME_COMMENTS);
+const UserRef = db.collection(Constants.COLLECTION_USERS);
 
 exports.getAllResumes = async (req, res) => {  
     try {
@@ -42,12 +43,18 @@ req must contain the following:
 exports.getResume = async (req, res) => {
     try {
         userData =req.userData;
+        console.log(req.user.uid, "his")
+        if (userData.Resume ===false)
+        {
+            return res.status(200).json({ success: true, user: userData });
+        }
+
         let pathName = Constants.STORAGE_RESUME + req.user.uid;
         const resumeRef = ref(storage, pathName);
         const URL = await getDownloadURL(resumeRef);
-
-        res.status(200).json({ URL: URL, success: true, user:userData });
-
+       
+            return res.status(200).json({ URL: URL, success: true, user: userData });
+  
     } catch (error) {
 
         res.status(500).json({ success: false, message: 'Error getting resume' });
@@ -89,10 +96,20 @@ exports.uploadResume = async (req, res) => {
             uid: req.user.uid,
             storagePath: pathName,
             DownloadUrl: DownloadUrl, // Reference to the file in the storage
+            
             // Add other relevant metadata here
         };
         await ResumeRef.doc(req.user.uid).set(resumeData);
-        
+
+        //Update Resume to be true for userProfile
+           
+        const  UserData= {
+            Resume:true
+            // Construct resume data here based on user data if needed
+            // Example: resumeName: userData.name, resumeEmail: userData.email, etc.
+        };
+        await UserRef.doc(req.user.uid).set(UserData, { merge: true });
+
         res.status(200).json({ success: true, message: 'Succes when getting resume' });
     } catch (error) {
         console.log("an error happened:");
