@@ -62,70 +62,58 @@ function ResumeViewer({sendDataToParent, resumeUrl, resumeUID, resumeComments}) 
     };
 
     return (
-       
-        <Col >
-
-  {/* <iframe
-    src={resumeUrl}
-    loading="lazy"
-    width={900}
-    height={1000}
-    style={{
-      border: 'none',
-      marginBottom: '20px', // Add some space below the iframe
-    }}
-     */}
-  <Row> 
-  <Document file={resumeUrl}>
-  <Page pageNumber={1} width={900} />
-</Document>
-</Row>
-
-<Row style= {{ marginBottom: '200px' }}> 
-
-<Col sm={6}> 
-
-  <Button value={resumeUID} onClick={toggleComments} variant="outline-primary" className="mb-3">
-    Comments
-  </Button>
-  </Col>
-  
-
-
-
-  {showComments && (
-    <Card>
-      <Card.Body>
-        <h5 className="mb-3">Comments</h5>
-        {resumeComments && resumeComments.length > 0 ? (
-          resumeComments.map((resComment, index) => (
-            <div key={index} className="mb-2">
-              <strong>{resComment.comment} </strong> 
-            </div>
-          ))
-        ) : (
-          <p>No comments yet.</p>
-        )}
-        <Form.Group className="mb-3">
-          <Form.Control
-            as="textarea"
-            rows={3}
-            value={newComment}
-            onChange={(e) => setNewComment(e.target.value)}
-            placeholder="Add a comment..."
-          />
-        </Form.Group>
-        <Button onClick={submitComment} variant="primary">
-          Submit
-        </Button>
-      </Card.Body>
-      
-    </Card>
-    
-  )}
+        <Col className="resume-viewer-container">
+            {/* Column that shows resumes */}
+        <Row>
+        <Col sm={6}>
+            <Document file={resumeUrl}>
+                <Page pageNumber={1} width={600} />
+            </Document>
+        </Col>
+{/* Column that shows comment section */}
+        <Col sm={6}>
+                    <Row>
+                    <Button className="comment-button" value={resumeUID} onClick={toggleComments} variant="outline-primary" >
+                 Comments
+                </Button>
+                     </Row>
+                {/* Comment Section */}
+            {showComments && currentResumeUID === resumeUID && (
+                <Card className="comments-section">
+                    <Card.Body>
+                        <h5 className="label">Comments</h5>
+                        {/* Divider */}
+                        <div className="divider"></div>
+                        {resumeComments && resumeComments.length > 0 ? (
+                            resumeComments.map((resComment, index) => (
+                                <div key={index} className="mb-2">
+                                    <strong>{resComment.comment} </strong>
+                                </div>
+                            ))
+                        ) : (
+                            <p>No comments yet.</p>
+                        )}
+                        <Form.Group className="mb-3">
+                            {/* Add a comment, needs an input section */}
+                            <Form.Control
+                                as="textarea"
+                                value={newComment}
+                                onChange={(e) => setNewComment(e.target.value)}
+                                placeholder="Add a comment..."
+                                className="comment-input"
+                            />
+                        </Form.Group>
+                        {/* allows to hit submit */}
+                        <Button className = "submit-button" onClick={submitComment} variant="primary">
+                            Submit
+                        </Button>
+                    </Card.Body>
+                </Card>
+            )}
+        </Col>
     </Row>
 </Col>
+
     );
 }
-
 export default ResumeViewer;

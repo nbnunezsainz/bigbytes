@@ -8,8 +8,6 @@ import '../Styling/CreateInternship.css';
 import Confetti from 'react-dom-confetti';
 
 
-
-
 const CreateInternship = () => {
     const [success,setSuccess]= useState(false);
   const [internshipData, setInternshipData] = useState({
@@ -52,7 +50,6 @@ const CreateInternship = () => {
           }
   
           const data = await response.json();
-          console.log(data.success,"hi");
           setSuccess(data.success);
           setShowConfetti(data.success);
           console.log(success);
@@ -62,10 +59,6 @@ const CreateInternship = () => {
         }
       };
   
-  
-  
-  
-      
         const handleChange = (e) => {
             setInternshipData({ ...internshipData, [e.target.name]: e.target.value });
         };

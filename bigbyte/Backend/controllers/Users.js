@@ -133,7 +133,7 @@ exports.getUserAndResume = async (req, res, next) => {
         // req.UserResume = URL;
         next();
     }
-    res.status(200).json({ success: true, user: user });
+    //res.status(200).json({ success: true, user: user });
 
 };
 
@@ -241,11 +241,9 @@ exports.CheckReferalStatus = async (req, res) => {
         const studentID = req.user.uid;
         const userNotificationsSnapshot = await MentorNotificationsRef.where('studentID', '==', studentID).get();
 
-        if (!userNotificationsSnapshot) {
-            res.json({ message: "currently no request made" }).status(200);
+        if (userNotificationsSnapshot.empty) {
+           return res.status(200).json({ message: "currently no request made" });
         }
-
-        console.log(userNotificationsSnapshot, "hello");
 
         // Array to store notifications
         const notifications = [];

@@ -21,8 +21,10 @@ const NavBar = () => {
             {/* <Link to="/InternShips">Internship Search</Link>
             <Link to="/Resume">Resume Tools</Link>
             <Link to="BackendTesting">Backend Testing</Link> */}
-            <Link className= "right-li" to="/Login">Login</Link>
-            <Link to="/SignUp">Sign Up</Link>
+            <div  className= "rightt-links">
+            <Link className= "login-sign-title" to="/Login">Login</Link>
+            <Link  className= "login-sign-title" to="/SignUp">Sign Up</Link>
+            </div>
             {/* Want to see its css but access it due to sign up  */}
 
             

@@ -70,14 +70,14 @@ exports.requestReferal = async (req, res) => {
   const notificationData = {
     mentorID: mentorID,
     studentID: student.userID,
-    company: internshipDoc.data().Company,
-    internshipURL: internshipDoc.data().URL,
-    InternshipTitle: internshipDoc.data().Title,
-    studentMajor: student.Major,
-    GradYear: student.Year,
-    studentOrganizations: student.Organizations,
-    studentBio: student.Bio,
-    Resume: student.Resume,
+    company: internshipDoc.data().Company || '',
+    internshipURL: internshipDoc.data().URL || '',
+    InternshipTitle: internshipDoc.data().Title || '',
+    studentMajor: student.Major || '',
+    GradYear: student.Year || '',
+    studentOrganizations: student.Organizations || '',
+    studentBio: student.Bio || '',
+    Resume: student.Resume || '',
     message: `Referral request for your internship: ${internshipDoc.data().Title}`,
     status: "pending",
   };
@@ -85,8 +85,12 @@ exports.requestReferal = async (req, res) => {
 
   const newMentorNotificationsRef = MentorNotificationsRef.doc();
   await newMentorNotificationsRef.set(notificationData);
+  
+  let  MentorDeletesInternship = false; //only true when a mentor wants to delte the internship
+  updateInternshipData(internshipID,InternshipRef,internshipDoc.data(), MentorDeletesInternship);
+  updateUserData(student.userID);
 
-  return res.status(200).json({ sucess: "sucess" })
+  res.status(200).json({sucess:"sucess"})
 
 }
 
@@ -97,12 +101,14 @@ exports.getAllInternships = async (req = null, res = null) => {
 
     let internshipData = {};
 
-    console.log(res, "res2");
     data.forEach(internship => {
-      internshipData[internship.id] = internship.data();
-    });
+      if(internship.data().Status ==="Open for Applications")
+      {
+        internshipData[internship.id] = internship.data();
 
-    console.log(res, "res");
+      }
+      
+    });
     if (res != null) {
       res.status(200).json({ success: true, message: 'Internship has been found', internshipData: internshipData });
     }
@@ -182,15 +188,33 @@ const cleanQuery = (query) => {
 // find and return an internship dictionary that relates their ID to thier data
 exports.getInternship = async (req, res) => {
   try {
-    let internshipID = req.body.id;
-    const internship = await getDocument(InternshipRef, internshipID);
+    //MentorID
+    //Get all Intenrships that relate to Mentor
+    const userID = req.user.uid;
 
-    console.log("Success- internship received!");
-    res.status(200).json({ success: true, message: 'Internship received successfully' });
-    return internship;
+    const MentorInternships = await InternshipRef.where('MentorID', '==', userID).get(); 
+    const internships = [];
 
+    // Iterate over the documents in the snapshot
+    MentorInternships.forEach(doc => {
+        const data = doc.data();
+        // Construct the internship object with relevant data
+        if(data.Status ==="Open for Applications")
+        {
+          console.log("mepp");
+        const internship = {
+            id: doc.id, // Document ID
+            data:data,// Other fields...
+        };
+        internships.push(internship); // Push the internship object to the array
+      }
+    });
+
+    res.status(200).json({message:"Internships Found", internships:internships})
+
+   
   } catch (error) {
-    console.log("RAN INTO PROBLEM LOOKING FOR INTERNSHIP", error);
+    
     res.status(500).json({ success: false, message: 'Error when getting internship' });
   }
 };
@@ -200,7 +224,13 @@ exports.getInternship = async (req, res) => {
 // THIS CODE IS ESSENTIALLY USELESS NOW! TO ENSURE OUR DATA IS SECURE, WE HAVE COMMENTED THE deleteDocument() FUNCTION
 exports.deleteInternship = async (req, res) => {
   try {
-    let internshipID = req.body.id;
+    let internshipID = req.user.id;
+    const InternshipRef = db.collection(Constants.COLLECTION_INTERNSHIP);
+    let internshipData = await getDocument(InternshipRef, internshipID);
+    internshipData = internshipData[internshipID];
+
+    let MentorDeletesInternship= true;
+    updateInternshipData(internshipID,InternshipRef,internshipData,MentorDeletesInternship);
 
     //const result = await deleteDocument(InternshipRef, internshipID);
     console.log("Success- internship deleted!");
@@ -208,6 +238,48 @@ exports.deleteInternship = async (req, res) => {
   } catch (error) {
     console.log("There was some error when deleting internship", error);
     res.status(500).json({ success: false, message: 'Error deleting internship' });
+  }
+};
+
+
+const updateInternshipData = async (internshipID, InternshipRef, internshipData,MentorDeletesInternship) => {
+  try {
+      // gather and update internship information
+      const internship = InternshipRef.doc(internshipID);
+      let appCount = internshipData.ApplicationCounter + 1;
+      let newStatus = internshipData.Status;
+      let newDisplay = internshipData.Display;
+      if (appCount >= internshipData.RefferalLimit || MentorDeletesInternship==true) {
+          newStatus = Constants.INTERNSHIP_STATUS_REVIEW;
+          newDisplay = false;
+      }
+      await internship.update(
+          {
+              ApplicationCounter: appCount,
+              Status: newStatus,
+              Display: newDisplay
+          }
+      );
+      console.log("Internship data is updated after application was submitted");
+  } catch (error) {
+      console.log("There was some error when updating internship data", error);
+  }
+};
+
+const updateUserData = async (userID) => {
+  try {
+      // gather and update user information
+      const user = UserRef.doc(userID);
+      let userData = (await user.get()).data();
+      await user.update(
+          {
+              MonthlyRefferalCount: userData.MonthlyRefferalCount - 1,
+              TotalRefferalCount: userData.TotalRefferalCount + 1
+          }
+      );
+      console.log("User data is updated after application was submitted");
+  } catch (error) {
+      console.log("There was some error when updating user data", error);
   }
 };
 
