@@ -10,12 +10,13 @@ function UserDetailsForm() {
         firstName: '',
         lastName: '',
         major: '',
-        year: '',
+        gradYear: '',
         bio: '',
         company: '',
         UserStatus: '',
         linkedIn: '',
-        industry: ''
+        industry: '',
+        organizations: ''
     });
     const [redirectToLanding, setRedirectToLanding] = useState(false);
 
@@ -43,34 +44,40 @@ function UserDetailsForm() {
         const user = auth.currentUser;
         const token = user && (await user.getIdToken());
 
-        fetch('http://localhost:3001/api/v1/user/userDetails', {
+        // split organization string by commas into a list for Users
+        let organizationList = userDetails.organizations.split(',').map(org => org.trim());
+        userDetails.organizations = organizationList;
+
+        const payloadHeader = {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json',
+                "Content-Type": "application/json",
                 Authorization: `Bearer ${token}`,
             },
             body: JSON.stringify(userDetails)
-        })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return response.json();
-            })
-            .then(data => {
-                console.log('Response from server:', data);
-                // Check if signup success
-                if (data.success) {
-                    // signup successful
-                    setRedirectToLanding(true);
-                } else {
-                    // Handle signup error
-                    console.error('Signup failed: ', data.message);
-                }
-            })
-            .catch(error => {
-                console.error('There was a problem with your fetch operation: ', error);
-            });
+        };
+
+        let response;
+
+        //if signing up a user
+        if (role == "student") {
+            response = await fetch('http://localhost:3001/api/v1/user/UserDetails', payloadHeader);
+        } else {
+            //if signing up a mentor
+            response = await fetch('http://localhost:3001/api/v1/mentor/MentorDetails', payloadHeader);
+        }
+
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+
+        const data = await response.json();
+
+        if (data.success) {
+            setRedirectToLanding(true);
+        } else {
+            throw new Error('There was a problem with your post operation');
+        }
     };
 
 
@@ -106,10 +113,19 @@ function UserDetailsForm() {
                                     <Form.Label>Bio:</Form.Label>
                                     <Form.Control as="textarea" rows={3} name="bio" value={userDetails.bio} onChange={handleChange} />
                                 </Form.Group>
-                                <Form.Group controlId="year">
-                                    <Form.Label>Year:</Form.Label>
-                                    <Form.Control type="text" name="year" value={userDetails.year} onChange={handleChange} />
+                                <Form.Group controlId="gradYear">
+                                    <Form.Label>Graduation Year:</Form.Label>
+                                    <Form.Control type="text" name="gradYear" value={userDetails.gradYear} onChange={handleChange} />
                                 </Form.Group>
+                                <Form.Group controlId="organizations">
+                                    <Form.Label>Organizations (seperated by commas):</Form.Label>
+                                    <Form.Control type="text" name="organizations" value={userDetails.organizations} onChange={handleChange} />
+                                </Form.Group>
+                                <Form.Group controlId="linkedIn">
+                                    <Form.Label>LinkedIn:</Form.Label>
+                                    <Form.Control type="text" name="linkedIn" value={userDetails.linkedIn} onChange={handleChange} />
+                                </Form.Group>
+
                             </>
                         }
                         {role === 'mentor' &&
@@ -119,7 +135,7 @@ function UserDetailsForm() {
                                     <Form.Control type="text" name="company" value={userDetails.company} onChange={handleChange} />
                                 </Form.Group>
                                 <Form.Group controlId="industry">
-                                    <Form.Label>Company:</Form.Label>
+                                    <Form.Label>Industry:</Form.Label>
                                     <Form.Control type="text" name="industry" value={userDetails.industry} onChange={handleChange} />
                                 </Form.Group>
                                 <Form.Group controlId="bio">

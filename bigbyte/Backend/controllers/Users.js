@@ -8,32 +8,16 @@ const UserRef = db.collection(Constants.COLLECTION_USERS);
 
 const MentorNotificationsRef = db.collection(Constants.COLLECTION_MENTORS_NOTIFICATIONS);
 //add a User --> takes userData in json format (FirstName: John, LastName: Smith)
-exports.addUser = async (req, res) => {
+exports.addUser = async (data, res = null) => {
     try {
-        const userData = req.body;
-        const userID = userData.id;
-
-        const data = {
-            FirstName: userData.firstName,
-            LastName: userData.lastName,
-            Major: userData.major,
-            GradYear: userData.gradYear,
-            Bio: userData.bio || null,
-            Organizations: userData.organizations || [],
-            LinkedIn: userData.linkedIn || null,
-
-            //not provided by entered data
-            MonthlyRefferalCount: 20,
-            TotalRefferalCount: 0,
-        };
-
+        const userID = data.uid;
         await UserRef.doc(userID).set(data);
 
         console.log("Success- a new user has been added!");
-        res.status(200).json({ success: true, message: 'User added successfully' });
+        //res.status(200).json({ success: true, message: 'User added successfully' });
     } catch (error) {
         console.log("There was some error when adding user", error);
-        res.status(500).json({ success: false, message: 'Error adding user' });
+        //res.status(500).json({ success: false, message: 'Error adding user' });
     }
 }
 
@@ -254,33 +238,33 @@ const updateInternshipData = async (internshipID, InternshipRef, internshipData)
 
 exports.CheckReferalStatus = async (req, res) => {
     try {
-      const studentID = req.user.uid;
-      const userNotificationsSnapshot = await MentorNotificationsRef.where('studentID', '==', studentID ).get();
-  
-      if (!userNotificationsSnapshot ) {
-        res.json({ message: "currently no request made" }).status(200);
-      }
-  
-      console.log(userNotificationsSnapshot , "hello");
-  
-      // Array to store notifications
-      const notifications = [];
-  
-      userNotificationsSnapshot.forEach(doc => {
-        const data = doc.data();
-        console.log(doc.data());
-        console.log(doc.data(), "www");
-        const notificationData = {
-            InternshipTitle: data.InternshipTitle,
-            Company:data.company,
-            status:data.status,
-            // Add more fields as needed
-        };
-        notifications.push(notificationData);
-    });
-  
-  
-      res.status(200).json({ success: true, notifications: notifications });
+        const studentID = req.user.uid;
+        const userNotificationsSnapshot = await MentorNotificationsRef.where('studentID', '==', studentID).get();
+
+        if (!userNotificationsSnapshot) {
+            res.json({ message: "currently no request made" }).status(200);
+        }
+
+        console.log(userNotificationsSnapshot, "hello");
+
+        // Array to store notifications
+        const notifications = [];
+
+        userNotificationsSnapshot.forEach(doc => {
+            const data = doc.data();
+            console.log(doc.data());
+            console.log(doc.data(), "www");
+            const notificationData = {
+                InternshipTitle: data.InternshipTitle,
+                Company: data.company,
+                status: data.status,
+                // Add more fields as needed
+            };
+            notifications.push(notificationData);
+        });
+
+
+        res.status(200).json({ success: true, notifications: notifications });
     }
     catch (error) {
         console.error('Error fetching mentor notifications:', error);
