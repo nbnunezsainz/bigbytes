@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { useHistory } from 'react-router-dom';
+import { Navigate } from 'react-router-dom';
 
 const ErrorPage = () => {
   const [redirect, setRedirect] = useState(false);
-  const history = useHistory();
 
   useEffect(() => {
     const timeout = setTimeout(() => {
@@ -16,9 +15,9 @@ const ErrorPage = () => {
 
   useEffect(() => {
     if (redirect) {
-      history.push('/Home'); // Redirect to the home page
+      <Navigate to="/Home" />
     }
-  }, [redirect, history]);
+  }, [redirect]);
 
   return (
     <div>
