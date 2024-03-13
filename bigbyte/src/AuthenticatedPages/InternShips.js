@@ -212,11 +212,11 @@ const JobDetail = () => {
   return (
     <>
       <AuthNavbar />
-      <Container fluid >
+      <Container fluid style={{ marginTop: '70px' }}>
         <Row  className ="mx-2">
           <Col xs={12}  className="mb-5">
             {/* Filter Section */}
-            <h5>Filters</h5>
+            <h5 s>Filters</h5>
             <Form>
 
               {/* company */}
