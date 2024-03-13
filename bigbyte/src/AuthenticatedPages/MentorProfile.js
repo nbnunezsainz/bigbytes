@@ -3,7 +3,7 @@ import { Button, Card, Container, Form, Row, Col } from 'react-bootstrap';
 import AuthNavbar from './AuthenticatedNavBar';
 import auth from "../fb.js";
 import {Navigate } from 'react-router-dom';
-
+import Footer from '../pages/Footer';
 import "../Styling/MentorProfile.css"
 //import {getAllInternships} from "../../Backend/controllers/Internships";
 
@@ -477,6 +477,7 @@ const MentProfile = () => {
               </div>
 
             </div>
+            <Footer />
         </>
     );
 };

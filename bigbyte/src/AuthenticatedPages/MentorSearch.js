@@ -3,6 +3,7 @@ import { Container, Row, Col, Button, Card } from 'react-bootstrap';
 import AuthNavbar from './AuthenticatedNavBar';
 import auth from "../fb.js";
 import { Form, FormControl } from 'react-bootstrap';
+import Footer from '../pages/Footer';
 
 const MentorSearch = () => {
   const [Mentors, setMentors] = useState([]); // State to store mentor data
@@ -197,6 +198,7 @@ const MentorSearch = () => {
           ))}
         </Row>
       </div>
+      <Footer />
     </>
   );
 };

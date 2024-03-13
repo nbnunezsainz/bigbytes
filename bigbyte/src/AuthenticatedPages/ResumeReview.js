@@ -4,7 +4,7 @@ import AuthNavbar from './AuthenticatedNavBar';
 import {Container, Row, Col, Card, Button} from 'react-bootstrap';
 import { Link } from "react-router-dom";
 import '../Styling/ResumeReview.css';
-
+import Footer from '../pages/Footer';
 
 const ResumeReviewer = () => {
     const [resumes, setResumes] = useState([]);
@@ -78,7 +78,9 @@ const ResumeReviewer = () => {
                     )}
                 </div>
             </div>
+            <Footer />
         </>
+        
     );
 };
 
