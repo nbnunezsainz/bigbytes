@@ -78,7 +78,7 @@ exports.requestReferal = async (req, res) => {
     Resume: student.Resume || '',
     message: `Referral request for your internship: ${internshipDoc.data().Title}`,
     status: "pending",
-    internshipID: internshipID 
+    internshipID: internshipID
   };
 
 
@@ -93,11 +93,10 @@ exports.requestReferal = async (req, res) => {
 
 }
 
-exports.getAllInternshipsRelatedToAMentor = async (req,res) =>
-{
+exports.getAllInternshipsRelatedToAMentor = async (req, res) => {
   const mentorID = req.user.uid;
 
-try {
+  try {
     // Query the Internship collection to get all internships where MentorID equals mentorID
     const internshipSnapshot = await InternshipRef.where('MentorID', '==', mentorID).get();
 
@@ -118,14 +117,14 @@ try {
           }
        
     });
-    res.status(200).json({ success: true, internshipData:internshipData });
-    
-  //get mentorID, have it query all interships related to a mentr
-}
-catch
-{
-  res.status(500).json({ success: false, message: 'Error querying internships' });
-}
+    res.status(200).json({ success: true, internshipData: internshipData });
+
+    //get mentorID, have it query all interships related to a mentr
+  }
+  catch
+  {
+    res.status(500).json({ success: false, message: 'Error querying internships' });
+  }
 }
 //query ALL Internships based on a specific field, filtering technique, and target value --> returns dictionary of ALL internship IDs to their data
 exports.getAllInternships = async (req = null, res = null) => {
@@ -252,7 +251,7 @@ exports.getInternship = async (req, res) => {
 exports.deleteInternship = async (req, res) => {
   try {
     const InternshipID = Object.keys(req.query)[0];
-    
+
 
     const InternshipRef = db.collection(Constants.COLLECTION_INTERNSHIP);
     let internshipData = await getDocument(InternshipRef, InternshipID);
