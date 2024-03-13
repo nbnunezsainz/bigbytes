@@ -18,8 +18,10 @@ router.route('/GetMentorProfile').get(AuthenticationController.verifyToken, Ment
 router.route('/UpdateMentor').patch(AuthenticationController.verifyToken, MentorController.updateMentor);
 router.route('/GenerateInternship').post(MentorController.generateInternship);
 router.route('/RequestedReferals').get(AuthenticationController.verifyToken, MentorController.CheckReferals);
-
 router.route('/UpdateRefStatus').patch(AuthenticationController.verifyToken, MentorController.UpdateReferalStatus);
+
+// Mentor Routes for viewing data
+router.route('/ViewMentorProfile').get(MentorController.viewMentorProfile);
 
 // TO TEST USER DATASE WITH RANDOM MENTORS
 //router.route('/GenerateMentorTestData').post(MentorController.generateTestMentors);

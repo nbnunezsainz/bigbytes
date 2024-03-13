@@ -157,7 +157,7 @@ function UserDetailsForm() {
                         }
                         {failedSignUp &&
                             <div>
-                                <p style={{color: "red"}}>All fields required. Try again...</p>
+                                <p style={{ color: "red" }}>All fields required. Try again...</p>
                             </div>
                         }
                         <Button variant="primary" type="submit">Submit</Button>

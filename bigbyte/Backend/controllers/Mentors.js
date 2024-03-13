@@ -1,7 +1,7 @@
 const { getFirestore, Timestamp, FieldValue, Filter } = require('firebase-admin/firestore');
 const { db, admin } = require('../FireBaseSetUp.js');
 const Constants = require('./databaseConstant.js');
-const { filterHelper, getDocument } = require('./databaseFunctions.js');
+const { filterHelper, getDocument, queryCollection } = require('./databaseFunctions.js');
 const { addInternship } = require('./Internships.js');
 
 // create and initialize a database reference to the "Internship" collection
@@ -214,6 +214,53 @@ exports.getMentor = async (req, res) => {
   }
 };
 
+exports.viewMentorProfile = async (req, res) => {
+  try {
+
+    //getting the mentor's information
+    let mentorID = req.query.id;
+    let mentorData = await getDocument(MentorRef, mentorID);
+
+    if (mentorData == null) {
+      res.status(500).json({ success: false, message: 'Mentor does not exist!' });
+    }
+    delete mentorData.uid;
+
+    //getitng the mentor's active internships
+    let queryParams =
+    {
+      field: "MentorID",
+      filter: "==",
+      target: mentorID
+    }
+    const InternshipRef = db.collection(Constants.COLLECTION_INTERNSHIP);
+    const internshipData = await queryCollection(InternshipRef, queryParams);
+    const internshipKeys = Object.keys(internshipData);
+    const totalInternships = internshipKeys.length;
+
+    // Iterate through each internship object
+    for (let i = 0; i < totalInternships; i++) {
+      const internshipId = internshipKeys[i];
+      const internship = internshipData[internshipId];
+
+      // Rename the key
+      delete internshipData[internshipId];
+      internshipData[i] = internship;
+
+      // Delete specified fields
+      delete internship.MentorID;
+      delete internship.Display;
+      delete internship.Status;
+      delete internship.ReferalLimit;
+      delete internship.ApplicationCounter;
+    }
+
+    res.status(200).json({ success: true, message: 'Succesfully returned mentor', mentorData: mentorData, internshipData: internshipData });
+  } catch (error) {
+    console.log("RAN INTO PROBLEM GETTING MENTOR", error);
+    res.status(500).json({ success: false, message: 'Error when getting mentor' });
+  }
+}
 //update specific mentor with new data
 exports.updateMentor = async (req, res) => {
 
