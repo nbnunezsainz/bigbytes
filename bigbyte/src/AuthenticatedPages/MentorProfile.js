@@ -179,6 +179,8 @@ const MentProfile = () => {
     const allInternshipsForMentor = async() => {
        // let referalId= referals.notifications[index].id;
 
+        setcondInternship(!condInternship);
+
         const payload = {
             status: "Accepted"
         };
@@ -227,7 +229,6 @@ const MentProfile = () => {
 
 
         setallInternships(allInternshipswithMentor);
-        setcondInternship(true);
 
         console.log(mentor.uid)
 
@@ -412,7 +413,7 @@ const MentProfile = () => {
                                         {/* Hide dropdown when condInternship is false */}
                                         {/* button for View Internships  */}
                         
-                                            <Button onClick={() => setcondInternship(!condInternship)} className='mt-4 form-button left-button-mp'>
+                                            <Button onClick={allInternshipsForMentor} className='mt-4 form-button left-button-mp'>
                                     {condInternship ? "Hide Internships" : "View Internships"}
                                     </Button> 
                                     </Col>
