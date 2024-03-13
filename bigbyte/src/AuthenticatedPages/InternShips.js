@@ -3,6 +3,8 @@ import { Container, Row, Col, Button, Card } from 'react-bootstrap';
 import AuthNavbar from './AuthenticatedNavBar';
 import auth from "../fb.js";
 import { Form, FormControl } from 'react-bootstrap';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 
 const JobDetail = () => {
@@ -19,8 +21,6 @@ const JobDetail = () => {
 
 
   const [selectedCategory, setSelectedCategory] = useState('');
-  const [selectedSubcategory, setSelectedSubcategory] = useState('');
-  const [allSubcategories, setAllSubcategories] = useState('');
 
 
   const applyFilters = async () => {
@@ -185,11 +185,10 @@ const JobDetail = () => {
     const internshipID = event.target.value;
     try {
       const response = await fetch(`http://localhost:3001/api/v1/internship/RequestReferal?internshipID=${internshipID}`, payloadHeader);
+      console.log(response, "response");
       if (!response.ok) {
-        throw new Error('Failed to request referral');
+        toast.error('Resume does not exist. Please create one before proceeding.');
       }
-      // Handle successful response here
-      console.log("looks semi good mate");
 
     } catch (error) {
       console.error('Error requesting referral:', error);
@@ -213,9 +212,9 @@ const JobDetail = () => {
   return (
     <>
       <AuthNavbar />
-      <Container fluid className="mt-5">
-        <Row>
-          <Col md={3}>
+      <Container fluid >
+        <Row  className ="mx-2">
+          <Col xs={12}  className="mb-5">
             {/* Filter Section */}
             <h5>Filters</h5>
             <Form>
@@ -258,30 +257,6 @@ const JobDetail = () => {
                 </Form.Control>
               </Form.Group>
 
-              {selectedCategory && (
-                <Form.Group className="mb-3">
-                  <Form.Label>Subcategory</Form.Label>
-                  <Form.Control
-                    as="select"
-                    value={selectedSubcategory}
-                    onChange={(e) => setSelectedSubcategory(e.target.value)}
-
-                  >
-                    <option value="">Select Subcategory</option>
-
-
-                    {/* need help here - thought inserting 'selectedCategory' should work*/}
-                    {Object.values(allCategory).map((subcategory) => (
-                      <option key={subcategory} value={subcategory}>
-                        {subcategory}
-                      </option>
-                    ))}
-                  </Form.Control>
-                </Form.Group>
-              )}
-
-
-
               <Form.Group className="mb-3">
                 <Form.Label>Major</Form.Label>
                 <Form.Control
@@ -323,18 +298,19 @@ const JobDetail = () => {
               {<Button variant="secondary" onClick={resetFilters}> Reset Filters</Button>}
             </Form>
           </Col>
-          <Col md={9}>
+          <Col sm={12}>
             {/* Job Listing Section */}
-            <Row>
+            <Row sm={12}>
               {Object.entries(jobs).map(([internshipID, job]) => (
                 <Col md={12} key={internshipID}>
                   <Card className="mb-3">
                     <Card.Body>
                       <Card.Title>{job.title}</Card.Title>
                       <Card.Text><strong>Company:</strong> {job.Company}</Card.Text>
-                      <Card.Text><strong>Date Posted:</strong> {job.datePosted}</Card.Text>
+        
                       <Card.Text>{job.Description}</Card.Text>
                       <Button variant="primary" value={internshipID} onClick={handleReferal}>Apply</Button>
+                      <ToastContainer />
                     </Card.Body>
                   </Card>
                 </Col>

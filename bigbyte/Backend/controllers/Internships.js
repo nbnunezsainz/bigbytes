@@ -2,7 +2,6 @@ const { getFirestore, Timestamp, FieldValue, Filter, collection, getDocs } = req
 const { db, admin } = require('../FireBaseSetUp.js');
 const Constants = require('./databaseConstant.js');
 const { getDocument, filterHelper } = require('./databaseFunctions.js');
-const { param } = require('../routes/InternShipRoutes.js');
 const { query } = require('express');
 
 // create and initialize a database reference to the "Internship" collection
@@ -40,7 +39,6 @@ exports.addInternship = async (req, res) => {
     const newInternshipRef = InternshipRef.doc();
     await newInternshipRef.set(data);
 
-    res.status(200).json({ message: 'Internship has been created', success: true });
     return;
 
     // unneccesary as the only result needed is from generateInternship in Mentors.js (which this function is solely called from)
@@ -54,68 +52,69 @@ exports.addInternship = async (req, res) => {
 exports.requestReferal = async (req, res) => {
   let student = req.student; //get usersname, and resume, and linkdln?
 
-  console.log(student, "studenr data");
-  console.log(req.query, "random");
-
   const internshipID = req.query.internshipID;
 
-  console.log(internshipID, "id");
 
   const internshipDoc = await InternshipRef.doc(internshipID).get();
 
-  console.log(internshipDoc.data(), 'doc');
+  
 
   if (!internshipDoc) {
-    throw new Error('Internship not found');
+    return res.status(500).json({message:"create a profile", resume:false})
   }
   const mentorID = internshipDoc.data().MentorID;
 
   console.log(mentorID, "mentor");
   console.log(internshipDoc.data(), "doc")
-     // Create a notification document for the mentor
-     const notificationData = {
-      mentorID: mentorID,
-      studentID: student.userID,
-      company: internshipDoc.data().Company,
-      internshipURL: internshipDoc.data().URL,
-      InternshipTitle: internshipDoc.data().Title,
-      studentMajor: student.Major,
-      GradYear: student.Year,
-      studentOrganizations: student.Organizations,
-      studentBio: student.Bio,
-      Resume: student.Resume,
-      message: `Referral request for your internship: ${internshipDoc.data().Title}`,
-      status:"pending",
-    };
+  // Create a notification document for the mentor
+  const notificationData = {
+    mentorID: mentorID,
+    studentID: student.userID,
+    company: internshipDoc.data().Company,
+    internshipURL: internshipDoc.data().URL,
+    InternshipTitle: internshipDoc.data().Title,
+    studentMajor: student.Major,
+    GradYear: student.Year,
+    studentOrganizations: student.Organizations,
+    studentBio: student.Bio,
+    Resume: student.Resume,
+    message: `Referral request for your internship: ${internshipDoc.data().Title}`,
+    status: "pending",
+  };
 
 
   const newMentorNotificationsRef = MentorNotificationsRef.doc();
   await newMentorNotificationsRef.set(notificationData);
 
+  return res.status(200).json({sucess:"sucess"})
+
 }
 
 //query ALL Internships based on a specific field, filtering technique, and target value --> returns dictionary of ALL internship IDs to their data
-exports.getAllInternships = async (req, res) => {
+exports.getAllInternships = async (req = null, res = null) => {
   try {
     let data = await InternshipRef.get();
 
     let internshipData = {};
 
+    console.log(res, "res2");
     data.forEach(internship => {
       internshipData[internship.id] = internship.data();
     });
 
-    res.status(200).json({ success: true, message: 'Internship has been found', internshipData: internshipData });
-
+    console.log(res, "res");
+    if (res != null) {
+      res.status(200).json({ success: true, message: 'Internship has been found', internshipData: internshipData });
+    }
     return internshipData;
 
   } catch (error) {
     console.log("RAN INTO PROBLEM QUERYING INTERNSHIPS", error);
-    res.status(500).json({ success: false, message: 'Error querying internships' });
+    if (res != null) {
+      res.status(500).json({ success: false, message: 'Error querying internships' });
+    }
   }
 }
-
-
 
 /*compound/complex querying of internships based on a specific field(s), filtering technique(s), and target value(s) --> returns dictionary of internship IDs to their data
 ALL parameters of query should be passed (Company, Category, Pay, Location). Empty values will be disregarded.
@@ -129,9 +128,9 @@ exports.queryInternships = async (req, res) => {
     const keyNames = Object.keys(paramList);
 
     if (keyNames.length == 0) {
-      queryDict = this.getAllInternships(req, res);
+      console.log("no params")
+      queryDict = await this.getAllInternships();
     } else {
-      console.log("I am here");
       queryDict = await filterHelper(InternshipRef, paramList);
     }
 

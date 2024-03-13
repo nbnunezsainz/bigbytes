@@ -5,6 +5,9 @@ const router = express.Router();
 const MentorController = require('../controllers/Mentors');
 const AuthenticationController = require("../controllers/Authentication");
 
+// AUTHENTICATION ROUTES
+router.route('/MentorDetails').post(AuthenticationController.verifyToken, AuthenticationController.CreateDetailsAboutMentor);
+
 // Mentor routes
 router.route('/AddMentor').post(MentorController.addMentor);
 router.route('/QueryMentors').get(AuthenticationController.verifyToken, MentorController.queryMentors);
@@ -16,7 +19,7 @@ router.route('/UpdateMentor').patch(AuthenticationController.verifyToken, Mentor
 router.route('/GenerateInternship').post(MentorController.generateInternship);
 router.route('/RequestedReferals').get(AuthenticationController.verifyToken, MentorController.CheckReferals);
 
-router.route('/UpdateRefStatus').patch(AuthenticationController.verifyToken, MentorController.UpdateReferalStatus); 
+router.route('/UpdateRefStatus').patch(AuthenticationController.verifyToken, MentorController.UpdateReferalStatus);
 
 // TO TEST USER DATASE WITH RANDOM MENTORS
 //router.route('/GenerateMentorTestData').post(MentorController.generateTestMentors);

@@ -117,11 +117,12 @@ const MentProfile = () => {
         return <div>Loading...</div>;
     }
 
-    const handleResume = async (index) => {
-      // Navigate to ViewResume page
-      return <Navigate to="/ViewResume" />;
-    };
 
+    const handleResume = async(index) => {
+      const resumeUrl = referals.notifications[index].data.Resume;
+       window.open(resumeUrl, '_blank');
+    }
+    
     const FetchUpdate = async(referalId, payload) => 
     {
     try {

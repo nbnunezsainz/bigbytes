@@ -11,15 +11,18 @@ const [email, setemail] = useState('');
 const [password, setPassword] = useState('');
 const [redirectToUserData, setRedirectToUserData] = useState(false);
 const { register, setError } = useAuth();
+const [failedSignUp, setFailedSignUp] = useState(false);
 
 
 
 const handleEmailChange = (event) => {
   setemail(event.target.value);
+    setFailedSignUp(false);
 };
 
 const handlePasswordChange = (event) => {
     setPassword(event.target.value);
+    setFailedSignUp(false);
 };
 
 const SignUserUp = async () => {
@@ -27,9 +30,11 @@ const SignUserUp = async () => {
     
     await register(email, password);
     setRedirectToUserData(true);
+    setFailedSignUp(false);
 
   } catch (e) {
     setError("Failed to register");
+    setFailedSignUp(true);
   }
 };
 
@@ -139,6 +144,11 @@ if (redirectToUserData) {
               onChange={handlePasswordChange} 
               placeholder="Enter your password" 
           />
+             {failedSignUp &&
+                 <div className='mt-4'>
+                     <p style={{color: "red"}}>Incorrect email or password.</p>
+                 </div>
+             }
           <button className = "signup-btn" onClick={SignUserUp} type="submit">Sign Up</button>
           </div>
       </>
