@@ -347,6 +347,11 @@ const MentProfile = () => {
             <AuthNavbar />
             <div style={{ padding: "120px" }}>
                 <Card style={{ width: '100%', minHeight: '550px', display: 'flex', flexDirection: 'column', padding: '20px', borderRadius: '10px', boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.1)' }}>
+                    {/* Hard coded a profile picture */}
+                <div className="profile-picture-container">
+                                            <img src={"https://www.research.fsu.edu/media/6334/rma_logo.png"} alt="Profile" className="profile-picture" />
+                                        </div>
+                                        {/* Input Fields  */}
                     <Container style={{ flex: '1', display: 'flex', flexDirection: 'column' , alignItems: 'center'}}>
                         {editFields ? (
                             <>
@@ -366,16 +371,21 @@ const MentProfile = () => {
                             <>
                                 <Row>
                                     <Col>
+                                     {/* header for Name   */}
                                         <h1 className='mt-4 mb-2' style={{
                                             fontSize: '24px',
                                             fontWeight: 'bold',
                                             color: '#333'
                                         }}>{mentor.FirstName} {mentor.LastName}</h1>
+                                        {/* Mentor */}
                                         <h5 className="mb-1" style={{color: '#666'}}>Mentor</h5>
+                                        {/* Company*/}
                                         <h6 className='' style={{color: '#888'}}>{mentor.Company}</h6>
-                                        <a href={mentor.LinkedIn} target="_blank"
-                                           rel="noopener noreferrer" style={{color: '#007bff', textDecoration: 'none'}}>View LinkedIn</a>
-                                            <p className='mt-4' style={{
+                                        {/* Linked in  */}
+                                        <a href={mentor.LinkedIn} target="_blank" rel="noopener noreferrer" className="linkedin-link">
+                                     {/* No content I want the picture to represent */} </a>
+                                            {/* Bio */}
+                                            <p className='bio' style={{
                                                 fontSize: '16px',
                                                 lineHeight: '1.5',
                                                 color: '#555'
