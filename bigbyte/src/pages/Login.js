@@ -22,8 +22,7 @@ export default function Login() {
     //   }, [currentUser]);
     
    const handleLogin2 = async () =>{
-        
-    
+
         try {
           //setError("");
           //setLoading(true);
