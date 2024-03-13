@@ -97,10 +97,12 @@ exports.getAllInternships = async (req = null, res = null) => {
 
     let internshipData = {};
 
+    console.log(res, "res2");
     data.forEach(internship => {
       internshipData[internship.id] = internship.data();
     });
 
+    console.log(res, "res");
     if (res != null) {
       res.status(200).json({ success: true, message: 'Internship has been found', internshipData: internshipData });
     }
