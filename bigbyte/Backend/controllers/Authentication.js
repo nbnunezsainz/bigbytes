@@ -157,7 +157,6 @@ exports.CreateDetailsAboutMentor = async (req, res) => {
       Bio: mentorData.bio || null,
       LinkedIn: mentorData.linkedIn || null,
       Industry: mentorData.industry,
-
       uid: req.user.uid,
       UserStatus: req.body.UserStatus
     };

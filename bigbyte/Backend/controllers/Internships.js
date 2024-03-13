@@ -180,15 +180,27 @@ const cleanQuery = (query) => {
 // find and return an internship dictionary that relates their ID to thier data
 exports.getInternship = async (req, res) => {
   try {
-    let internshipID = req.body.id;
-    const internship = await getDocument(InternshipRef, internshipID);
+    //MentorID
+    //Get all Intenrships that relate to Mentor
+    const userID = req.user.uid;
 
-    console.log("Success- internship received!");
-    res.status(200).json({ success: true, message: 'Internship received successfully' });
-    return internship;
+    const MentorInternships = await InternshipRef.where('MentorID', '==', userID).get(); 
+    const internships = [];
 
+    // Iterate over the documents in the snapshot
+    MentorInternships.forEach(doc => {
+        const data = doc.data();
+        // Construct the internship object with relevant data
+        const internship = {
+            id: doc.id, // Document ID
+            data:data,// Other fields...
+        };
+        internships.push(internship); // Push the internship object to the array
+    });
+
+   
   } catch (error) {
-    console.log("RAN INTO PROBLEM LOOKING FOR INTERNSHIP", error);
+    
     res.status(500).json({ success: false, message: 'Error when getting internship' });
   }
 };
