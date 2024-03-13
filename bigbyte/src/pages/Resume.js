@@ -8,18 +8,7 @@ import auth from "../fb.js";
 import Confetti from 'react-dom-confetti';
 import Footer from './Footer';
 
-// export default function Resume() {
-//     return (
-//         <div className="resume_form">
-//             <center>
-//                 <form>
-//                     <label htmlFor="file">Upload Your Resume:</label>
-//                     <input type="file" id="file" />
-//                 </form>
-//             </center>
-//         </div>
-//     );
-// }
+
 export default function Resume() {
     const [resumeFile, setResumeFile] = useState(null);
     const [showConfetti, setShowConfetti] = useState(false);
