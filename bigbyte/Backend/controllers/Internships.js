@@ -198,6 +198,8 @@ exports.getInternship = async (req, res) => {
         internships.push(internship); // Push the internship object to the array
     });
 
+    res.status(200).json({message:"Resumes Found", internships:internships})
+
    
   } catch (error) {
     
