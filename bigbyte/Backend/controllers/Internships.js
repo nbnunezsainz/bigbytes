@@ -78,7 +78,7 @@ exports.requestReferal = async (req, res) => {
     Resume: student.Resume || '',
     message: `Referral request for your internship: ${internshipDoc.data().Title}`,
     status: "pending",
-    internshipID: internshipID 
+    internshipID: internshipID
   };
 
 
@@ -93,11 +93,10 @@ exports.requestReferal = async (req, res) => {
 
 }
 
-exports.getAllInternshipsRelatedToAMentor = async (req,res) =>
-{
+exports.getAllInternshipsRelatedToAMentor = async (req, res) => {
   const mentorID = req.user.uid;
 
-try {
+  try {
     // Query the Internship collection to get all internships where MentorID equals mentorID
     const internshipSnapshot = await InternshipRef.where('MentorID', '==', mentorID).get();
 
@@ -106,20 +105,20 @@ try {
 
     // Iterate over the documents in the snapshot
     internshipSnapshot.forEach(doc => {
-        // Get the data of each document and push it to the internshipData array
-        internshipData.push({
-            id: doc.id, // Document ID
-            data: doc.data() // Other fields...
-        });
+      // Get the data of each document and push it to the internshipData array
+      internshipData.push({
+        id: doc.id, // Document ID
+        data: doc.data() // Other fields...
+      });
     });
-    res.status(200).json({ success: true, internshipData:internshipData });
-    
-  //get mentorID, have it query all interships related to a mentr
-}
-catch
-{
-  res.status(500).json({ success: false, message: 'Error querying internships' });
-}
+    res.status(200).json({ success: true, internshipData: internshipData });
+
+    //get mentorID, have it query all interships related to a mentr
+  }
+  catch
+  {
+    res.status(500).json({ success: false, message: 'Error querying internships' });
+  }
 }
 //query ALL Internships based on a specific field, filtering technique, and target value --> returns dictionary of ALL internship IDs to their data
 exports.getAllInternships = async (req = null, res = null) => {
@@ -131,7 +130,6 @@ exports.getAllInternships = async (req = null, res = null) => {
     data.forEach(internship => {
       if (internship.data().Status === "Open for Applications") {
         internshipData[internship.id] = internship.data();
-        console.log(internship.data(),"backedn testing");
       }
 
     });
@@ -251,12 +249,9 @@ exports.deleteInternship = async (req, res) => {
     const InternshipID = req.query.referalId;
     //let MentorNotificationCollectionsID = req.body.referalId;
 
-    console.log(req.query.referalId,"body22");
 
-
- 
-  //   const MentorNotifcation = await MentorNotificationsRef.doc(MentorNotificationCollectionsID).get();
-  //  let  internshipID=MentorNotifcation.data().internshipID;
+    //   const MentorNotifcation = await MentorNotificationsRef.doc(MentorNotificationCollectionsID).get();
+    //  let  internshipID=MentorNotifcation.data().internshipID;
 
 
 
