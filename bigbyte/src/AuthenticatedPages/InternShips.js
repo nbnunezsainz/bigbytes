@@ -212,9 +212,9 @@ const JobDetail = () => {
   return (
     <>
       <AuthNavbar />
-      <Container fluid className="mt-5">
-        <Row>
-          <Col md={3}>
+      <Container fluid >
+        <Row  className ="mx-2">
+          <Col xs={12}  className="mb-5">
             {/* Filter Section */}
             <h5>Filters</h5>
             <Form>
@@ -298,16 +298,16 @@ const JobDetail = () => {
               {<Button variant="secondary" onClick={resetFilters}> Reset Filters</Button>}
             </Form>
           </Col>
-          <Col md={9}>
+          <Col sm={12}>
             {/* Job Listing Section */}
-            <Row>
+            <Row sm={12}>
               {Object.entries(jobs).map(([internshipID, job]) => (
                 <Col md={12} key={internshipID}>
                   <Card className="mb-3">
                     <Card.Body>
                       <Card.Title>{job.title}</Card.Title>
                       <Card.Text><strong>Company:</strong> {job.Company}</Card.Text>
-                      <Card.Text><strong>Date Posted:</strong> {job.datePosted}</Card.Text>
+        
                       <Card.Text>{job.Description}</Card.Text>
                       <Button variant="primary" value={internshipID} onClick={handleReferal}>Apply</Button>
                       <ToastContainer />
