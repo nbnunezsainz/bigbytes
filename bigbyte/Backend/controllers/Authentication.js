@@ -111,6 +111,44 @@ exports.DetermineuserType = async (req, res, next) => {
   res.status(200).json({ user: "student" });
 }
 
+exports.IsStudent = async (req, res, next) => {
+  let userID = req.user.uid;
+  try
+  {
+    let doc= await UserRef.doc(userID).get();
+    if (!doc.exists) {
+      // If the document for the user doesn't exist in the student collection
+      return res.status(500).json({ message: "Not a Student" });
+  }
+  next();
+  }
+  catch
+  {
+  //not a user collection check mentor
+    return res.status(500).json({ message: "Not a student" });
+  }
+  
+ next();
+}
+
+exports.IsMentor = async (req, res, next) => {
+  let userID = req.user.uid;
+  try {
+    let doc2 = await MentorRef.doc(userID).get();
+    if (!doc2.exists) {
+        // If the document for the user doesn't exist in the MentorRef collection
+        return res.status(500).json({ message: "Not a Mentor" });
+    }
+    next();
+} catch(error) {
+    // Handle specific error types
+    console.error("Error checking mentor status:", error);
+    return res.status(500).json({ message: "Internal Server Error" });
+}
+
+
+}
+
 exports.CreateDetailsAboutMentor = async (req, res) => {
   try {
     const mentorData = req.body

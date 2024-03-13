@@ -133,7 +133,7 @@ exports.getUserAndResume = async (req, res, next) => {
         // req.UserResume = URL;
         next();
     }
-    res.status(200).json({ success: true, user: user });
+    //res.status(200).json({ success: true, user: user });
 
 };
 

@@ -5,6 +5,7 @@ import auth from "../fb.js";
 import { Form, FormControl } from 'react-bootstrap';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import Confetti from 'react-dom-confetti';
 
 
 const JobDetail = () => {
@@ -18,6 +19,7 @@ const JobDetail = () => {
   const [allCompany, setCompany] = useState('');
   const [allLocations, setAllLocations] = useState(new Set());
   const [allCategory, setCategory] = useState(new Set());
+  
 
 
   const [selectedCategory, setSelectedCategory] = useState('');
@@ -185,16 +187,18 @@ const JobDetail = () => {
     const internshipID = event.target.value;
     try {
       const response = await fetch(`http://localhost:3001/api/v1/internship/RequestReferal?internshipID=${internshipID}`, payloadHeader);
-      console.log(response, "response");
+      console.log(response, "response please");
       if (!response.ok) {
         toast.error('Resume does not exist. Please create one before proceeding.');
       }
+      toast.success('you have succesfully requested a referal!');
 
     } catch (error) {
       console.error('Error requesting referral:', error);
       // Handle error
     }
   };
+
 
   useEffect(() => {
     // Define the asynchronous function inside the useEffect hook
@@ -212,6 +216,7 @@ const JobDetail = () => {
   return (
     <>
       <AuthNavbar />
+      
       <Container fluid style={{ marginTop: '70px' }}>
         <Row  className ="mx-2">
           <Col xs={12}  className="mb-5">
@@ -252,8 +257,7 @@ const JobDetail = () => {
                     </option>
                   ))}
 
-                  console.log(setSelectedCategory)
-
+                
                 </Form.Control>
               </Form.Group>
 
@@ -293,7 +297,7 @@ const JobDetail = () => {
                 </Form.Control>
 
               </Form.Group>
-
+              
               {<Button className="me-2" variant="primary" onClick={applyFilters}>Apply Filters</Button>}
               {<Button variant="secondary" onClick={resetFilters}> Reset Filters</Button>}
             </Form>
@@ -321,6 +325,7 @@ const JobDetail = () => {
           </Col>
         </Row>
       </Container>
+   
     </>
   );
 };
