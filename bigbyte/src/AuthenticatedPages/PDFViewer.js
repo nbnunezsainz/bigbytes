@@ -77,11 +77,13 @@ function ResumeViewer({sendDataToParent, resumeUrl, resumeUID, resumeComments}) 
                  Comments
                 </Button>
                      </Row>
-                {/* this allows us to show the comment section */}
+                {/* Comment Section */}
             {showComments && currentResumeUID === resumeUID && (
                 <Card className="comments-section">
                     <Card.Body>
-                        <h5 className="mb-3">Comments</h5>
+                        <h5 className="label">Comments</h5>
+                        {/* Divider */}
+                        <div className="divider"></div>
                         {resumeComments && resumeComments.length > 0 ? (
                             resumeComments.map((resComment, index) => (
                                 <div key={index} className="mb-2">

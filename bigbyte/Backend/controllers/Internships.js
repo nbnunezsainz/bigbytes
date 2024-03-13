@@ -1,7 +1,7 @@
 const { getFirestore, Timestamp, FieldValue, Filter, collection, getDocs } = require('firebase-admin/firestore');
 const { db, admin } = require('../FireBaseSetUp.js');
 const Constants = require('./databaseConstant.js');
-const { getDocument, filterHelper } = require('./databaseFunctions.js');
+const { getDocument, filterHelper, queryCollection } = require('./databaseFunctions.js');
 const { query } = require('express');
 
 // create and initialize a database reference to the "Internship" collection
@@ -57,13 +57,12 @@ exports.requestReferal = async (req, res) => {
 
   const internshipDoc = await InternshipRef.doc(internshipID).get();
 
-  
+
 
   if (!internshipDoc) {
-    return res.status(500).json({message:"create a profile", resume:false})
+    return res.status(500).json({ message: "create a profile", resume: false })
   }
   const mentorID = internshipDoc.data().MentorID;
-
 
   // Create a notification document for the mentor
   const notificationData = {
@@ -85,15 +84,12 @@ exports.requestReferal = async (req, res) => {
 
   const newMentorNotificationsRef = MentorNotificationsRef.doc();
   await newMentorNotificationsRef.set(notificationData);
-  
-  let  MentorDeletesInternship = false; //only true when a mentor wants to delte the internship
-  updateInternshipData(internshipID,InternshipRef,internshipDoc.data(), MentorDeletesInternship);
+
+  let MentorDeletesInternship = false; //only true when a mentor wants to delte the internship
+  updateInternshipData(internshipID, InternshipRef, internshipDoc.data(), MentorDeletesInternship);
   updateUserData(student.userID);
 
-
-  //After this we want to update internship, and a users ReferalCount
-  
-  res.status(200).json({sucess:"sucess"})
+  res.status(200).json({ sucess: "sucess" })
 
 }
 
@@ -133,12 +129,11 @@ exports.getAllInternships = async (req = null, res = null) => {
     let internshipData = {};
 
     data.forEach(internship => {
-      if(internship.data().Status ==="Open for Applications")
-      {
+      if (internship.data().Status === "Open for Applications") {
         internshipData[internship.id] = internship.data();
         console.log(internship.data(),"backedn testing");
       }
-      
+
     });
     if (res != null) {
       res.status(200).json({ success: true, message: 'Internship has been found', internshipData: internshipData });
@@ -158,20 +153,21 @@ ALL parameters of query should be passed (Company, Category, Pay, Location). Emp
 
 Please refer to the project structure document for the field, filter, and target restrictions
 */
-exports.queryInternships = async (req, res) => {
+exports.queryInternships = async (req, res = null) => {
   try {
     let queryDict = {};
     let paramList = cleanQuery(req.query);
     const keyNames = Object.keys(paramList);
 
     if (keyNames.length == 0) {
-      console.log("no params")
       queryDict = await this.getAllInternships();
     } else {
       queryDict = await filterHelper(InternshipRef, paramList);
     }
 
-    res.status(200).json({ success: true, message: 'Internships have been found', internshipData: queryDict });
+    if (res != null) {
+      res.status(200).json({ success: true, message: 'Internships have been found', internshipData: queryDict });
+    }
     return queryDict;
 
   } catch (error) {
@@ -221,28 +217,28 @@ exports.getInternship = async (req, res) => {
     //Get all Intenrships that relate to Mentor
     const userID = req.user.uid;
 
-    const MentorInternships = await InternshipRef.where('MentorID', '==', userID).get(); 
+    const MentorInternships = await InternshipRef.where('MentorID', '==', userID).get();
     const internships = [];
 
     // Iterate over the documents in the snapshot
     MentorInternships.forEach(doc => {
-        const data = doc.data();
-        // Construct the internship object with relevant data
-        if(data.Status ==="Open for Applications")
-        {
+
+      const data = doc.data();
+      // Construct the internship object with relevant data
+      if (data.Status === "Open for Applications") {
         const internship = {
-            id: doc.id, // Document ID
-            data:data,// Other fields...
+          id: doc.id, // Document ID
+          data: data,// Other fields...
         };
         internships.push(internship); // Push the internship object to the array
       }
     });
 
-    res.status(200).json({message:"Internships Found", internships:internships})
+    res.status(200).json({ message: "Internships Found", internships: internships })
 
-   
+
   } catch (error) {
-    
+
     res.status(500).json({ success: false, message: 'Error when getting internship' });
   }
 };
@@ -269,11 +265,11 @@ exports.deleteInternship = async (req, res) => {
     let internshipData = await getDocument(InternshipRef, InternshipID);
     internshipData = internshipData[InternshipID];
 
-    let MentorDeletesInternship= true;
-    updateInternshipData(InternshipID,InternshipRef,internshipData,MentorDeletesInternship);
+
+    let MentorDeletesInternship = true;
+    updateInternshipData(internshipID, InternshipRef, internshipData, MentorDeletesInternship);
 
     //const result = await deleteDocument(InternshipRef, internshipID);
-    console.log("Success- internship deleted!");
     res.status(200).json({ success: true, message: 'Internship deleted successfully' });
   } catch (error) {
     console.log("There was some error when deleting internship", error);
@@ -282,44 +278,42 @@ exports.deleteInternship = async (req, res) => {
 };
 
 
-const updateInternshipData = async (internshipID, InternshipRef, internshipData,MentorDeletesInternship) => {
+const updateInternshipData = async (internshipID, InternshipRef, internshipData, MentorDeletesInternship) => {
   try {
-      // gather and update internship information
-      const internship = InternshipRef.doc(internshipID);
-      let appCount = internshipData.ApplicationCounter + 1;
-      let newStatus = internshipData.Status;
-      let newDisplay = internshipData.Display;
-      if (appCount >= internshipData.RefferalLimit || MentorDeletesInternship==true) {
-          newStatus = Constants.INTERNSHIP_STATUS_REVIEW;
-          newDisplay = false;
+    // gather and update internship information
+    const internship = InternshipRef.doc(internshipID);
+    let appCount = internshipData.ApplicationCounter + 1;
+    let newStatus = internshipData.Status;
+    let newDisplay = internshipData.Display;
+    if (appCount >= internshipData.RefferalLimit || MentorDeletesInternship == true) {
+      newStatus = Constants.INTERNSHIP_STATUS_REVIEW;
+      newDisplay = false;
+    }
+    await internship.update(
+      {
+        ApplicationCounter: appCount,
+        Status: newStatus,
+        Display: newDisplay
       }
-      await internship.update(
-          {
-              ApplicationCounter: appCount,
-              Status: newStatus,
-              Display: newDisplay
-          }
-      );
-      console.log("Internship data is updated after application was submitted");
+    );
   } catch (error) {
-      console.log("There was some error when updating internship data", error);
+    console.log("There was some error when updating internship data", error);
   }
 };
 
 const updateUserData = async (userID) => {
   try {
-      // gather and update user information
-      const user = UserRef.doc(userID);
-      let userData = (await user.get()).data();
-      await user.update(
-          {
-              MonthlyRefferalCount: userData.MonthlyRefferalCount - 1,
-              TotalRefferalCount: userData.TotalRefferalCount + 1
-          }
-      );
-      console.log("User data is updated after application was submitted");
+    // gather and update user information
+    const user = UserRef.doc(userID);
+    let userData = (await user.get()).data();
+    await user.update(
+      {
+        MonthlyRefferalCount: userData.MonthlyRefferalCount - 1,
+        TotalRefferalCount: userData.TotalRefferalCount + 1
+      }
+    );
   } catch (error) {
-      console.log("There was some error when updating user data", error);
+    console.log("There was some error when updating user data", error);
   }
 };
 

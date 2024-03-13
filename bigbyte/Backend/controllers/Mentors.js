@@ -1,7 +1,7 @@
 const { getFirestore, Timestamp, FieldValue, Filter } = require('firebase-admin/firestore');
 const { db, admin } = require('../FireBaseSetUp.js');
 const Constants = require('./databaseConstant.js');
-const { filterHelper, getDocument } = require('./databaseFunctions.js');
+const { filterHelper, getDocument, queryCollection } = require('./databaseFunctions.js');
 const { addInternship } = require('./Internships.js');
 
 // create and initialize a database reference to the "Internship" collection
@@ -28,7 +28,6 @@ exports.addMentor = async (data, res = null) => {
     const mentorID = data.uid;
     await MentorRef.doc(mentorID).set(data);
 
-    console.log("Success- a new mentor has been added!");
     //res.status(200).json({ success: true, message: 'Mentor added successfully' });
   } catch (error) {
     console.log("There was some error when adding mentor", error);
@@ -48,7 +47,6 @@ exports.queryMentors = async (req, res) => {
     const keyNames = Object.keys(paramList);
 
     if (keyNames.length == 0) {
-      console.log("no params rn")
       queryDict = await this.getAllMentors();
     } else {
       queryDict = await filterHelper(MentorRef, paramList);
@@ -91,7 +89,7 @@ const cleanQuery = (query) => {
 
 exports.CheckReferals = async (req, res) => {
   try {
-    
+
     const mentorID = req.user.uid;
     const mentorNotificationsSnapshot = await MentorNotificationsRef.where('mentorID', '==', mentorID).get();
 
@@ -165,7 +163,6 @@ exports.deleteMentor = async (req, res) => {
     let mentorID = req.body.id;
 
     //const result = await deleteDocument(MentorRef, mentorID);
-    console.log("Success- mentor deleted!");
     res.status(200).json({ success: true, message: 'Mentor deleted successfully' });
   } catch (error) {
     console.log("There was some error when deleting mentor", error);
@@ -214,6 +211,53 @@ exports.getMentor = async (req, res) => {
   }
 };
 
+exports.viewMentorProfile = async (req, res) => {
+  try {
+
+    //getting the mentor's information
+    let mentorID = req.query.id;
+    let mentorData = await getDocument(MentorRef, mentorID);
+
+    if (mentorData == null) {
+      res.status(500).json({ success: false, message: 'Mentor does not exist!' });
+    }
+    delete mentorData.uid;
+
+    //getitng the mentor's active internships
+    let queryParams =
+    {
+      field: "MentorID",
+      filter: "==",
+      target: mentorID
+    }
+    const InternshipRef = db.collection(Constants.COLLECTION_INTERNSHIP);
+    const internshipData = await queryCollection(InternshipRef, queryParams);
+    const internshipKeys = Object.keys(internshipData);
+    const totalInternships = internshipKeys.length;
+
+    // Iterate through each internship object
+    for (let i = 0; i < totalInternships; i++) {
+      const internshipId = internshipKeys[i];
+      const internship = internshipData[internshipId];
+
+      // Rename the key
+      delete internshipData[internshipId];
+      internshipData[i] = internship;
+
+      // Delete specified fields
+      delete internship.MentorID;
+      delete internship.Display;
+      delete internship.Status;
+      delete internship.ReferalLimit;
+      delete internship.ApplicationCounter;
+    }
+
+    res.status(200).json({ success: true, message: 'Succesfully returned mentor', mentorData: mentorData, internshipData: internshipData });
+  } catch (error) {
+    console.log("RAN INTO PROBLEM GETTING MENTOR", error);
+    res.status(500).json({ success: false, message: 'Error when getting mentor' });
+  }
+}
 //update specific mentor with new data
 exports.updateMentor = async (req, res) => {
 
@@ -270,7 +314,6 @@ exports.generateInternship = async (req, res) => {
   try {
     //await addInternship(internshipData, mentorID);
     await addInternship(req, res);
-    console.log("succesfully added a internship for this mentor in backend");
     res.status(200).json({ success: true, message: 'Internship successfully generated for mentor' });
 
   } catch (error) {
@@ -286,8 +329,6 @@ Below includes functions solely for testing. These will NOT be included
 const mentorData = require('../TestDataGeneration/testMentorData.js');
 exports.generateTestMentors = async (req, res) => {
   try {
-    console.log("The length of the test data is: " + mentorData.mentors.length);
-
     const promises = mentorData.mentors.map((mentor) => {
       console.log("Mentor ID: " + mentor.body.id);
       //return this.addMentor(mentor, "");
