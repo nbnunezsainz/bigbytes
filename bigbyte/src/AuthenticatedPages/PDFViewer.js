@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Document, Page, pdfjs } from 'react-pdf';
-import Button from 'react-bootstrap/Button';
+
+import { Container, Row, Col, Button, Card,Form } from 'react-bootstrap';
 //import { FaComment } from 'react-icons/fa'; // Assuming you're using react-icons for the comment icon
 import 'react-pdf/dist/Page/TextLayer.css';
 import 'react-pdf/dist/Page/AnnotationLayer.css';
@@ -20,9 +21,6 @@ function ResumeViewer({sendDataToParent, resumeUrl, resumeUID, resumeComments}) 
          setCurrentResumeUID(e.target.value);
     //  // This will log the value of the button (resumeUID)
      }
-     const safeResumeComments = resumeComments || [];
-
-   
     const submitComment = async() => {
         
         if (newComment.trim()) { // Avoid adding empty comments
@@ -64,42 +62,69 @@ function ResumeViewer({sendDataToParent, resumeUrl, resumeUID, resumeComments}) 
     };
 
     return (
-        <>
-            <Document 
-                file={resumeUrl}
-                
-            >
-                <Page className ="react-pdf__Page__canvas" size ="A4" pageNumber={1}  renderTextLayer = {false} renderAnnotationLayer ={false}
-        />
-            </Document>
-            <Button className='mt-2 mb-2' value={resumeUID} onClick={toggleComments}>
-    comments
-    {/* <FaComment /> Comments */}
-</Button>
-            {showComments && (
-                <div>
-                    <div>
-                        {(resumeComments || []).length > 0 ? (
-                            resumeComments.map((resComment, index) => (
-                                <div key={index}>
-                                    <p>{resComment.resumeUID} : {resComment.comment} </p>
-                                </div>
-                            ))
-                        ) : (
-                            <p>No comments yet.</p>
-                        )}
-                    </div>
-                    <div>
-                        <textarea
-                            value={newComment}
-                            onChange={(e) => setNewComment(e.target.value)}
-                            placeholder="Add a comment..."
-                        />
-                        <button onClick={submitComment}>Submit</button>
-                    </div>
-                </div>
-            )}
-        </>
+       
+        <Col >
+
+  {/* <iframe
+    src={resumeUrl}
+    loading="lazy"
+    width={900}
+    height={1000}
+    style={{
+      border: 'none',
+      marginBottom: '20px', // Add some space below the iframe
+    }}
+     */}
+  <Row> 
+  <Document file={resumeUrl}>
+  <Page pageNumber={1} width={900} />
+</Document>
+</Row>
+
+<Row style= {{ marginBottom: '200px' }}> 
+
+<Col sm={6}> 
+
+  <Button value={resumeUID} onClick={toggleComments} variant="outline-primary" className="mb-3">
+    Comments
+  </Button>
+  </Col>
+  
+
+
+
+  {showComments && (
+    <Card>
+      <Card.Body>
+        <h5 className="mb-3">Comments</h5>
+        {resumeComments && resumeComments.length > 0 ? (
+          resumeComments.map((resComment, index) => (
+            <div key={index} className="mb-2">
+              <strong>{resComment.comment} </strong> 
+            </div>
+          ))
+        ) : (
+          <p>No comments yet.</p>
+        )}
+        <Form.Group className="mb-3">
+          <Form.Control
+            as="textarea"
+            rows={3}
+            value={newComment}
+            onChange={(e) => setNewComment(e.target.value)}
+            placeholder="Add a comment..."
+          />
+        </Form.Group>
+        <Button onClick={submitComment} variant="primary">
+          Submit
+        </Button>
+      </Card.Body>
+      
+    </Card>
+    
+  )}
+    </Row>
+</Col>
     );
 }
 

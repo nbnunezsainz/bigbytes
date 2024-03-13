@@ -50,7 +50,7 @@ const ResumeReviewer = () => {
          
     }, [submitted]);
 
-    // console.log(resumes, "resume data is here");
+    console.log(resumes, "resume data is here");
     return (
         <>
             <AuthNavbar />
@@ -60,8 +60,9 @@ const ResumeReviewer = () => {
                     {resumes.length > 0 ? (
                         resumes.map((resume, index) => (
                             <div key={index}>
-                                <h2>User: {resume.userID}</h2>
+                               <Container style= {{ marginBottom: '100px' }}>  
                                 <PDFViewer sendDataToParent={handleDataFromChild} resumeUrl={resume.URL} resumeUID= {resume.userID} resumeComments = {resume.comments}/>
+                               </Container>
                             </div>
                         ))
                     ) : (
