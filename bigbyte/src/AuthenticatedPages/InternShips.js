@@ -305,9 +305,11 @@ const JobDetail = () => {
                 <Col md={12} key={internshipID}>
                   <Card className="mb-3">
                     <Card.Body>
-                      <Card.Title>{job.title}</Card.Title>
+                      <Card.Title>{job.Title}</Card.Title>
+                      
+
                       <Card.Text><strong>Company:</strong> {job.Company}</Card.Text>
-        
+                      <Card.Text><strong>Location:</strong> {job.Location}</Card.Text>
                       <Card.Text>{job.Description}</Card.Text>
                       <Button variant="primary" value={internshipID} onClick={handleReferal}>Apply</Button>
                       <ToastContainer />
