@@ -77,7 +77,6 @@ req must contain the following:
 */
 exports.uploadResume = async (req, res) => {
     try {
-        console.log("upload?")
         let pathName = Constants.STORAGE_RESUME + req.user.uid;
         const resumeStorageRef = ref(storage, pathName);
         const metadata = {

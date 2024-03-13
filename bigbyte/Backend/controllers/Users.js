@@ -127,10 +127,6 @@ exports.getUserAndResume = async (req, res, next) => {
      return res.status(500).json({message:" Upload a resume first before requesting a referal", resume:false});
 
     }
-
-  
-
-
     //const user = await getDocument(UserRef, userID); cant use this because dont want to send USer UID back, secuirty hazard
     let user;
     const doc = await UserRef.doc(userID).get();
