@@ -6,18 +6,23 @@ const MentorController = require('../controllers/Mentors');
 const AuthenticationController = require("../controllers/Authentication");
 
 // AUTHENTICATION ROUTES
-router.route('/MentorDetails').post(AuthenticationController.verifyToken, AuthenticationController.CreateDetailsAboutMentor);
+router.route('/MentorDetails').post(AuthenticationController.IsMentor,AuthenticationController.verifyToken, AuthenticationController.CreateDetailsAboutMentor);
 
 // Mentor routes
 router.route('/AddMentor').post(MentorController.addMentor);
-router.route('/QueryMentors').get(AuthenticationController.verifyToken, MentorController.queryMentors);
-router.route('/GetAllMentors').get(AuthenticationController.verifyToken, MentorController.getAllMentors);
-router.route('/DeleteMentor').delete(MentorController.deleteMentor);
-router.route('/GetMentor').get(AuthenticationController.verifyToken, MentorController.getMentor);
-router.route('/GetMentorProfile').get(AuthenticationController.verifyToken, MentorController.getMentorProfile);
-router.route('/UpdateMentor').patch(AuthenticationController.verifyToken, MentorController.updateMentor);
-router.route('/GenerateInternship').post(MentorController.generateInternship);
-router.route('/RequestedReferals').get(AuthenticationController.verifyToken, MentorController.CheckReferals);
+
+router.route('/QueryMentors').get( MentorController.queryMentors);
+router.route('/GetAllMentors').get(MentorController.getAllMentors);
+
+router.route('/DeleteMentor').delete(AuthenticationController.verifyToken, AuthenticationController.IsMentor, MentorController.deleteMentor);
+
+router.route('/GetMentor').get(AuthenticationController.verifyToken, AuthenticationController.IsMentor,MentorController.getMentor);
+
+router.route('/GetMentorProfile').get(AuthenticationController.verifyToken,AuthenticationController.IsMentor ,MentorController.getMentorProfile);
+
+router.route('/UpdateMentor').patch(AuthenticationController.verifyToken, AuthenticationController.IsMentor,MentorController.updateMentor);
+// router.route('/GenerateInternship').post(AuthenticationController.IsMentor, MentorController.generateInternship);
+router.route('/RequestedReferals').get(AuthenticationController.verifyToken,AuthenticationController.IsMentor, MentorController.CheckReferals);
 
 router.route('/UpdateRefStatus').patch(AuthenticationController.verifyToken, MentorController.UpdateReferalStatus);
 

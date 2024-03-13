@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Button, Card, Container, Form, Row, Col } from 'react-bootstrap';
 import AuthNavbar from './AuthenticatedNavBar';
 import auth from "../fb.js";
+import {Navigate } from 'react-router-dom';
 
 import "../Styling/MentorProfile.css"
 
@@ -11,7 +12,8 @@ const MentProfile = () => {
     const [mentor, setMentor] = useState([]);
     const [editFields, setEditFields] = useState(false);
     const [referals, setReferals] = useState([]);
-    const [viewReferals, setViewReferals] = useState(false)
+    const [viewReferals, setViewReferals] = useState(false);
+    const [IsMentor,setIsMentor]  = useState(true);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -27,8 +29,10 @@ const MentProfile = () => {
                 };
 
                 const response = await fetch('http://localhost:3001/api/v1/mentor/GetMentor', payloadHeader);
+                console.log(response, "response");
                 if (!response.ok) {
-                    throw new Error('Failed to fetch');
+                    setIsMentor(false);
+                   
                 }
 
                 const data = await response.json();
@@ -41,6 +45,8 @@ const MentProfile = () => {
             } finally {
                 setLoading(false);
             }
+            
+           
           
           // load referrals
           const user = auth.currentUser;
@@ -54,19 +60,25 @@ const MentProfile = () => {
           };
 
           const response = await fetch('http://localhost:3001/api/v1/mentor/RequestedReferals', payloadHeader);
+          console.log(response.message, "response")
           if (!response.ok) {
-              throw new Error('Failed to fetch');
+            setIsMentor(false);
           }
 
           const data = await response.json();
           setReferals(data);
-          console.log(data, "data");
+          
         };
         
 
         fetchData();
         
     }, []);
+
+    if(!IsMentor)
+            {
+                return <Navigate to ="/Intenrships"></Navigate>
+            }
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -95,8 +107,8 @@ const MentProfile = () => {
             };
 
             const response = await fetch('http://localhost:3001/api/v1/mentor/UpdateMentor', payloadHeader);
-            if (!response.ok) {
-                throw new Error('Failed to fetch');
+            if (!IsMentor) {
+                return <Navigate to ="/"></Navigate>
             }
 
             const data = await response.json();
