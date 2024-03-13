@@ -7,10 +7,12 @@ const { addInternship } = require('./Internships.js');
 // create and initialize a database reference to the "Internship" collection
 const MentorRef = db.collection(Constants.COLLECTION_MENTORS);
 const MentorNotificationsRef = db.collection(Constants.COLLECTION_MENTORS_NOTIFICATIONS);
+
+
 //add a Mentor --> takes mentorData in json format (FirstName: John, LastName: Smith)
-exports.addMentor = async (req, res) => {
+exports.addMentor = async (data, res = null) => {
   try {
-    const mentorData = req.body;
+    /*const mentorData = req.body;
     const mentorID = req.body.id;
 
     const data = {
@@ -22,14 +24,15 @@ exports.addMentor = async (req, res) => {
       LinkedIn: mentorData.linkedIn || null,
       Industry: mentorData.industry
     };
-
+    */
+    const mentorID = data.uid;
     await MentorRef.doc(mentorID).set(data);
 
     console.log("Success- a new mentor has been added!");
-    res.status(200).json({ success: true, message: 'Mentor added successfully' });
+    //res.status(200).json({ success: true, message: 'Mentor added successfully' });
   } catch (error) {
     console.log("There was some error when adding mentor", error);
-    res.status(500).json({ success: false, message: 'Error adding mentor' });
+    //res.status(500).json({ success: false, message: 'Error adding mentor' });
   }
 }
 
@@ -45,7 +48,8 @@ exports.queryMentors = async (req, res) => {
     const keyNames = Object.keys(paramList);
 
     if (keyNames.length == 0) {
-      queryDict = this.getAllMentors(req, res);
+      console.log("no params rn")
+      queryDict = await this.getAllMentors();
     } else {
       queryDict = await filterHelper(MentorRef, paramList);
     }
@@ -84,6 +88,7 @@ const cleanQuery = (query) => {
   });
   return updatedQuery;
 }
+
 exports.CheckReferals = async (req, res) => {
   try {
     const mentorID = req.user.uid;
@@ -97,16 +102,16 @@ exports.CheckReferals = async (req, res) => {
     // Array to store notifications
     const notifications = [];
 
-  
+
     // Iterate over each notification document and add it to the notifications array
     mentorNotificationsSnapshot.forEach(doc => {
       const docId = doc.id;
       // Get document data using doc.data()
       const docData = doc.data();
-      
+
       notifications.push({ id: docId, data: docData });
-  });
-   
+    });
+
 
     console.log(notifications, "notify");
     res.status(200).json({ success: true, notifications: notifications });
@@ -130,7 +135,7 @@ exports.UpdateReferalStatus = async (req, res) => {
     if (!referralDoc.exists) {
       return res.status(404).json({ message: 'Referral not found' });
     }
-   
+
     await referralDocRef.update({ status });
 
     // Array to store notifications
@@ -144,7 +149,7 @@ exports.UpdateReferalStatus = async (req, res) => {
     // });
 
 
-    res.status(200).json({ success: true, message: "updated referal status"});
+    res.status(200).json({ success: true, message: "updated referal status" });
   }
   catch (error) {
     console.error('Error fetching mentor notifications:', error);
@@ -229,7 +234,7 @@ exports.updateMentor = async (req, res) => {
   }
 }
 //get all Mentors
-exports.getAllMentors = async (req, res) => {
+exports.getAllMentors = async (req = null, res = null) => {
   try {
 
     let mentors = [];
@@ -246,13 +251,17 @@ exports.getAllMentors = async (req, res) => {
         mentorData.push({ id: doc.id, ...doc.data() });
       });
 
-      res.status(200).json({ success: true, message: 'Mentorship has been found', mentorData: mentorData });
+      if (res != null) {
+        res.status(200).json({ success: true, message: 'Mentorship has been found', mentorData: mentorData });
+      }
       return mentorData;
     }
 
   } catch (error) {
-    console.log("RAN INTO PROBLEM QUERYING INTERNSHIPS", error);
-    res.status(500).json({ success: false, message: 'Error querying internships' });
+    console.log("RAN INTO PROBLEM FINDING ALL MENTORS", error);
+    if (res != null) {
+      res.status(500).json({ success: false, message: 'Error finding mentor' });
+    }
   }
 }
 
