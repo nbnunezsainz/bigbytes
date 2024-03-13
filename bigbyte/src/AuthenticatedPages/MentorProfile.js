@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Button, Card, Container, Form, Row, Col } from 'react-bootstrap';
 import { Navigate } from 'react-router-dom';
 import AuthNavbar from './AuthenticatedNavBar';
-// import ViewResume from './ViewResume';
+import ViewResume from './ViewResume';
 import auth from "../fb.js";
 
 import "../Styling/MentorProfile.css"
@@ -117,11 +117,12 @@ const MentProfile = () => {
         return <div>Loading...</div>;
     }
 
+
     const handleResume = async(index) => {
       const resumeUrl = referals.notifications[index].data.Resume;
        window.open(resumeUrl, '_blank');
     }
-
+    
     const FetchUpdate = async(referalId, payload) => 
     {
     try {
@@ -159,7 +160,7 @@ const MentProfile = () => {
 
         await FetchUpdate(referalId, payload)
 
-        // load referrals
+        // reload referrals
         const user = auth.currentUser;
         const token = user && (await user.getIdToken());
 
@@ -193,7 +194,7 @@ const MentProfile = () => {
     await FetchUpdate(referalId, payload);
       // MAKE BACKEND REQUEST FOR REF STATUS = DECLINE
 
-      // load referrals
+      // reload referrals
       const user = auth.currentUser;
       const token = user && (await user.getIdToken());
 
@@ -218,7 +219,7 @@ const MentProfile = () => {
         <>
             <AuthNavbar />
             <div style={{ padding: "120px" }}>
-                <Card style={{ width: '100%', display: 'flex', flexDirection: 'column', padding: '20px', borderRadius: '10px', boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.1)' }}>
+                <Card style={{ width: '100%', minHeight: '550px', display: 'flex', flexDirection: 'column', padding: '20px', borderRadius: '10px', boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.1)' }}>
                     <Container style={{ flex: '1', display: 'flex', flexDirection: 'column' , alignItems: 'center'}}>
                         {editFields ? (
                             <>
@@ -296,7 +297,7 @@ const MentProfile = () => {
                               )
                           ))
                       ) : (
-                          <h3>Loading referrals or no referrals currently</h3>
+                          <h3>Loading referrals or no pending referrals currently</h3>
                       )
                   )}
               </div>
