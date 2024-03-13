@@ -27,8 +27,6 @@ exports.SignUp = async (req, res, next) => {
     password: password
   });
 
-  console.log(req.body, "info");
-  console.log(userRecord, "userRecord");
   const frontendRedirectUrl = '/UserData';
   if (userRecord) {
     const customToken = await admin.auth().createCustomToken(userRecord.uid);
@@ -107,24 +105,22 @@ exports.DetermineuserType = async (req, res, next) => {
     return;
 
   }
-  console.log("here");
   res.status(200).json({ user: "student" });
 }
 
 exports.IsStudent = async (req, res, next) => {
   let userID = req.user.uid;
-  try
-  {
-    let doc= await UserRef.doc(userID).get();
+  try {
+    let doc = await UserRef.doc(userID).get();
     if (!doc.exists) {
       // If the document for the user doesn't exist in the student collection
       return res.status(500).json({ message: "Not a Student" });
-  }
-  next();
+    }
+    next();
   }
   catch
   {
-  //not a user collection check mentor
+    //not a user collection check mentor
     return res.status(500).json({ message: "Not a student" });
   }
 }
@@ -134,15 +130,15 @@ exports.IsMentor = async (req, res, next) => {
   try {
     let doc2 = await MentorRef.doc(userID).get();
     if (!doc2.exists) {
-        // If the document for the user doesn't exist in the MentorRef collection
-        return res.status(500).json({ message: "Not a Mentor" });
+      // If the document for the user doesn't exist in the MentorRef collection
+      return res.status(500).json({ message: "Not a Mentor" });
     }
     next();
-} catch(error) {
+  } catch (error) {
     // Handle specific error types
     console.error("Error checking mentor status:", error);
     return res.status(500).json({ message: "Internal Server Error" });
-}
+  }
 
 
 }
@@ -201,16 +197,10 @@ exports.CreateDetailsAboutUser = async (req, res) => {
 exports.Login = async (req, res, next) => {
   const { email, password } = req.body;
 
-  console.log(req.body);
-
   try {
     // Sign in the user with Firebase Authentication
     const userCredential = await signInWithEmailAndPassword(Clientauth, email, password);
-    console.log("here");
     const user = userCredential.user;
-
-
-
 
     //const customToken = await admin.auth().createCustomToken(user.uid);
 

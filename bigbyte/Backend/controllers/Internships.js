@@ -64,8 +64,6 @@ exports.requestReferal = async (req, res) => {
   }
   const mentorID = internshipDoc.data().MentorID;
 
-  console.log(mentorID, "mentor");
-  console.log(internshipDoc.data(), "doc")
   // Create a notification document for the mentor
   const notificationData = {
     mentorID: mentorID,
@@ -133,7 +131,6 @@ exports.queryInternships = async (req, res = null) => {
     const keyNames = Object.keys(paramList);
 
     if (keyNames.length == 0) {
-      console.log("no params")
       queryDict = await this.getAllInternships();
     } else {
       queryDict = await filterHelper(InternshipRef, paramList);
@@ -199,7 +196,6 @@ exports.getInternship = async (req, res) => {
       const data = doc.data();
       // Construct the internship object with relevant data
       if (data.Status === "Open for Applications") {
-        console.log("mepp");
         const internship = {
           id: doc.id, // Document ID
           data: data,// Other fields...
@@ -231,7 +227,6 @@ exports.deleteInternship = async (req, res) => {
     updateInternshipData(internshipID, InternshipRef, internshipData, MentorDeletesInternship);
 
     //const result = await deleteDocument(InternshipRef, internshipID);
-    console.log("Success- internship deleted!");
     res.status(200).json({ success: true, message: 'Internship deleted successfully' });
   } catch (error) {
     console.log("There was some error when deleting internship", error);
@@ -258,7 +253,6 @@ const updateInternshipData = async (internshipID, InternshipRef, internshipData,
         Display: newDisplay
       }
     );
-    console.log("Internship data is updated after application was submitted");
   } catch (error) {
     console.log("There was some error when updating internship data", error);
   }
@@ -275,7 +269,6 @@ const updateUserData = async (userID) => {
         TotalRefferalCount: userData.TotalRefferalCount + 1
       }
     );
-    console.log("User data is updated after application was submitted");
   } catch (error) {
     console.log("There was some error when updating user data", error);
   }

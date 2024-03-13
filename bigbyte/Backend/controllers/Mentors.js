@@ -28,7 +28,6 @@ exports.addMentor = async (data, res = null) => {
     const mentorID = data.uid;
     await MentorRef.doc(mentorID).set(data);
 
-    console.log("Success- a new mentor has been added!");
     //res.status(200).json({ success: true, message: 'Mentor added successfully' });
   } catch (error) {
     console.log("There was some error when adding mentor", error);
@@ -48,7 +47,6 @@ exports.queryMentors = async (req, res) => {
     const keyNames = Object.keys(paramList);
 
     if (keyNames.length == 0) {
-      console.log("no params rn")
       queryDict = await this.getAllMentors();
     } else {
       queryDict = await filterHelper(MentorRef, paramList);
@@ -114,7 +112,6 @@ exports.CheckReferals = async (req, res) => {
     });
 
 
-    console.log(notifications, "notify");
     res.status(200).json({ success: true, notifications: notifications });
   }
   catch (error) {
@@ -166,7 +163,6 @@ exports.deleteMentor = async (req, res) => {
     let mentorID = req.body.id;
 
     //const result = await deleteDocument(MentorRef, mentorID);
-    console.log("Success- mentor deleted!");
     res.status(200).json({ success: true, message: 'Mentor deleted successfully' });
   } catch (error) {
     console.log("There was some error when deleting mentor", error);
@@ -318,7 +314,6 @@ exports.generateInternship = async (req, res) => {
   try {
     //await addInternship(internshipData, mentorID);
     await addInternship(req, res);
-    console.log("succesfully added a internship for this mentor in backend");
     res.status(200).json({ success: true, message: 'Internship successfully generated for mentor' });
 
   } catch (error) {
@@ -334,8 +329,6 @@ Below includes functions solely for testing. These will NOT be included
 const mentorData = require('../TestDataGeneration/testMentorData.js');
 exports.generateTestMentors = async (req, res) => {
   try {
-    console.log("The length of the test data is: " + mentorData.mentors.length);
-
     const promises = mentorData.mentors.map((mentor) => {
       console.log("Mentor ID: " + mentor.body.id);
       //return this.addMentor(mentor, "");
