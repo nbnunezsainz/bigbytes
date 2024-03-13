@@ -19,7 +19,7 @@ const JobDetail = () => {
   const [allCompany, setCompany] = useState('');
   const [allLocations, setAllLocations] = useState(new Set());
   const [allCategory, setCategory] = useState(new Set());
-  
+
 
 
   const [selectedCategory, setSelectedCategory] = useState('');
@@ -85,10 +85,7 @@ const JobDetail = () => {
       }
 
       const data = await response.json();
-      console.log(data, 'data');
       setJobs(data.internshipData); // Assuming the response JSON structure matches our state
-      console.log(data.internshipData, "hod");
-
 
 
       //get all internship locations
@@ -187,7 +184,6 @@ const JobDetail = () => {
     const internshipID = event.target.value;
     try {
       const response = await fetch(`http://localhost:3001/api/v1/internship/RequestReferal?internshipID=${internshipID}`, payloadHeader);
-      console.log(response, "response please");
       if (!response.ok) {
         toast.error('Resume does not exist. Please create one before proceeding.');
       }
@@ -216,10 +212,10 @@ const JobDetail = () => {
   return (
     <>
       <AuthNavbar />
-      
+
       <Container fluid style={{ marginTop: '70px' }}>
-        <Row  className ="mx-2">
-          <Col xs={12}  className="mb-5">
+        <Row className="mx-2">
+          <Col xs={12} className="mb-5">
             {/* Filter Section */}
             <h5 s>Filters</h5>
             <Form>
@@ -257,7 +253,7 @@ const JobDetail = () => {
                     </option>
                   ))}
 
-                
+
                 </Form.Control>
               </Form.Group>
 
@@ -297,7 +293,7 @@ const JobDetail = () => {
                 </Form.Control>
 
               </Form.Group>
-              
+
               {<Button className="me-2" variant="primary" onClick={applyFilters}>Apply Filters</Button>}
               {<Button variant="secondary" onClick={resetFilters}> Reset Filters</Button>}
             </Form>
@@ -310,7 +306,7 @@ const JobDetail = () => {
                   <Card className="mb-3">
                     <Card.Body>
                       <Card.Title>{job.Title}</Card.Title>
-                      
+
 
                       <Card.Text><strong>Company:</strong> {job.Company}</Card.Text>
                       <Card.Text><strong>Location:</strong> {job.Location}</Card.Text>
@@ -325,7 +321,7 @@ const JobDetail = () => {
           </Col>
         </Row>
       </Container>
-   
+
       <Footer />
     </>
 
