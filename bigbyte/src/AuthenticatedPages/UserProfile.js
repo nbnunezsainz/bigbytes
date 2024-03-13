@@ -11,39 +11,10 @@ const UserProfile = () => {
   const [User, setUser] = useState([]); // State to store student information
   const [loading, setLoading] = useState(true); // State to manage loading status
   const [notifications, setNotifications] = useState([]);
-  const [viewReferrals, setReferrals] = useState(false);
+  const [viewReferals, setViewReferals] = useState(false);
   const [editFields, setEditFields] = useState(false);
   const [resume, setResume] = useState("");
 
-
-  const CheckReferals = async () => {
-    const user = auth.currentUser;
-    const token = user && (await user.getIdToken());
-
-    const payloadHeader = {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-    };
-    const response = await fetch('http://localhost:3001/api/v1/user/ReferalStatus', payloadHeader)
-    if (!response.ok) {
-      throw new Error('Failed to fetch');
-    }
-
-    const data = await response.json();
-
-    if (data.success) {
-      console.log(data.notifications, "notfiy me")
-      setNotifications(data.notifications);
-    } else {
-      console.error("Failed.");
-    }
-
-    console.log(notifications, "...notifications");
-    // console.log(data, "dataa");
-    setReferrals(!viewReferrals);
-  };
 
   const handleResume = () => {
     // const resumeUrl = referals.notifications[index].data.Resume;
@@ -116,6 +87,33 @@ const UserProfile = () => {
       } finally {
         setLoading(false);
       }
+
+      const user = auth.currentUser;
+    const token = user && (await user.getIdToken());
+
+    const payloadHeader = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    };
+    const response = await fetch('http://localhost:3001/api/v1/user/ReferalStatus', payloadHeader)
+    if (!response.ok) {
+      throw new Error('Failed to fetch');
+    }
+
+    const data = await response.json();
+
+    if (data.success) {
+      console.log(data.notifications, "notfiy me")
+      setNotifications(data.notifications);
+    } else {
+      console.error("Failed.");
+    }
+
+    console.log(notifications, "...notifications");
+    // console.log(data, "dataa");
+    setViewReferals(!viewReferals);
     };
 
     fetchData();
@@ -129,81 +127,100 @@ const UserProfile = () => {
   return (
     <>
       <AuthNavbar />
-      <Container>
-        <Row className="mt-5">
-          <Col md={12}>
-            <Card style={{ width: '18rem', margin: 'auto' }}>
-              <Card.Body>
-                {editFields ? (
-                  <>
-                    {/* Editable fields */}
-                    <Form.Label>First name</Form.Label>
-                    <Form.Control type="text" name="FirstName" value={User.FirstName} onChange={handleInputChange} className="me-2" />
-                    <Form.Label>Last name</Form.Label>
-                    <Form.Control type="text" name="LastName" value={User.LastName} onChange={handleInputChange} className="me-2" />
-                    <Form.Label>Major</Form.Label>
-                    <Form.Control type="text" name="Major" value={User.Major} onChange={handleInputChange} className="me-2" />
-                    <Form.Label>Graduation year</Form.Label>
-                    <Form.Control type="text" name="GradYear" value={User.GradYear} onChange={handleInputChange} className="me-2" />
-                    <Form.Label>Bio</Form.Label>
-                    <Form.Control type="text" name="Bio" value={User.Bio} onChange={handleInputChange} className="me-2" />
-                    <Form.Label>LinkedIn</Form.Label>
-                    <Form.Control type="text" name="LinkedIn" value={User.LinkedIn} onChange={handleInputChange} className="me-2" />
+      <div style={{ padding: "120px" }}>
+                <Card style={{ width: '100%', minHeight: '550px', display: 'flex', flexDirection: 'column', padding: '20px', borderRadius: '10px', boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.1)' }}>
+                    <Container style={{ flex: '1', display: 'flex', flexDirection: 'column' , alignItems: 'center'}}>
+                        {editFields ? (
+                            <>
+                                <Form.Label>First name</Form.Label>
+                                <Form.Control type="text" name="FirstName" value={User.FirstName} onChange={handleInputChange} className="me-2" />
+                                <Form.Label>Last name</Form.Label>
+                                <Form.Control type="text" name="LastName" value={User.LastName} onChange={handleInputChange} className="me-2" />
+                                <Form.Label>Major</Form.Label>
+                                <Form.Control type="text" name="Major" value={User.Major} onChange={handleInputChange} className="me-2" />
+                                <Form.Label>LinkedIn</Form.Label>
+                                <Form.Control type="text" name="GradYear" value={User.GradYear} onChange={handleInputChange} className="me-2" />
+                                <Form.Label>Bio</Form.Label>
+                                <Form.Control type="text" name="Bio" value={User.Bio} onChange={handleInputChange} className="me-2" />
+                                <Form.Label>LinkedIn</Form.Label>
+                                <Form.Control type="text" name="LinkedIn" value={User.LinkedIn} onChange={handleInputChange} className="me-2" />
+                                
+                                <Button onClick={handleEditFields} className='mt-4'>Done</Button>
+                            </>
+                        ) : (
+                            <>
+                                <Row>
+                                    <Col>
+                                        <h1 className='mt-4 mb-2' style={{
+                                            fontSize: '24px',
+                                            fontWeight: 'bold',
+                                            color: '#333'
+                                        }}>{User.FirstName} {User.LastName}</h1>
+                                        <h5 className="mb-1" style={{color: '#666'}}>Student : Class of {User.GradYear}</h5>
+                                        <h6 className='' style={{color: '#888'}}>Major: {User.Major}</h6>
+                                        <a href={User.LinkedIn} target="_blank"
+                                           rel="noopener noreferrer" style={{color: '#007bff', textDecoration: 'none'}}>View LinkedIn</a>
+                                            <p className='mt-4' style={{
+                                                fontSize: '16px',
+                                                lineHeight: '1.5',
+                                                color: '#555'
+                                            }}>{User.Bio}</p>
+                                    </Col>
+                                </Row>
+                                <Row style={{ marginTop: 'auto' }}>
+                                    <Col className="d-flex justify-content-end">
+                                        <Button onClick={() => setEditFields(true)} className='mt-4 me-4' style={{ backgroundColor: '#007bff', color: '#fff', border: 'none', borderRadius: '5px', padding: '8px 16px' }}>Edit</Button>
+                                        { (!viewReferals) ? (
+                                          <Button onClick={() => {setViewReferals(true)}} className='mt-4' style={{ backgroundColor: '#007bff', color: '#fff', border: 'none', borderRadius: '5px', padding: '8px 16px' }}>Show Referrals</Button>
+                                        ) : (
+                                          <Button onClick={() => {setViewReferals(false)}} className='mt-4' style={{ backgroundColor: '#007bff', color: '#fff', border: 'none', borderRadius: '5px', padding: '8px 16px' }}>Hide Referrals</Button>
+                                        )}
+                                    </Col>
+                                </Row>
+                            </>
+                        )}
+                    </Container>
+                </Card>
+                
+                <div>
+                  {viewReferals && (
+                      notifications.length > 0 ? (
+                          notifications.map((referal, index) => (
+                                  <Row key={index} className='mt-4'>
+                                        <Card key={index}>   
+                                          <Card.Title style={{ marginTop: "20px" }}>Position: {referal.InternshipTitle}</Card.Title>
+                                          <Card.Text>
+                                            {referal.Company && (
+                                              <div>Company: {referal.Company}</div>
+                                            )}
+                                            
+                                            {/* <div>Status: {referal.status}</div> */}
+                                          </Card.Text>
 
-                    <Button onClick={handleEditFields} className='mt-4'>Done</Button>
-                  </>
-                ) : (
-                  <>
-                    {/* Display-only fields */}
-                    <Card.Title>{User.FirstName} {User.LastName}</Card.Title>
-                    <Card.Subtitle className="mb-2 text-muted">{User.Major}</Card.Subtitle>
-                    <Card.Text>
-                      {User.GradYear}<br />
-                      <a href={User.linkedIn}>LinkedIn</a>
-                    </Card.Text>
-                    <Button variant="primary" onClick ={handleResume}>View Resume</Button>
-                    <Card.Text className="mt-3">
-                      {User.Bio}
-                    </Card.Text>
-                    <Row style={{ marginTop: 'auto' }}>
-                      <Col className="d-flex justify-content-end">
-                        <Button onClick={CheckReferals}> Referral Status</Button>
-                        <Button onClick={() => setEditFields(true)} className='mt-4 me-4' style={{ backgroundColor: '#007bff', color: '#fff', border: 'none', borderRadius: '5px', padding: '8px 16px' }}>Edit</Button>
-                      </Col>
-                    </Row>
-                  </>
-                )}
-              </Card.Body>
-            </Card>
-          </Col>
-        </Row>
-        
-        <div>
-          {viewReferrals && (
-            notifications.length > 0 ? (
-              notifications.map((referral, index) => (
-                <Row key={index} className='mt-4'>
-                  <Card>
-                    <Card.Title style={{ marginTop: "20px" }}>Position: {referral.InternshipTitle}</Card.Title>
-                    <Card.Text>
-                      <p>Company: {referral.Company}</p>
-                      <p>Status: {referral.status}</p>
-                    </Card.Text>
-                    <Row className='mb-3'>
-                    </Row>
-                  </Card>
-                </Row>
-              ))
-            ) : (
-              <>
-                <p>Loading referrals or no referrals currently</p>
-              </>
-            )
-          )}
+                                          <Row key={index} className='mb-3'>
+                                            {(referal.status === "pending") && (
+                                              <button className='pending-btn' type='button' disabled>Pending</button>
+                                            )}
 
-        </div>
+                                            {(referal.status === 'Accepted') && (
+                                              <button className='accept-btn' type='button' disabled>Accepted</button>
+                                            )}
+                                            {(referal.status === 'Declined') && (
+                                              <button className='decline-btn' type='button' disabled>Declined</button>
+                                            )}
+                                          </Row>
+                                          </Card>
 
-      </Container>
+                                  </Row>
+
+                          ))
+                      ) : (
+                          <h3>Loading referrals or no pending referrals currently</h3>
+                      )
+                  )}
+              </div>
+
+            </div>
     </>
   );
 };
