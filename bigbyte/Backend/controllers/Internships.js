@@ -64,8 +64,7 @@ exports.requestReferal = async (req, res) => {
   }
   const mentorID = internshipDoc.data().MentorID;
 
-  console.log(mentorID, "mentor");
-  console.log(internshipDoc.data(), "doc")
+
   // Create a notification document for the mentor
   const notificationData = {
     mentorID: mentorID,
@@ -80,6 +79,7 @@ exports.requestReferal = async (req, res) => {
     Resume: student.Resume || '',
     message: `Referral request for your internship: ${internshipDoc.data().Title}`,
     status: "pending",
+    internshipID: internshipID 
   };
 
 
@@ -97,6 +97,34 @@ exports.requestReferal = async (req, res) => {
 
 }
 
+exports.getAllInternshipsRelatedToAMentor = async (req,res) =>
+{
+  const mentorID = req.user.uid;
+
+try {
+    // Query the Internship collection to get all internships where MentorID equals mentorID
+    const internshipSnapshot = await InternshipRef.where('MentorID', '==', mentorID).get();
+
+    // Initialize an array to store internship data
+    const internshipData = [];
+
+    // Iterate over the documents in the snapshot
+    internshipSnapshot.forEach(doc => {
+        // Get the data of each document and push it to the internshipData array
+        internshipData.push({
+            id: doc.id, // Document ID
+            data: doc.data() // Other fields...
+        });
+    });
+    res.status(200).json({ success: true, internshipData:internshipData });
+    
+  //get mentorID, have it query all interships related to a mentr
+}
+catch
+{
+  res.status(500).json({ success: false, message: 'Error querying internships' });
+}
+}
 //query ALL Internships based on a specific field, filtering technique, and target value --> returns dictionary of ALL internship IDs to their data
 exports.getAllInternships = async (req = null, res = null) => {
   try {
@@ -108,7 +136,7 @@ exports.getAllInternships = async (req = null, res = null) => {
       if(internship.data().Status ==="Open for Applications")
       {
         internshipData[internship.id] = internship.data();
-
+        console.log(internship.data(),"backedn testing");
       }
       
     });
@@ -202,7 +230,6 @@ exports.getInternship = async (req, res) => {
         // Construct the internship object with relevant data
         if(data.Status ==="Open for Applications")
         {
-          console.log("mepp");
         const internship = {
             id: doc.id, // Document ID
             data:data,// Other fields...
@@ -225,13 +252,25 @@ exports.getInternship = async (req, res) => {
 // THIS CODE IS ESSENTIALLY USELESS NOW! TO ENSURE OUR DATA IS SECURE, WE HAVE COMMENTED THE deleteDocument() FUNCTION
 exports.deleteInternship = async (req, res) => {
   try {
-    let internshipID = req.user.id;
+    const InternshipID = req.query.referalId;
+    //let MentorNotificationCollectionsID = req.body.referalId;
+
+    console.log(req.query.referalId,"body22");
+
+
+ 
+  //   const MentorNotifcation = await MentorNotificationsRef.doc(MentorNotificationCollectionsID).get();
+  //  let  internshipID=MentorNotifcation.data().internshipID;
+
+
+
+
     const InternshipRef = db.collection(Constants.COLLECTION_INTERNSHIP);
-    let internshipData = await getDocument(InternshipRef, internshipID);
-    internshipData = internshipData[internshipID];
+    let internshipData = await getDocument(InternshipRef, InternshipID);
+    internshipData = internshipData[InternshipID];
 
     let MentorDeletesInternship= true;
-    updateInternshipData(internshipID,InternshipRef,internshipData,MentorDeletesInternship);
+    updateInternshipData(InternshipID,InternshipRef,internshipData,MentorDeletesInternship);
 
     //const result = await deleteDocument(InternshipRef, internshipID);
     console.log("Success- internship deleted!");

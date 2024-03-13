@@ -79,6 +79,7 @@ exports.verifyToken = async (req, res, next) => {
     const decodeValue = await admin.auth().verifyIdToken(token);
     if (decodeValue) {
       req.user = decodeValue;
+      console.log("here mate")
       next(); // Proceed to the next middleware/function
     } else {
       // Token is invalid

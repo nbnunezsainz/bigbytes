@@ -114,7 +114,6 @@ exports.CheckReferals = async (req, res) => {
     });
 
 
-    console.log(notifications, "notify");
     res.status(200).json({ success: true, notifications: notifications });
   }
   catch (error) {
