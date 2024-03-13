@@ -8,8 +8,6 @@ import '../Styling/CreateInternship.css';
 import Confetti from 'react-dom-confetti';
 
 
-
-
 const CreateInternship = () => {
     const [success,setSuccess]= useState(false);
   const [internshipData, setInternshipData] = useState({
