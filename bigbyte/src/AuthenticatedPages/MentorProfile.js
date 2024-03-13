@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Button, Card, Container, Form, Row, Col } from 'react-bootstrap';
-import { Navigate } from 'react-router-dom';
 import AuthNavbar from './AuthenticatedNavBar';
-import ViewResume from './ViewResume';
 import auth from "../fb.js";
 
 import "../Styling/MentorProfile.css"
