@@ -169,32 +169,34 @@ const MentorSearch = () => {
       </Form>
 
       {/*</Form>*/}
-      <Row className="mt-5" style={{ paddingTop: "30px" }}>
-        {Object.entries(Mentors).map(([mentorID, mentor]) => (
-          <Col md={12}>
-            <Card className="mb-3">
-              <Card.Body>
-                <Card.Text><strong>Company:</strong> {mentor.Company}</Card.Text>
-                <Card.Text><strong>Name:</strong> {mentor.FirstName} {mentor.LastName}</Card.Text>
-                <Card.Text><strong>Bio:</strong> {mentor.Bio} </Card.Text>
-                <Card.Text>
-                  {/*<strong>LinkedIn:</strong>{" "}*/}
-                  {/*<a href={`https://${mentor.LinkedIn}`} target="_blank" rel="noopener noreferrer">*/}
-                  {/*  {mentor.LinkedIn}*/}
-                  {/*</a>*/}
-                </Card.Text>
+      <div className='d-flex 100vw' style={{justifyContent: "center"}}>
+        <Row className="mt-5" style={{ paddingTop: "30px"}}>
+          {Object.entries(Mentors).map(([mentorID, mentor]) => (
+            <Col md={12}>
+              <Card className="mb-3">
+                <Card.Body>
+                  <Card.Text><strong>Company:</strong> {mentor.Company}</Card.Text>
+                  <Card.Text><strong>Name:</strong> {mentor.FirstName} {mentor.LastName}</Card.Text>
+                  <Card.Text><strong>Bio:</strong> {mentor.Bio} </Card.Text>
+                  <Card.Text>
+                    {/*<strong>LinkedIn:</strong>{" "}*/}
+                    {/*<a href={`https://${mentor.LinkedIn}`} target="_blank" rel="noopener noreferrer">*/}
+                    {/*  {mentor.LinkedIn}*/}
+                    {/*</a>*/}
+                  </Card.Text>
 
-                <a href={`https://${mentor.LinkedIn}`} target="_blank" rel="noopener noreferrer">
-                  <Button variant="primary">Contact - LinkedIn</Button>
-                </a>
+                  <a href={`https://${mentor.LinkedIn}`} target="_blank" rel="noopener noreferrer">
+                    <Button variant="primary">Contact - LinkedIn</Button>
+                  </a>
 
 
 
-              </Card.Body>
-            </Card>
-          </Col>
-        ))}
-      </Row>
+                </Card.Body>
+              </Card>
+            </Col>
+          ))}
+        </Row>
+      </div>
     </>
   );
 };
