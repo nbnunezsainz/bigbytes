@@ -18,6 +18,7 @@ function UserDetailsForm() {
         industry: ''
     });
     const [redirectToLanding, setRedirectToLanding] = useState(false);
+    const [failedSignUp, setFailedSignUp] = useState(false);
 
     const handleButtonClick = (selectedRole) => {
         setRole(selectedRole);
@@ -38,7 +39,16 @@ function UserDetailsForm() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         console.log(userDetails);
+
         // Send userDetails to backend for further processing
+
+        //needs required fields for either student/mentor
+        if ((role === 'student' && (userDetails.firstName === '' || userDetails.lastName === '' || userDetails.major === '' || userDetails.year === '')) ||
+            (role === 'mentor' && (userDetails.firstName === '' || userDetails.lastName === '' || userDetails.company === ''))) {
+            setFailedSignUp(true);
+            console.error("Required fields are missing");
+            return; // Prevent further execution of form submission
+        }
 
         const user = auth.currentUser;
         const token = user && (await user.getIdToken());
@@ -89,17 +99,17 @@ function UserDetailsForm() {
                     <h2>User Details Form</h2>
                     <Form onSubmit={handleSubmit}>
                         <Form.Group controlId="firstName">
-                            <Form.Label>First Name:</Form.Label>
+                            <Form.Label>*First Name:</Form.Label>
                             <Form.Control type="text" name="firstName" value={userDetails.firstName} onChange={handleChange} />
                         </Form.Group>
                         <Form.Group controlId="lastName">
-                            <Form.Label>Last Name:</Form.Label>
+                            <Form.Label>*Last Name:</Form.Label>
                             <Form.Control type="text" name="lastName" value={userDetails.lastName} onChange={handleChange} />
                         </Form.Group>
                         {role === 'student' &&
                             <>
                                 <Form.Group controlId="major">
-                                    <Form.Label>Major:</Form.Label>
+                                    <Form.Label>*Major:</Form.Label>
                                     <Form.Control type="text" name="major" value={userDetails.major} onChange={handleChange} />
                                 </Form.Group>
                                 <Form.Group controlId="bio">
@@ -107,7 +117,7 @@ function UserDetailsForm() {
                                     <Form.Control as="textarea" rows={3} name="bio" value={userDetails.bio} onChange={handleChange} />
                                 </Form.Group>
                                 <Form.Group controlId="year">
-                                    <Form.Label>Year:</Form.Label>
+                                    <Form.Label>*Year:</Form.Label>
                                     <Form.Control type="text" name="year" value={userDetails.year} onChange={handleChange} />
                                 </Form.Group>
                             </>
@@ -115,11 +125,11 @@ function UserDetailsForm() {
                         {role === 'mentor' &&
                             <>
                                 <Form.Group controlId="company">
-                                    <Form.Label>Company:</Form.Label>
+                                    <Form.Label>*Company:</Form.Label>
                                     <Form.Control type="text" name="company" value={userDetails.company} onChange={handleChange} />
                                 </Form.Group>
                                 <Form.Group controlId="industry">
-                                    <Form.Label>Company:</Form.Label>
+                                    <Form.Label>Industry:</Form.Label>
                                     <Form.Control type="text" name="industry" value={userDetails.industry} onChange={handleChange} />
                                 </Form.Group>
                                 <Form.Group controlId="bio">
@@ -131,6 +141,11 @@ function UserDetailsForm() {
                                     <Form.Control type="text" name="linkedIn" value={userDetails.linkedIn} onChange={handleChange} />
                                 </Form.Group>
                             </>
+                        }
+                        {failedSignUp &&
+                            <div>
+                                <p style={{color: "red"}}>All fields required. Try Again. </p>
+                            </div>
                         }
                         <Button variant="primary" type="submit">Submit</Button>
                     </Form>
