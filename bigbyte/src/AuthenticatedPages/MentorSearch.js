@@ -4,6 +4,7 @@ import AuthNavbar from './AuthenticatedNavBar';
 import auth from "../fb.js";
 import { Form, FormControl } from 'react-bootstrap';
 import Footer from '../pages/Footer';
+import '../Styling/MentorSearch.css';
 
 const MentorSearch = () => {
   const [Mentors, setMentors] = useState([]); // State to store mentor data
@@ -130,7 +131,9 @@ const MentorSearch = () => {
   return (
     <>
       <AuthNavbar />
-
+<div className="container-fluid" > 
+<div className="filters-container">
+  {/*</Beginning of Filter Form*/}
       <h5>Filters</h5>
       <Form>
         <Form.Group className="mb-3">
@@ -148,7 +151,6 @@ const MentorSearch = () => {
             ))}
           </Form.Control>
         </Form.Group>
-
         <Form.Group className="mb-3">
           <Form.Label>Industry</Form.Label>
           <Form.Control
@@ -163,13 +165,16 @@ const MentorSearch = () => {
               </option>
             ))}
           </Form.Control>
-        </Form.Group>
+
+        </Form.Group  >
 
         {<Button variant="primary" onClick={applyFilters} className="me-4">Apply Filters</Button>}
         {<Button variant="primary" onClick={resetFilters}> Reset Filters</Button>}
       </Form>
-
+      </div>
       {/*</Form>*/}
+      </div>   
+      {/*Explains the mentor in container */}
       <div className='d-flex 100vw' style={{justifyContent: "center"}}>
         <Row className="mt-5" style={{ paddingTop: "30px"}}>
           {Object.entries(Mentors).map(([mentorID, mentor]) => (
@@ -186,8 +191,8 @@ const MentorSearch = () => {
                     {/*</a>*/}
                   </Card.Text>
 
-                  <a href={`https://${mentor.LinkedIn}`} target="_blank" rel="noopener noreferrer">
-                    <Button variant="primary">Contact - LinkedIn</Button>
+                  <a href={`https://${mentor.LinkedIn}`} className="linkedin-link-ms"target="_blank" rel="noopener noreferrer">
+                    {/* <Button className="linkedin-link-ms" variant="primary">Contact - LinkedIn</Button> */}
                   </a>
 
 
@@ -198,6 +203,7 @@ const MentorSearch = () => {
           ))}
         </Row>
       </div>
+      {/*Adds footer to it */}
       <Footer />
     </>
   );
