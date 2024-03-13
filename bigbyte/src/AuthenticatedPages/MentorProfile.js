@@ -191,32 +191,33 @@ const MentProfile = () => {
             },
         };
 
-        const response = await fetch('http://localhost:3001/api/v1/internship/GetAllInternships', payloadHeader);
+        const response = await fetch('http://localhost:3001/api/v1/internship/GetMentorsInternships', payloadHeader);
         if (!response.ok) {
             throw new Error('Failed to fetch');
         }
 
         //all internships for mentor
-        const allInternshipswithMentor = [];
 
         const data = await response.json();
+
+        console.log(data.internshipData, "dats");
 
         //const mentorIds = new Set(Object.values(data.internshipData).map(item => item.MentorID));
 
         //iterate all internships and get specific internship for particular mento
-        Object.values(data.internshipData).forEach(item => {
-            if (item.MentorID === mentor.uid) {
-                // Perform actions when the MentorID matches the mentor's uid
-                // console.log('MentorID matched:', item.MentorID);
-                allInternshipswithMentor.push(item);
-            } else {
-                // Perform actions when the MentorID does not match the mentor's uid
-                //console.log('MentorID not matched:', item.MentorID);
-            }
-        });
+        // Object.values(data.internshipData).forEach(item => {
+        //     if (item.MentorID === mentor.uid) {
+        //         // Perform actions when the MentorID matches the mentor's uid
+        //         // console.log('MentorID matched:', item.MentorID);
+        //         allInternshipswithMentor.push(item);
+        //     } else {
+        //         // Perform actions when the MentorID does not match the mentor's uid
+        //         //console.log('MentorID not matched:', item.MentorID);
+        //     }
+        // });
 
 
-        setallInternships(allInternshipswithMentor);
+        setallInternships(data.internshipData);
 
         //for all resumes, if mentor.uid == item.MentorID
         //
@@ -228,7 +229,6 @@ const MentProfile = () => {
     const handleAccept = async (index) => {
         let referalId = referals.notifications[index].id;
 
-        return;
 
         const payload = {
             status: "Accepted"
@@ -258,9 +258,11 @@ const MentProfile = () => {
     }
 
     //delete internship button
-    const handleDeleteInternship = async (index) => {
+    const handleDeleteInternship = async (InternshipID) => {
         // Implement logic to delete the internship with the given ID
-        let referalId = referals.notifications[index].id;
+        
+
+        console.log(InternshipID, "intenrship ID");
 
         //fetch request
         //callDelete endpoint
@@ -275,11 +277,11 @@ const MentProfile = () => {
                     "Content-Type": "application/json",
                     Authorization: `Bearer ${token}`,
                 },
-                body: JSON.stringify(referalId)
             };
 
-            const response = await fetch('http://localhost:3001/api/v1/internship/DeleteInternship', payloadHeader);
+            const response = await fetch(`http://localhost:3001/api/v1/internship/DeleteInternship?${InternshipID}`, payloadHeader);
             const data = await response.json();
+            console.log(data, "data");
             //setMentor(data.user);
         } catch (error) {
             console.error("Error fetching data:", error);
@@ -450,9 +452,9 @@ const MentProfile = () => {
                                     <div className='internship-item' key={index}>
                                         <div className='internship-title'>
                                             <div className="divider divider-top"></div>
-                                            {internship.Company} - {internship.Title}
+                                            {internship.data.Company} - {internship.data.Title} - {internship.data.URL}
                                             {/* Delete button */}
-                                            <Button onClick={() => handleDeleteInternship(index)} className='ml-2 form-button left-button delete-button' variant="danger">Delete</Button>
+                                            <Button onClick={() => handleDeleteInternship(internship.id)} className='ml-2 form-button left-button delete-button' variant="danger">Delete</Button>
                                             {/* Divider */}
                                             <div className="divider "></div>
                                         </div>
