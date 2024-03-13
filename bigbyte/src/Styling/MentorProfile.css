@@ -108,3 +108,41 @@
   .list-mp li button {
     margin-left: 10px;
   }
+
+  .delete-button{
+    margin-left: 50px;
+
+  }
+  .delete-button:hover{
+    margin-left: 50px;
+    background-color: red;
+    
+  }
+
+  .internship-title {
+    margin-bottom: 20px; /* Adjust the margin as needed */
+}
+
+
+/* CSS for the divider */
+.divider, .divider-bottom {
+    height: 5px;
+    width: 700px; 
+    /* Controls the length of the divider */
+    background-color: black;
+    justify-content: center;
+    position:center;
+ 
+    margin: 10px auto 40px;
+    /* margin below the divider */
+    border-color: black;
+}
+.divider-top {
+    box-shadow: 10px 5px 6px rgba(0, 0, 0, 0.554);
+    margin-bottom: 25px;
+}
+
+.title-mp{
+margin-top: 20px;
+margin-bottom: 20px;
+}

@@ -455,25 +455,32 @@ const MentProfile = () => {
                           <h3>Loading referrals or no pending referrals currently</h3>
                       )
                   )}
-              </div>
-              <div>
-              {condInternship && (
-                                            <div className='mt-4 container-mp'>
-                                                {/* Render list of all internships */}
-                                                <h6>All Internships</h6>
-                                                <ul>
-                                                    <div className = "list-mp">
-                                                    {allInternships.map((internship, index) => (
-                                                        <li key={index}> {internship.Company} - {internship.Title}
-                                                            {/* Deletes the buttons */}
-                                                            <Button onClick={() => handleDeleteInternship(index)} className='ml-2 form-button left-button' variant="danger">Delete</Button>
-                                                        </li>
-                                                        // <li key={index}>{internship.Company}</li>
-                                                    ))}
-                                                    </div>
-                                                </ul>
-                                            </div>
-                                        )}
+                                 </div>
+                                <div>
+                                    {condInternship && (
+                                    <div className='mt-4 container-mp'>
+                                     {/* Render list of all internships */}
+                                 <h6 className="title-mp" style={{
+                                            fontSize: '24px',
+                                            fontWeight: 'bold',
+                                            color: '#333'
+                                        }}>All Internships</h6>
+                             <ul className="list-mp">
+                         {allInternships.map((internship, index) => (
+                             <div className='internship-item' key={index}>
+                              <div className='internship-title'>
+                              <div className="divider divider-top"></div>
+                               {internship.Company} - {internship.Title}
+                             {/* Delete button */}
+                             <Button onClick={() => handleDeleteInternship(index)} className='ml-2 form-button left-button delete-button' variant="danger">Delete</Button>
+                              {/* Divider */}
+                         <div className="divider "></div>
+                                </div>
+                                </div>
+                               ))}
+                         </ul>
+                         </div>
+                        )}
 
               </div>
 
