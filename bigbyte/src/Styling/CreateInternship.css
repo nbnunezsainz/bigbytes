@@ -18,7 +18,7 @@
     /* Slightly increased shadow */
     box-shadow: 10px 10px 8px rgba(6, 4, 4, 0.631); 
     /* Added margin top */
-    margin-top: -200px; 
+    margin-top: -50px; 
     /* width I thought looked best  */
     width: 700px; 
 }
