@@ -224,6 +224,8 @@ const MentProfile = () => {
 
         console.log("all userId with mentor:", allInternshipswithMentor);
 
+
+
         setallInternships(allInternshipswithMentor);
         setcondInternship(true);
 
@@ -406,27 +408,13 @@ const MentProfile = () => {
                                         {/*<Button onClick={allInternshipsForMentor} className='mt-4' style={{ backgroundColor: '#007bff', color: '#fff', border: 'none', borderRadius: '5px', padding: '8px 16px' }}>View Internships</Button>*/}
                                         {/* condInternship */}
                                         {/* Show dropdown when condInternship is true */}
-                                        {condInternship && (
-                                            <div className='mt-4'>
-                                                {/* Render list of all internships */}
-                                                <h6>All Internships</h6>
-                                                <ul>
-                                                    {allInternships.map((internship, index) => (
-                                                        <li key={index}> {internship.Company} - {internship.Title}
-
-                                                            <Button onClick={() => handleDeleteInternship(index)} className='ml-2' variant="danger">Delete</Button>
-                                                        </li>
-                                                        // <li key={index}>{internship.Company}</li>
-                                                    ))}
-                                                </ul>
-                                            </div>
-                                        )}
 
                                         {/* Hide dropdown when condInternship is false */}
                                         {/* button for View Internships  */}
-                                        {!condInternship && (
-                                            <Button onClick={allInternshipsForMentor} className='mt-4 form-button left-button' >View Internships</Button>
-                                        )}
+                        
+                                            <Button onClick={() => setcondInternship(!condInternship)} className='mt-4 form-button left-button-mp'>
+                                    {condInternship ? "Hide Internships" : "View Internships"}
+                                    </Button> 
                                     </Col>
                                 </Row>
                             </>
@@ -435,7 +423,7 @@ const MentProfile = () => {
                 </Card>
                 
                 <div>
-                    {/* button for See Referals (Accept, Declione, etc)   */}
+                    {/* button for See Referals (Accept, Decline, etc)   */}
                   {viewReferals && (
                       referals.notifications.length > 0 ? (
                           referals.notifications.map((referal, index) => (
@@ -446,6 +434,7 @@ const MentProfile = () => {
                                           <Card.Text>
                                               Applicant Bio: {referal.data.studentBio}
                                           </Card.Text>
+                                          {/* Accept, Decline, and View Resume Buttons  */}
                                           <Row key={index} className='mb-3'>
                                               <Col key={index}>
                                                   <Button className="resume-btn" onClick={() => handleResume(index)}> View Resume </Button>
@@ -465,6 +454,26 @@ const MentProfile = () => {
                           <h3>Loading referrals or no pending referrals currently</h3>
                       )
                   )}
+              </div>
+              <div>
+              {condInternship && (
+                                            <div className='mt-4 container-mp'>
+                                                {/* Render list of all internships */}
+                                                <h6>All Internships</h6>
+                                                <ul>
+                                                    <div className = "list-mp">
+                                                    {allInternships.map((internship, index) => (
+                                                        <li key={index}> {internship.Company} - {internship.Title}
+                                                            {/* Deletes the buttons */}
+                                                            <Button onClick={() => handleDeleteInternship(index)} className='ml-2 form-button left-button' variant="danger">Delete</Button>
+                                                        </li>
+                                                        // <li key={index}>{internship.Company}</li>
+                                                    ))}
+                                                    </div>
+                                                </ul>
+                                            </div>
+                                        )}
+
               </div>
 
             </div>

@@ -85,6 +85,26 @@
    background-color: #0e59a9;
 }
 
-.left-button{
-    margin-left: 20px;
+.container-mp {
+    background-color: #ffffff; /* White background color */
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Add a subtle shadow */
+  }
+  
+.left-button-mp{
+    margin-left: 30px;
 }
+
+.list-mp {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .list-mp li {
+    margin-bottom: 10px;
+  }
+  
+  .list-mp li button {
+    margin-left: 10px;
+  }
