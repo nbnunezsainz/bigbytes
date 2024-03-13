@@ -85,8 +85,9 @@ exports.requestReferal = async (req, res) => {
 
   const newMentorNotificationsRef = MentorNotificationsRef.doc();
   await newMentorNotificationsRef.set(notificationData);
-
-  updateInternshipData(internshipID,InternshipRef,internshipDoc.data());
+  
+  let  MentorDeletesInternship = false; //only true when a mentor wants to delte the internship
+  updateInternshipData(internshipID,InternshipRef,internshipDoc.data(), MentorDeletesInternship);
   updateUserData(student.userID);
 
 
@@ -103,12 +104,14 @@ exports.getAllInternships = async (req = null, res = null) => {
 
     let internshipData = {};
 
-    console.log(res, "res2");
     data.forEach(internship => {
-      internshipData[internship.id] = internship.data();
-    });
+      if(internship.data().Status ==="Open for Applications")
+      {
+        internshipData[internship.id] = internship.data();
 
-    console.log(res, "res");
+      }
+      
+    });
     if (res != null) {
       res.status(200).json({ success: true, message: 'Internship has been found', internshipData: internshipData });
     }
@@ -197,14 +200,18 @@ exports.getInternship = async (req, res) => {
     MentorInternships.forEach(doc => {
         const data = doc.data();
         // Construct the internship object with relevant data
+        if(data.Status ==="Open for Applications")
+        {
+          console.log("mepp");
         const internship = {
             id: doc.id, // Document ID
             data:data,// Other fields...
         };
         internships.push(internship); // Push the internship object to the array
+      }
     });
 
-    res.status(200).json({message:"Resumes Found", internships:internships})
+    res.status(200).json({message:"Internships Found", internships:internships})
 
    
   } catch (error) {
@@ -223,7 +230,8 @@ exports.deleteInternship = async (req, res) => {
     let internshipData = await getDocument(InternshipRef, internshipID);
     internshipData = internshipData[internshipID];
 
-    updateInternshipData(internshipID,InternshipRef,internshipData);
+    let MentorDeletesInternship= true;
+    updateInternshipData(internshipID,InternshipRef,internshipData,MentorDeletesInternship);
 
     //const result = await deleteDocument(InternshipRef, internshipID);
     console.log("Success- internship deleted!");
@@ -235,14 +243,14 @@ exports.deleteInternship = async (req, res) => {
 };
 
 
-const updateInternshipData = async (internshipID, InternshipRef, internshipData) => {
+const updateInternshipData = async (internshipID, InternshipRef, internshipData,MentorDeletesInternship) => {
   try {
       // gather and update internship information
       const internship = InternshipRef.doc(internshipID);
       let appCount = internshipData.ApplicationCounter + 1;
       let newStatus = internshipData.Status;
       let newDisplay = internshipData.Display;
-      if (appCount >= internshipData.RefferalLimit) {
+      if (appCount >= internshipData.RefferalLimit || MentorDeletesInternship==true) {
           newStatus = Constants.INTERNSHIP_STATUS_REVIEW;
           newDisplay = false;
       }
