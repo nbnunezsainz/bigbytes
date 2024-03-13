@@ -91,7 +91,6 @@ const cleanQuery = (query) => {
 
 exports.CheckReferals = async (req, res) => {
   try {
-    console.log("here mate");
     
     const mentorID = req.user.uid;
     const mentorNotificationsSnapshot = await MentorNotificationsRef.where('mentorID', '==', mentorID).get();
