@@ -127,8 +127,6 @@ exports.IsStudent = async (req, res, next) => {
   //not a user collection check mentor
     return res.status(500).json({ message: "Not a student" });
   }
-  
- next();
 }
 
 exports.IsMentor = async (req, res, next) => {
