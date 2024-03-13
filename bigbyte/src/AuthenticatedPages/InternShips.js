@@ -3,7 +3,7 @@ import { Container, Row, Col, Button, Card } from 'react-bootstrap';
 import AuthNavbar from './AuthenticatedNavBar';
 import auth from "../fb.js";
 import { Form, FormControl } from 'react-bootstrap';
-import { toast,ToastContainer  } from 'react-toastify';
+import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 
@@ -21,8 +21,6 @@ const JobDetail = () => {
 
 
   const [selectedCategory, setSelectedCategory] = useState('');
-  const [selectedSubcategory, setSelectedSubcategory] = useState('');
-  const [allSubcategories, setAllSubcategories] = useState('');
 
 
   const applyFilters = async () => {
@@ -191,7 +189,7 @@ const JobDetail = () => {
       if (!response.ok) {
         toast.error('Resume does not exist. Please create one before proceeding.');
       }
-      
+
     } catch (error) {
       console.error('Error requesting referral:', error);
       // Handle error
@@ -258,30 +256,6 @@ const JobDetail = () => {
 
                 </Form.Control>
               </Form.Group>
-
-              {selectedCategory && (
-                <Form.Group className="mb-3">
-                  <Form.Label>Subcategory</Form.Label>
-                  <Form.Control
-                    as="select"
-                    value={selectedSubcategory}
-                    onChange={(e) => setSelectedSubcategory(e.target.value)}
-
-                  >
-                    <option value="">Select Subcategory</option>
-
-
-                    {/* need help here - thought inserting 'selectedCategory' should work*/}
-                    {Object.values(allCategory).map((subcategory) => (
-                      <option key={subcategory} value={subcategory}>
-                        {subcategory}
-                      </option>
-                    ))}
-                  </Form.Control>
-                </Form.Group>
-              )}
-
-
 
               <Form.Group className="mb-3">
                 <Form.Label>Major</Form.Label>
