@@ -119,7 +119,11 @@ const MentProfile = () => {
 
     const handleResume = async(index) => {
       // redirect to page with PDFViewer for Resume URL
-      <Navigate to="/ViewResume" target="_blank"/>
+     // console.log(referals.notifications[index].data.Resume, "lit");
+      <li> referals.notifications[index].data.Resume</li>
+      const resumeUrl = referals.notifications[index].data.Resume;
+       window.open(resumeUrl, '_blank');
+      
     }
 
     const FetchUpdate = async(referalId, payload) => 

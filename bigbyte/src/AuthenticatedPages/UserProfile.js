@@ -3,7 +3,7 @@ import { Outlet, Link } from "react-router-dom";
 import { Card, Button, Form } from 'react-bootstrap';
 import { Container, Row, Col } from 'react-bootstrap';
 import AuthNavbar from './AuthenticatedNavBar';
-import "./UserProfile.css"
+import "../Styling/UserProfile.css";
 import auth from "../fb.js"
 
 
@@ -13,6 +13,7 @@ const UserProfile = () => {
   const [notifications, setNotifications] = useState([]);
   const [viewReferrals, setReferrals] = useState(false);
   const [editFields, setEditFields] = useState(false);
+  const [resume, setResume] = useState("");
 
 
   const CheckReferals = async () => {
@@ -33,6 +34,7 @@ const UserProfile = () => {
     const data = await response.json();
 
     if (data.success) {
+      console.log(data.notifications, "notfiy me")
       setNotifications(data.notifications);
     } else {
       console.error("Failed.");
@@ -42,6 +44,12 @@ const UserProfile = () => {
     // console.log(data, "dataa");
     setReferrals(!viewReferrals);
   };
+
+  const handleResume = () => {
+    // const resumeUrl = referals.notifications[index].data.Resume;
+     window.open(resume, '_blank');
+  }
+
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -95,13 +103,15 @@ const UserProfile = () => {
           },
         };
 
-        const response = await fetch('http://localhost:3001/api/v1/User/GetUserProfile', payloadHeader);
+        const response = await fetch('http://localhost:3001/api/v1/User/GetUser', payloadHeader);
         if (!response.ok) {
           throw new Error('Failed to fetch');
         }
 
         const data = await response.json();
-        setUser(data.userData); // Assuming the response JSON structure matches our state
+        setUser(data.user); // Assuming the response JSON structure matches our state
+        setResume(data.URL);
+        console.log(data,"meep");
       } catch (error) {
         console.error("Error fetching data:", error);
       } finally {
@@ -152,7 +162,7 @@ const UserProfile = () => {
                       {User.GradYear}<br />
                       <a href={User.linkedIn}>LinkedIn</a>
                     </Card.Text>
-                    <Button variant="primary">View Resume</Button>
+                    <Button variant="primary" onClick ={handleResume}>View Resume</Button>
                     <Card.Text className="mt-3">
                       {User.Bio}
                     </Card.Text>
@@ -168,22 +178,7 @@ const UserProfile = () => {
             </Card>
           </Col>
         </Row>
-        {/*<Button className="resume-btn"> View Resume </Button>*/}
-        {/*<button onClick ={CheckReferals}> Referral Status</button>*/}
-        {/*{notifications.length > 0 && (*/}
-        {/*    <div>*/}
-        {/*      <h3>Referral Notifications:</h3>*/}
-        {/*      <ul>*/}
-        {/*        {notifications.map((notification, index) => (*/}
-        {/*            <li key={index}>*/}
-        {/*              <strong>Internship*/}
-        {/*                Title:</strong> {notification.InternshipTitle}, <strong>Status:</strong> {notification.status}*/}
-        {/*            </li>*/}
-        {/*        ))}*/}
-        {/*      </ul>*/}
-        {/*    </div>*/}
-        {/*)}*/}
-
+        
         <div>
           {viewReferrals && (
             notifications.length > 0 ? (
