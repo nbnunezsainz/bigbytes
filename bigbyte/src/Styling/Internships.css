@@ -1,0 +1,49 @@
+/* internships.css */
+/* Filter section styles */
+/* JobDetail.css */
+
+/* Container styles */
+.container {
+  margin-top: 70px;
+}
+
+/* Filter section styles */
+.filter-section {
+  background-color: #f9f9f9;
+  padding: 20px;
+  border-radius: 10px;
+  margin-right: 20px; /* Adjust margin between filter and job listing */
+}
+
+.filter-section h5 {
+  margin-bottom: 20px;
+}
+
+/* Job listing section styles */
+.job-listing-section {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.job-card {
+  flex: 1;
+  margin-right: 20px; /* Adjust margin between job cards */
+  margin-bottom: 20px;
+}
+
+.job-card .card-body {
+  display: flex;
+  flex-direction: column;
+}
+
+.job-card .card-title {
+  font-weight: bold;
+}
+
+.job-card .card-text {
+  margin-bottom: 10px;
+}
+
+.job-card .btn {
+  margin-top: auto;
+}
