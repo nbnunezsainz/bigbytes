@@ -1,7 +1,7 @@
 const { getFirestore, Timestamp, FieldValue, Filter, collection, getDocs } = require('firebase-admin/firestore');
 const { db, admin } = require('../FireBaseSetUp.js');
 const Constants = require('./databaseConstant.js');
-const { getDocument, filterHelper } = require('./databaseFunctions.js');
+const { getDocument, filterHelper, queryCollection } = require('./databaseFunctions.js');
 const { query } = require('express');
 
 // create and initialize a database reference to the "Internship" collection
@@ -57,10 +57,10 @@ exports.requestReferal = async (req, res) => {
 
   const internshipDoc = await InternshipRef.doc(internshipID).get();
 
-  
+
 
   if (!internshipDoc) {
-    return res.status(500).json({message:"create a profile", resume:false})
+    return res.status(500).json({ message: "create a profile", resume: false })
   }
   const mentorID = internshipDoc.data().MentorID;
 
@@ -90,9 +90,6 @@ exports.requestReferal = async (req, res) => {
   updateInternshipData(internshipID,InternshipRef,internshipDoc.data(), MentorDeletesInternship);
   updateUserData(student.userID);
 
-
-  //After this we want to update internship, and a users ReferalCount
-  
   res.status(200).json({sucess:"sucess"})
 
 }
@@ -130,7 +127,7 @@ ALL parameters of query should be passed (Company, Category, Pay, Location). Emp
 
 Please refer to the project structure document for the field, filter, and target restrictions
 */
-exports.queryInternships = async (req, res) => {
+exports.queryInternships = async (req, res = null) => {
   try {
     let queryDict = {};
     let paramList = cleanQuery(req.query);
@@ -143,7 +140,9 @@ exports.queryInternships = async (req, res) => {
       queryDict = await filterHelper(InternshipRef, paramList);
     }
 
-    res.status(200).json({ success: true, message: 'Internships have been found', internshipData: queryDict });
+    if (res != null) {
+      res.status(200).json({ success: true, message: 'Internships have been found', internshipData: queryDict });
+    }
     return queryDict;
 
   } catch (error) {
