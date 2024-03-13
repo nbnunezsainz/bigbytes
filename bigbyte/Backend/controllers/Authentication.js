@@ -1,10 +1,13 @@
 
 
-const { signInWithEmailAndPassword , getIdToken,onAuthStateChanged} = require('firebase/auth');
+const { signInWithEmailAndPassword, getIdToken, onAuthStateChanged } = require('firebase/auth');
 
 const { Clientauth } = require('../fb.js');
 
 const { db, admin } = require('../FireBaseSetUp.js');
+const { addUser } = require('./Users.js');
+const { addMentor } = require('./Mentors.js');
+
 const Constants = require('./databaseConstant.js');
 const UserRef = db.collection(Constants.COLLECTION_USERS);
 
@@ -88,99 +91,76 @@ exports.verifyToken = async (req, res, next) => {
 };
 
 
+exports.DetermineuserType = async (req, res, next) => {
+  let userID = req.user.uid;
 
-  exports.DetermineuserType = async (req, res, next) => {
-    let userID = req.user.uid;
-  
-  
-    let doc = await UserRef.doc(userID).get();
-    if (!doc.exists) { //not a user collection check mentor
-      let doc2 = await MentorRef.doc(userID).get();
-   
-       if(!doc2.exists) //not a mentor either
-       {
-        return res.status(500).json({message:"error user does not exist in system"})
-       }
-       res.status(200).json({user:"mentor"});
-       return;
 
+  let doc = await UserRef.doc(userID).get();
+  if (!doc.exists) { //not a user collection check mentor
+    let doc2 = await MentorRef.doc(userID).get();
+
+    if (!doc2.exists) //not a mentor either
+    {
+      return res.status(500).json({ message: "error user does not exist in system" })
     }
-    console.log("here");
-    res.status(200).json({user:"studet"});
-  }
+    res.status(200).json({ user: "mentor" });
+    return;
 
-   
+  }
+  console.log("here");
+  res.status(200).json({ user: "student" });
+}
+
+exports.CreateDetailsAboutMentor = async (req, res) => {
+  try {
+    const mentorData = req.body
+    let data = {
+      FirstName: mentorData.firstName,
+      LastName: mentorData.lastName,
+      Company: mentorData.company,
+      Bio: mentorData.bio || null,
+      LinkedIn: mentorData.linkedIn || null,
+      Industry: mentorData.industry,
+
+      uid: req.user.uid,
+      UserStatus: req.body.UserStatus
+    };
+
+
+    await addMentor(data)
+    res.status(200).json({ success: true, message: 'Mentor data added correctly' });
+  } catch (error) {
+    console.error('Error signing up and creating mentor details:', error);
+    res.status(500).json({ success: false, message: 'Error signing up and creating mentor details' });
+  }
+}
 
 exports.CreateDetailsAboutUser = async (req, res) => {
-  User = req.user.uid; // got this from verifytoken function
+  try {
+    const userData = req.body;
+    const data = {
+      FirstName: userData.firstName,
+      LastName: userData.lastName,
+      Major: userData.major,
+      GradYear: userData.gradYear,
+      Bio: userData.bio || null,
+      Organizations: userData.organizations || [],
+      LinkedIn: userData.linkedIn || null,
+      UserStatus: userData.UserStatus,
+      uid: req.user.uid,
 
-  //need to get the token to verify who a user is first too.
-  console.log(req.body.UserStatus, "statuss");
-  if (req.body.UserStatus == "student") {
-    let userDetails = {
-      FirstName: req.body.firstName,
-      LastName: req.body.lastName,
-      Major: req.body.major,
-      Year: req.body.year,
-      Bio: req.body.bio || null,
-      Organizations: req.body.organizations || [],
-      LinkedIn: req.body.linkedIn || null,
-      Resume: req.body.resume || null,
-      //RefferalCount: 20, This is for internships
-      uid: User,
-      UserStatus: req.body.UserStatus, //tells us if user or student
-      // student:req.body.student, //bool
-      // mentor:req.body.mentor, //bool
-
-
+      //not provided by entered data
+      MonthlyRefferalCount: 20,
+      Resume: false,
+      TotalRefferalCount: 0,
     };
-    try {
 
-
-      const UsersRef = db.collection('User'); //this did not give deprecation error
-      UsersRef.doc(User).set(userDetails);
-
-      //await db.collection('User').doc(req.body.uid).set(userDetails);
-
-      res.status(200).json({ success: true, message: 'User data added correctly' });
-
-    } catch (error) {
-      console.error('Error signing up and creating user details:', error);
-      res.status(500).json({ success: false, message: 'Error signing up and creating user details' });
-    }
-
-
+    await addUser(data)
+    res.status(200).json({ success: true, message: 'User data added correctly' });
+  } catch (error) {
+    console.error('Error signing up and creating user details:', error);
+    res.status(500).json({ success: false, message: 'Error signing up and creating user details' });
   }
-  else {
-    let userDetails = {
-      FirstName: req.body.firstName,
-      LastName: req.body.lastName,
-      Bio: req.body.bio || null,
-      Organizations: req.body.organizations || [],
-      LinkedIn: req.body.linkedIn || null,
-      //RefferalCount: 20, This is for internships
-      uid:User,
-      UserStatus: req.body.UserStatus, //tells us if user or student
-      // student:req.body.student, //bool
-      // mentor:req.body.mentor, //bool
-
-    };
-    try {
-
-      // Add a new document in collection "USER" with ID Corresponding to UID, 
-
-      await db.collection('Mentor').doc(User).set(userDetails);
-
-      res.status(200).json({ success: true, message: 'User data added correctly' });
-
-    } catch (error) {
-      console.error('Error signing up and creating user details:', error);
-      res.status(500).json({ success: false, message: 'Error signing up and creating user details' });
-    }
-  }
-  // next(); Ideally redirect us to the next page
-
-
 }
 
 exports.Login = async (req, res, next) => {
@@ -194,7 +174,7 @@ exports.Login = async (req, res, next) => {
     console.log("here");
     const user = userCredential.user;
 
-   
+
 
 
     //const customToken = await admin.auth().createCustomToken(user.uid);
@@ -202,13 +182,13 @@ exports.Login = async (req, res, next) => {
 
     // If login is successful, return user data
     // res.json({ token: customToken , success:true});
-    res.json({ success:true});
+    res.json({ success: true });
     next();
 
   } catch (error) {
     // If there's an error, return an error message
     console.log(error);
-    res.status(401).json({ sucess:false, message: 'Authentication failed. Please check your credentials.' });
+    res.status(401).json({ sucess: false, message: 'Authentication failed. Please check your credentials.' });
   }
 
 }
@@ -220,17 +200,17 @@ exports.SignOut = async (req, res) => {
     if (req.user) {
       await admin.auth().revokeRefreshTokens(req.user.uid);
       res.json(
-          {message: 'User successfully signed out'}
+        { message: 'User successfully signed out' }
       );
     } else {
       res.status(401).json(
-          { message: 'user not authenticated'});
+        { message: 'user not authenticated' });
     }
   } catch (e) {
     res.status(500).json(
-        {
-          message: 'error: user wont sign out',
-        });
+      {
+        message: 'error: user wont sign out',
+      });
 
   }
 
@@ -241,5 +221,5 @@ exports.RedirectToStore = (req, res) => {
 }
 exports.RedirectToInternships = (req, res) => {
   //const frontendRedirectUrl = '/store';
-  res.json({success: false, redirectUrl: frontendRedirectUrl });
+  res.json({ success: false, redirectUrl: frontendRedirectUrl });
 }
