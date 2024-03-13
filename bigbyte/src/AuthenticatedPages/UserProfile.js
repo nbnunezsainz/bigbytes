@@ -50,7 +50,6 @@ const UserProfile = () => {
      window.open(resume, '_blank');
   }
 
-
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setUser({ ...User, [name]: value });
