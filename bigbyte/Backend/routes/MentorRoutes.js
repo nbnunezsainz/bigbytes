@@ -6,10 +6,10 @@ const MentorController = require('../controllers/Mentors');
 const AuthenticationController = require("../controllers/Authentication");
 
 // AUTHENTICATION ROUTES
-router.route('/MentorDetails').post(AuthenticationController.IsMentor,AuthenticationController.verifyToken, AuthenticationController.CreateDetailsAboutMentor);
+router.route('/MentorDetails').post(AuthenticationController.verifyToken, AuthenticationController.CreateDetailsAboutMentor);
 
 // Mentor routes
-router.route('/AddMentor').post(MentorController.addMentor);
+router.route('/AddMentor').post(AuthenticationController.verifyToken,MentorController.addMentor);
 
 router.route('/QueryMentors').get( MentorController.queryMentors);
 router.route('/GetAllMentors').get(MentorController.getAllMentors);

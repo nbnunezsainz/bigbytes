@@ -52,8 +52,17 @@ function UserDetailsForm() {
         const token = user && (await user.getIdToken());
 
         // split organization string by commas into a list for Users
-        let organizationList = userDetails.organizations.split(',').map(org => org.trim());
-        userDetails.organizations = organizationList;
+        if (userDetails && typeof userDetails.organizations === 'string') {
+            // Split the organizations string and map each organization
+            userDetails.organizations= userDetails.organizations.split(',').map(org => org.trim());
+          
+        } else {
+            
+          
+            userDetails.organizations = null;
+        }
+        
+        
 
         const payloadHeader = {
             method: 'POST',
