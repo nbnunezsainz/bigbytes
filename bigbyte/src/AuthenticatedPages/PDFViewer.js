@@ -63,20 +63,21 @@ function ResumeViewer({sendDataToParent, resumeUrl, resumeUID, resumeComments}) 
 
     return (
         <Col className="resume-viewer-container">
+            {/* Column that shows resumes */}
         <Row>
         <Col sm={6}>
             <Document file={resumeUrl}>
                 <Page pageNumber={1} width={600} />
             </Document>
         </Col>
-
+{/* Column that shows comment section */}
         <Col sm={6}>
                     <Row>
-                    <Button value={resumeUID} onClick={toggleComments} variant="outline-primary" className="mb-3">
+                    <Button className="comment-button" value={resumeUID} onClick={toggleComments} variant="outline-primary" >
                  Comments
                 </Button>
                      </Row>
-
+                {/* this allows us to show the comment section */}
             {showComments && currentResumeUID === resumeUID && (
                 <Card className="comments-section">
                     <Card.Body>
@@ -91,6 +92,7 @@ function ResumeViewer({sendDataToParent, resumeUrl, resumeUID, resumeComments}) 
                             <p>No comments yet.</p>
                         )}
                         <Form.Group className="mb-3">
+                            {/* Add a comment, needs an input section */}
                             <Form.Control
                                 as="textarea"
                                 value={newComment}
@@ -99,7 +101,8 @@ function ResumeViewer({sendDataToParent, resumeUrl, resumeUID, resumeComments}) 
                                 className="comment-input"
                             />
                         </Form.Group>
-                        <Button onClick={submitComment} variant="primary">
+                        {/* allows to hit submit */}
+                        <Button className = "submit-button" onClick={submitComment} variant="primary">
                             Submit
                         </Button>
                     </Card.Body>
