@@ -6,6 +6,7 @@ import AuthNavbar from './AuthenticatedNavBar';
 import auth from "../fb.js";
 import '../Styling/CreateInternship.css';
 import Confetti from 'react-dom-confetti';
+import Footer from '../pages/Footer';
 
 
 const CreateInternship = () => {
@@ -199,7 +200,9 @@ const CreateInternship = () => {
                 {/*    </div>*/}
                 {/*)}*/}
                  
+                <Footer />
             </div>
+            
         );
     };
     

@@ -6,6 +6,7 @@ import AuthNavbar from '../AuthenticatedPages/AuthenticatedNavBar';
 import '../Styling/Resume.css';
 import auth from "../fb.js";
 import Confetti from 'react-dom-confetti';
+import Footer from './Footer';
 
 // export default function Resume() {
 //     return (
@@ -102,6 +103,7 @@ export default function Resume() {
                     <Confetti active={showConfetti} />
                 )}
             </Container>
+            <Footer />
     </>
 );
 }

@@ -5,6 +5,7 @@ import { Container, Row, Col } from 'react-bootstrap';
 import AuthNavbar from './AuthenticatedNavBar';
 import "../Styling/UserProfile.css";
 import auth from "../fb.js"
+import Footer from '../pages/Footer';
 
 
 const UserProfile = () => {
@@ -223,7 +224,9 @@ const UserProfile = () => {
               </div>
 
             </div>
+            <Footer />
     </>
+    
   );
 };
 

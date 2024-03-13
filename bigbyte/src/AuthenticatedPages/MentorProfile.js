@@ -3,7 +3,7 @@ import { Button, Card, Container, Form, Row, Col } from 'react-bootstrap';
 import AuthNavbar from './AuthenticatedNavBar';
 import auth from "../fb.js";
 import {Navigate } from 'react-router-dom';
-
+import Footer from '../pages/Footer';
 import "../Styling/MentorProfile.css"
 //import {getAllInternships} from "../../Backend/controllers/Internships";
 
@@ -179,6 +179,8 @@ const MentProfile = () => {
     const allInternshipsForMentor = async() => {
        // let referalId= referals.notifications[index].id;
 
+        setcondInternship(!condInternship);
+
         const payload = {
             status: "Accepted"
         };
@@ -196,7 +198,7 @@ const MentProfile = () => {
             },
         };
 
-        const response = await fetch('http://localhost:3001/api/v1/internship/GetMentorsInternships', payloadHeader);
+        const response = await fetch('http://localhost:3001/api/v1/internship/GetAllInternships', payloadHeader);
         if (!response.ok) {
             throw new Error('Failed to fetch');
         }
@@ -208,26 +210,25 @@ const MentProfile = () => {
 
         console.log("data-------: ", data.internshipData);
 
-        console.log(data.internshipData, "helllo")
-
         //const mentorIds = new Set(Object.values(data.internshipData).map(item => item.MentorID));
 
         //iterate all internships and get specific internship for particular mento
-        // Object.values(data.internshipData).forEach(item => {
-        //     if (item.MentorID === mentor.uid) {
-        //         // Perform actions when the MentorID matches the mentor's uid
-        //        // console.log('MentorID matched:', item.MentorID);
-        //         allInternshipswithMentor.push(item);
-        //     } else {
-        //         // Perform actions when the MentorID does not match the mentor's uid
-        //         //console.log('MentorID not matched:', item.MentorID);
-        //     }
-        // });
+        Object.values(data.internshipData).forEach(item => {
+            if (item.MentorID === mentor.uid) {
+                // Perform actions when the MentorID matches the mentor's uid
+               // console.log('MentorID matched:', item.MentorID);
+                allInternshipswithMentor.push(item);
+            } else {
+                // Perform actions when the MentorID does not match the mentor's uid
+                //console.log('MentorID not matched:', item.MentorID);
+            }
+        });
 
         console.log("all userId with mentor:", allInternshipswithMentor);
 
-        setallInternships(data.internshipData);
-        setcondInternship(true);
+
+
+        setallInternships(allInternshipswithMentor);
 
         console.log(mentor.uid)
 
@@ -242,6 +243,9 @@ const MentProfile = () => {
     const handleAccept = async(index) => {
         let referalId= referals.notifications[index].id;
 
+        console.log(referalId, "referallll");
+
+        return;
        
         const payload = {
             status: "Accepted"
@@ -271,13 +275,11 @@ const MentProfile = () => {
     }
 
     //delete internship button
-    const handleDeleteInternship = async(internshipId) => {
+    const handleDeleteInternship = async(index) => {
         // Implement logic to delete the internship with the given ID
-        let referalId= internshipId;
+        let referalId= referals.notifications[index].id;
 
-        console.log("here");
-
-        console.log(referalId, "uuuu");
+        console.log("referalId-----: ", referalId);
 
         //fetch request
         //callDelete endpoint
@@ -292,11 +294,12 @@ const MentProfile = () => {
                     "Content-Type": "application/json",
                     Authorization: `Bearer ${token}`,
                 },
+                body: JSON.stringify(referalId)
             };
 
-            const response = await fetch(`http://localhost:3001/api/v1/internship/DeleteInternship?referalId=${referalId}`, payloadHeader);
+            const response = await fetch('http://localhost:3001/api/v1/internship/DeleteInternship', payloadHeader);
             const data = await response.json();
-            console.log(data, "what is going on")
+            console.log(data)
             //setMentor(data.user);
         } catch (error) {
             console.error("Error fetching data:", error);
@@ -380,7 +383,7 @@ const MentProfile = () => {
                                         {/* Mentor */}
                                         <h5 className="mb-1" style={{color: '#666'}}>Mentor</h5>
                                         {/* Company*/}
-                                        <h6 className='' style={{color: '#888'}}>{mentor.Company}</h6>
+                                        <h6 style={{color: '#888'}}>{mentor.Company}</h6>
                                         {/* Linked in  */}
                                         <a href={mentor.LinkedIn} target="_blank" rel="noopener noreferrer" className="linkedin-link">
                                      {/* No content I want the picture to represent */} </a>
@@ -391,40 +394,28 @@ const MentProfile = () => {
                                                 color: '#555'
                                             }}>{mentor.Bio}</p>
                                     </Col>
+                                    {/* Row for button */}
                                 </Row>
-                                <Row style={{ marginTop: 'auto' }}>
-                                    <Col className="d-flex justify-content-end">
-                                        <Button onClick={() => setEditFields(true)} className='mt-4 me-4' style={{ backgroundColor: '#007bff', color: '#fff', border: 'none', borderRadius: '5px', padding: '8px 16px' }}>Edit</Button>
+                                {/* Button for View Referals  */}
+                                <Row style={{ marginTop: 'auto',  alignItems: 'flex-end' }}>
+                                    <Col className="d-flex justify-content-end"> 
+                                    {/* Edit Button */}
+                                        <Button onClick={() => setEditFields(true)} className='mt-4 me-4 referal form-button' >Edit your Profile</Button>
                                         { (!viewReferals) ? (
-                                          <Button onClick={() => {setViewReferals(true)}} className='mt-4' style={{ backgroundColor: '#007bff', color: '#fff', border: 'none', borderRadius: '5px', padding: '8px 16px' }}>Show Referrals</Button>
+                                          <Button onClick={() => {setViewReferals(true)}} className='mt-4 form-button' >Show Referrals</Button>
                                         ) : (
-                                          <Button onClick={() => {setViewReferals(false)}} className='mt-4' style={{ backgroundColor: '#007bff', color: '#fff', border: 'none', borderRadius: '5px', padding: '8px 16px' }}>Hide Referrals</Button>
+                                          <Button onClick={() => {setViewReferals(false)}} className='mt-4 form-button' >Hide Referrals</Button>
                                         )}
                                         {/*<Button onClick={allInternshipsForMentor} className='mt-4' style={{ backgroundColor: '#007bff', color: '#fff', border: 'none', borderRadius: '5px', padding: '8px 16px' }}>View Internships</Button>*/}
                                         {/* condInternship */}
                                         {/* Show dropdown when condInternship is true */}
-                                        {condInternship && (
-                                            <div className='mt-4'>
-                                                {/* Render list of all internships */}
-                                                <h6>All Internships</h6>
-                                                <ul>
-                                                    {allInternships.map((internship, index) => (
-                                                        
-                                                        <li key={index}> {internship.data.Company} - {internship.data.Title} - {internship.data.URL} 
-                                                
-
-                                                            <Button onClick={() => handleDeleteInternship(internship.id)} className='ml-2' variant="danger">Delete</Button>
-                                                        </li>
-                                                        // <li key={index}>{internship.Company}</li>
-                                                    ))}
-                                                </ul>
-                                            </div>
-                                        )}
 
                                         {/* Hide dropdown when condInternship is false */}
-                                        {!condInternship && (
-                                            <Button onClick={allInternshipsForMentor} className='mt-4' style={{ backgroundColor: '#007bff', color: '#fff', border: 'none', borderRadius: '5px', padding: '8px 16px' }}>View Internships</Button>
-                                        )}
+                                        {/* button for View Internships  */}
+                        
+                                            <Button onClick={allInternshipsForMentor} className='mt-4 form-button left-button-mp'>
+                                    {condInternship ? "Hide Internships" : "View Internships"}
+                                    </Button> 
                                     </Col>
                                 </Row>
                             </>
@@ -433,6 +424,7 @@ const MentProfile = () => {
                 </Card>
                 
                 <div>
+                    {/* button for See Referals (Accept, Decline, etc)   */}
                   {viewReferals && (
                       referals.notifications.length > 0 ? (
                           referals.notifications.map((referal, index) => (
@@ -443,6 +435,7 @@ const MentProfile = () => {
                                           <Card.Text>
                                               Applicant Bio: {referal.data.studentBio}
                                           </Card.Text>
+                                          {/* Accept, Decline, and View Resume Buttons  */}
                                           <Row key={index} className='mb-3'>
                                               <Col key={index}>
                                                   <Button className="resume-btn" onClick={() => handleResume(index)}> View Resume </Button>
@@ -462,12 +455,39 @@ const MentProfile = () => {
                           <h3>Loading referrals or no pending referrals currently</h3>
                       )
                   )}
+                                 </div>
+                                <div>
+                                    {condInternship && (
+                                    <div className='mt-4 container-mp'>
+                                     {/* Render list of all internships */}
+                                 <h6 className="title-mp" style={{
+                                            fontSize: '24px',
+                                            fontWeight: 'bold',
+                                            color: '#333'
+                                        }}>All Internships</h6>
+                             <ul className="list-mp">
+                         {allInternships.map((internship, index) => (
+                             <div className='internship-item' key={index}>
+                              <div className='internship-title'>
+                              <div className="divider divider-top"></div>
+                               {internship.Company} - {internship.Title}
+                             {/* Delete button */}
+                             <Button onClick={() => handleDeleteInternship(index)} className='ml-2 form-button left-button delete-button' variant="danger">Delete</Button>
+                              {/* Divider */}
+                         <div className="divider "></div>
+                                </div>
+                                </div>
+                               ))}
+                         </ul>
+                         </div>
+                        )}
+
               </div>
 
             </div>
+            <Footer />
         </>
     );
 };
 
 export default MentProfile;
-

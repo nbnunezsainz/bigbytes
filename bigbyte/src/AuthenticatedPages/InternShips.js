@@ -6,7 +6,7 @@ import { Form, FormControl } from 'react-bootstrap';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Confetti from 'react-dom-confetti';
-
+import Footer from '../pages/Footer';
 
 const JobDetail = () => {
   const [jobs, setJobs] = useState([]); // State to store internship data
@@ -326,7 +326,9 @@ const JobDetail = () => {
         </Row>
       </Container>
    
+      <Footer />
     </>
+
   );
 };
 
