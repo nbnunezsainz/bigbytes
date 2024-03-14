@@ -104,17 +104,16 @@ exports.getAllInternshipsRelatedToAMentor = async (req, res) => {
 
     // Iterate over the documents in the snapshot
     internshipSnapshot.forEach(doc => {
-        // Get the data of each document and push it to the internshipData array
-        if( doc.data().Display !==false )
-          {
-            internshipData.push({
-          
-              id: doc.id, // Document ID
-  
-              data: doc.data() // Other fields...
-          });
-          }
-       
+      // Get the data of each document and push it to the internshipData array
+      if (doc.data().Display !== false) {
+        internshipData.push({
+
+          id: doc.id, // Document ID
+
+          data: doc.data() // Other fields...
+        });
+      }
+
     });
     res.status(200).json({ success: true, internshipData: internshipData });
 
@@ -254,7 +253,7 @@ exports.deleteInternship = async (req, res) => {
 
     const InternshipRef = db.collection(Constants.COLLECTION_INTERNSHIP);
     let internshipData = await getDocument(InternshipRef, InternshipID);
- 
+
     let MentorDeletesInternship = true;
     updateInternshipData(InternshipID, InternshipRef, internshipData, MentorDeletesInternship);
 
@@ -301,25 +300,3 @@ const updateUserData = async (userID) => {
   } catch (error) {
   }
 };
-
-
-/*
-Below includes functions solely for testing. These will NOT be included 
-*/
-/*
-const internshipData = require('../TestDataGeneration/testInternshipData.js');
-exports.generateTestInternsip = async (req, res) => {
-  try {
-    console.log("The length of the test data is: " + internshipData.internships.length);
-
-    internshipData.internships.forEach((internship) => {
-      this.addInternship(internship, "");
-    })
-
-    res.status(200).json({ success: true, message: 'Was able to do user testing correctly' });
-  } catch (error) {
-    console.log("oops something went wrong")
-    res.status(500).json({ success: false, message: 'Something went wrong when testing user data' });
-  }
-}
-*/

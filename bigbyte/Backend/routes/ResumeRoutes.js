@@ -5,7 +5,7 @@ const router = express.Router();
 const AuthenticationController = require('../controllers/Authentication');
 const ResumeController = require('../controllers/Resume');
 
-router.route('/UploadResume').post( AuthenticationController.verifyToken, AuthenticationController.IsStudent, ResumeController.uploadResume);
+router.route('/UploadResume').post(AuthenticationController.verifyToken, AuthenticationController.IsStudent, ResumeController.uploadResume);
 router.route('/DeleteResume').delete(AuthenticationController.verifyToken, AuthenticationController.IsStudent, ResumeController.deleteResume);
 router.route('/GetResume').get(ResumeController.getResume);
 router.route('/GetAllResumes').get(ResumeController.getAllResumes);

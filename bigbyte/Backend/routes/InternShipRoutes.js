@@ -16,7 +16,4 @@ router.route('/DeleteInternship').delete(AuthenticationController.verifyToken, I
 router.route('/GetInternship').get(AuthenticationController.verifyToken, InternshipController.getInternship);
 router.route('/RequestReferal').get(AuthenticationController.verifyToken, AuthenticationController.IsStudent, UserController.getUserAndResume, InternshipController.requestReferal);
 
-// TO TEST USER DATASE WITH RANDOM MENTORS
-//router.route('/GenerateInternshipTestData').post(InternshipController.generateTestInternsip);
-
 module.exports = router;

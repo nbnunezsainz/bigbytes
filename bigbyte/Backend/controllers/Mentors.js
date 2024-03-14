@@ -323,7 +323,3 @@ exports.generateInternship = async (req, res) => {
   }
 };
 
-/*
-Below includes functions solely for testing. These will NOT be included 
-*/
-
