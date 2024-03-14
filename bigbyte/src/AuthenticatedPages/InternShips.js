@@ -11,8 +11,6 @@ import "../Styling/Internships.css"
 const JobDetail = () => {
   const [jobs, setJobs] = useState([]); // State to store internship data
   const [loading, setLoading] = useState(true); // State to manage loading status
-  // const [filteredJobs, setFilteredJobs] = useState([]); // State to store filtered internship data
-  const [filterMajor, setFilterMajor] = useState('');
   const [filterPay, setFilterPay] = useState('');
   const [filterLocation, setFilterLocation] = useState('');
   const [filterCompany, setFilterCompany] = useState('');
@@ -56,7 +54,7 @@ const JobDetail = () => {
 
       setJobs(data.internshipData);
     } catch (error) {
-      
+
     } finally {
       setLoading(false); // Stop loading regardless of outcome
     }
@@ -128,27 +126,8 @@ const JobDetail = () => {
         setCategory(allCategory)
       }
 
-
-      //iterate through all categories and subcategories. creating a hash map
-      const hashMapforCategories = {};
-
-      for (let i = 0; i < allCategory.length; i++) {
-        const mainCategory = allCategory[i][1];
-        const subCategory = allCategory[i][0];
-
-
-        //if main category doesnt exist,
-        if (!hashMapforCategories[mainCategory]) {
-          hashMapforCategories[mainCategory] = new Set([subCategory]);
-        } else {
-          hashMapforCategories[mainCategory].add(subCategory);
-        }
-        setCategory(hashMapforCategories);
-      }
-
-
     } catch (error) {
-      
+
     } finally {
       setLoading(false); // Ensure loading is set to false after the fetch operation completes
     }
@@ -178,18 +157,17 @@ const JobDetail = () => {
       if (!response.ok) {
         toast.error('Resume does not exist. Please create one before proceeding.');
       }
-      else
-      {
+      else {
         toast.success('you have succesfully requested a referal!');
 
       }
-     
 
-  } catch (error) {
-  } finally {
+
+    } catch (error) {
+    } finally {
       setLoading(false); // Ensure loading is set to false after the fetch operation completes
-  }
-};
+    }
+  };
 
 
   useEffect(() => {
@@ -214,7 +192,7 @@ const JobDetail = () => {
           <Col xs={12} className="mb-5 filter-container">
             <h5 className='label-i'>Filters</h5>
             <Form >
-        
+
               <Form.Group className="mb-3">
                 <Form.Label>Company</Form.Label>
                 <Form.Control
@@ -241,7 +219,7 @@ const JobDetail = () => {
                 >
                   {/* main category */}
                   <option value="">Select Category</option>
-                  {Object.keys(allCategory).map((categoryKey) => (
+                  {Array.from(allCategory).map((categoryKey) => (
                     <option key={categoryKey} value={categoryKey}>
                       {categoryKey}
                     </option>
@@ -251,15 +229,6 @@ const JobDetail = () => {
                 </Form.Control>
               </Form.Group>
 
-              <Form.Group className="mb-3">
-                <Form.Label>Major</Form.Label>
-                <Form.Control
-                  type="text"
-                  placeholder="Enter major"
-                  value={filterMajor}
-                  onChange={(e) => setFilterMajor(e.target.value)}
-                />
-              </Form.Group>
               <Form.Group className="mb-3">
                 <Form.Label>Minimum Pay</Form.Label>
                 <Form.Control
@@ -289,10 +258,10 @@ const JobDetail = () => {
               </Form.Group>
 
               <Button className="me-2 intern-button" variant="primary" onClick={applyFilters}>
-              <img  className ="intern-icon "src="https://cdn-icons-png.flaticon.com/512/107/107799.png" alt="Filter Icon" />
-                 Apply Filters
-                  </Button>            
-                    {<Button variant="secondary intern-button" onClick={resetFilters}><img className = "intern-icon" src = "https://static.thenounproject.com/png/4800805-200.png" alt= "Reset-Icon"/> Reset Filters</Button>}
+                <img className="intern-icon " src="https://cdn-icons-png.flaticon.com/512/107/107799.png" alt="Filter Icon" />
+                Apply Filters
+              </Button>
+              {<Button variant="secondary intern-button" onClick={resetFilters}><img className="intern-icon" src="https://static.thenounproject.com/png/4800805-200.png" alt="Reset-Icon" /> Reset Filters</Button>}
             </Form>
           </Col>
           <Col sm={12}>
@@ -319,7 +288,7 @@ const JobDetail = () => {
         </Row>
       </Container>
       {/*We wanted confetti to show up */}
-      
+
 
       <Footer />
     </>

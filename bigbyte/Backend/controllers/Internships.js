@@ -1,5 +1,5 @@
 
-const { db} = require('../FireBaseSetUp.js');
+const { db } = require('../FireBaseSetUp.js');
 const Constants = require('./databaseConstant.js');
 const { getDocument, filterHelper } = require('./databaseFunctions.js');
 
@@ -194,7 +194,7 @@ const cleanQuery = (query) => {
     let fil = "==";
 
     if (key == "Category") {
-      fil = "array-contains"
+      fil = "=="
     }
     if (key == "Pay") {
       fil = ">=";
