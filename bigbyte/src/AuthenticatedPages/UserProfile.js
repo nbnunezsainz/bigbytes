@@ -167,12 +167,12 @@ const UserProfile = () => {
                 </Row>
                 <Row style={{ marginTop: 'auto' }}>
                   <Col className="d-flex justify-content-end">
-                    <Button onClick={() => handleResume()} className='mt-4 me-4' style={{ backgroundColor: '#007bff', color: '#fff', border: 'none', borderRadius: '5px', padding: '8px 16px' }}>View Resume</Button>
-                    <Button onClick={() => setEditFields(true)} className='mt-4 me-4' style={{ backgroundColor: '#007bff', color: '#fff', border: 'none', borderRadius: '5px', padding: '8px 16px' }}>Edit</Button>
+                    <button type="button" onClick={() => handleResume()} className='mt-4 me-4' style={{ backgroundColor: '#007bff', color: '#fff', border: 'none', borderRadius: '5px', padding: '8px 16px' }}>View Resume</button>
+                    <button type="button" onClick={() => setEditFields(true)} className='mt-4 me-4' style={{ backgroundColor: '#007bff', color: '#fff', border: 'none', borderRadius: '5px', padding: '8px 16px' }}>Edit</button>
                     {(!viewReferals) ? (
-                      <Button onClick={() => { setViewReferals(true) }} className='mt-4' style={{ backgroundColor: '#007bff', color: '#fff', border: 'none', borderRadius: '5px', padding: '8px 16px' }}>Show Referrals</Button>
+                      <button type="button" onClick={() => { setViewReferals(true) }} className='mt-4' style={{ backgroundColor: '#007bff', color: '#fff', border: 'none', borderRadius: '5px', padding: '8px 16px' }}>Show Referrals</button>
                     ) : (
-                      <Button onClick={() => { setViewReferals(false) }} className='mt-4' style={{ backgroundColor: '#007bff', color: '#fff', border: 'none', borderRadius: '5px', padding: '8px 16px' }}>Hide Referrals</Button>
+                      <button typw="button" onClick={() => { setViewReferals(false) }} className='mt-4' style={{ backgroundColor: '#007bff', color: '#fff', border: 'none', borderRadius: '5px', padding: '8px 16px' }}>Hide Referrals</button>
                     )}
                   </Col>
                 </Row>
@@ -196,16 +196,16 @@ const UserProfile = () => {
                       {/* <div>Status: {referal.status}</div> */}
                     </Card.Text>
 
-                    <Row key={index} className='mb-3'>
+                    <Row key={index} className='mb-3 d-flex'>
                       {(referal.status === "pending") && (
-                        <button className='pending-btn' type='button' disabled>Pending</button>
+                        <button className='pending-btn button' type='button' disabled>Pending</button>
                       )}
 
                       {(referal.status === 'Accepted') && (
-                        <button className='accept-btn' type='button' disabled>Accepted</button>
+                        <button className='accept-btn button' type='button' disabled>Accepted</button>
                       )}
                       {(referal.status === 'Declined') && (
-                        <button className='decline-btn' type='button' disabled>Declined</button>
+                        <button className='decline-btn button' type='button' disabled>Declined</button>
                       )}
                     </Row>
                   </Card>
