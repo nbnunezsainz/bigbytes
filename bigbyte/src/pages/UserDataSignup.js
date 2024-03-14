@@ -39,7 +39,6 @@ function UserDetailsForm() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log(userDetails);
         // Send userDetails to backend for further processing
         if ((role === 'student' && (userDetails.firstName === '' || userDetails.lastName === '' || userDetails.gradYear === '' || userDetails.major === '')) ||
             (role === 'mentor' && (userDetails.firstName === '' || userDetails.lastName === '' || userDetails.company === ''))) {
@@ -57,15 +56,15 @@ function UserDetailsForm() {
         // split organization string by commas into a list for Users
         if (userDetails && typeof userDetails.organizations === 'string') {
             // Split the organizations string and map each organization
-            userDetails.organizations= userDetails.organizations.split(',').map(org => org.trim());
-          
+            userDetails.organizations = userDetails.organizations.split(',').map(org => org.trim());
+
         } else {
-            
-          
+
+
             userDetails.organizations = null;
         }
-        
-        
+
+
 
         const payloadHeader = {
             method: 'POST',

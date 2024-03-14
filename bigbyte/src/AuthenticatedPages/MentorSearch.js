@@ -193,7 +193,7 @@ const MentorSearch = () => {
                 <p><strong>Name:</strong> {internship.Title}</p>
                 <p><strong>Company:</strong> {internship.Company}</p>
                 <p><strong>Location:</strong> {internship.Location}</p>
-                <p><strong>Category:</strong> {internship.Category.join(', ')}</p>
+                <p><strong>Category:</strong> {internship.Category}</p>
                 <p><strong>Pay:</strong> {internship.Pay}</p>
                 <p><strong>Description:</strong> {internship.Description}</p>
                 {/* Thin divider */}

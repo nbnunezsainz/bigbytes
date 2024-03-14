@@ -1,4 +1,3 @@
-
 const { getFirestore, } = require("firebase-admin/firestore");
 const { getStorage, ref } = require("firebase/storage")
 const admin = require("firebase-admin");
@@ -28,4 +27,3 @@ const bucket = admin.storage().bucket();
 const storage = getStorage();
 
 module.exports = { db, admin, bucket, storage };
-
