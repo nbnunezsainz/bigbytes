@@ -8,17 +8,13 @@
 
 ## Installation Process:
     1. Clone from GitHub repo
-    2. Navigate to the bigbyte/Backend directory and create the following files to store and initialize the Firebase API keys:
+    2. Navigate to the bigbytes/bigbyte directory and create the following file to store and initialize the Firebase API keys:
         - .env
-        - FBAdmin.json
-        - fb.js
-    3. Navigate to the bigbyte/src directory and create the following files to connect to the Backend:
-        - fb.js
-    4. Navigate to the bigbytes root directory and execute the start script start_app.sh which does the following: 
-    - installs all Firebase and Firebase Admin dependencies
-    - installs npm throughout the project
-    - navigates to the front end and back end folders, installs npm, and starts both servers to effectively launch the application
-    5. A new React application host will startup in localhost:3000 with backend functionality in localhost:3001
+    3. Navigate to the bigbytes root directory and execute the start script start_app.sh which does the following: 
+        - installs all Firebase and Firebase Admin dependencies
+        - installs npm throughout the project
+        - navigates to the front end and back end folders, installs npm, and starts both servers to effectively launch the application
+    4. A new React application host will startup in localhost:3000 with backend functionality in localhost:3001
 
 
 ## Backups:
