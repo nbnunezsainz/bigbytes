@@ -177,8 +177,13 @@ const JobDetail = () => {
       if (!response.ok) {
         toast.error('Resume does not exist. Please create one before proceeding.');
       }
+      else
+      {
+        toast.success('you have succesfully requested a referal!');
+
+      }
      
-      toast.success('you have succesfully requested a referal!');
+
   } catch (error) {
   } finally {
       setLoading(false); // Ensure loading is set to false after the fetch operation completes
