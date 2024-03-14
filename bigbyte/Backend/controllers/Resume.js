@@ -1,8 +1,7 @@
 
 const { uploadBytes, ref, deleteObject, getDownloadURL, listAll } = require('firebase/storage');
-const { db, admin, bucket, storage } = require('../FireBaseSetUp.js');
+const { db, admin, storage } = require('../FireBaseSetUp.js');
 const Constants = require('./databaseConstant.js');
-const { queryCollection, deleteDocument, getDocument } = require('./databaseFunctions.js');
 //import React, { useState } from 'react';
 
 const ResumeRef = db.collection(Constants.Collection_RESUME);

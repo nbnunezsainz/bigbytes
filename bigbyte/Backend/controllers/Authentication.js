@@ -1,6 +1,6 @@
 
 
-const { signInWithEmailAndPassword, getIdToken, onAuthStateChanged } = require('firebase/auth');
+const { signInWithEmailAndPassword} = require('firebase/auth');
 
 const { Clientauth } = require('../fb.js');
 

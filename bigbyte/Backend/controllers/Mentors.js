@@ -1,5 +1,5 @@
-const { getFirestore, Timestamp, FieldValue, Filter } = require('firebase-admin/firestore');
-const { db, admin } = require('../FireBaseSetUp.js');
+
+const { db} = require('../FireBaseSetUp.js');
 const Constants = require('./databaseConstant.js');
 const { filterHelper, getDocument, queryCollection } = require('./databaseFunctions.js');
 const { addInternship } = require('./Internships.js');
@@ -326,19 +326,4 @@ exports.generateInternship = async (req, res) => {
 /*
 Below includes functions solely for testing. These will NOT be included 
 */
-const mentorData = require('../TestDataGeneration/testMentorData.js');
-exports.generateTestMentors = async (req, res) => {
-  try {
-    const promises = mentorData.mentors.map((mentor) => {
-      console.log("Mentor ID: " + mentor.body.id);
-      //return this.addMentor(mentor, "");
-    });
 
-    //await Promise.all(promises);
-
-    res.status(200).json({ success: true, message: 'Was able to do mentor testing correctly' });
-  } catch (error) {
-    console.log("oops something went wrong")
-    res.status(500).json({ success: false, message: 'Something went wrong when testing mentor data' });
-  }
-}
