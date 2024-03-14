@@ -19,7 +19,8 @@ const JobDetail = () => {
   const [allCompany, setCompany] = useState('');
   const [allLocations, setAllLocations] = useState(new Set());
   const [allCategory, setCategory] = useState(new Set());
-  
+  const [showConfetti, setShowConfetti] = useState(false);
+
 
 
   const [selectedCategory, setSelectedCategory] = useState('');
@@ -58,7 +59,7 @@ const JobDetail = () => {
 
       setJobs(data.internshipData);
     } catch (error) {
-      console.error("Error fetching data:", error);
+      
     } finally {
       setLoading(false); // Stop loading regardless of outcome
     }
@@ -85,10 +86,7 @@ const JobDetail = () => {
       }
 
       const data = await response.json();
-      console.log(data, 'data');
       setJobs(data.internshipData); // Assuming the response JSON structure matches our state
-      console.log(data.internshipData, "hod");
-
 
 
       //get all internship locations
@@ -149,18 +147,11 @@ const JobDetail = () => {
           hashMapforCategories[mainCategory].add(subCategory);
         }
         setCategory(hashMapforCategories);
-
-
-        // Perform operations with mainCategory and subCategory
-        // console.log(`Main Category: ${mainCategory}, Sub Category: ${subCategory}`);
-        // console.log(hashMapforCategories);
       }
-
-      //console.log(allCategory)
 
 
     } catch (error) {
-      console.error("Error fetching data:", error);
+      
     } finally {
       setLoading(false); // Ensure loading is set to false after the fetch operation completes
     }
@@ -187,14 +178,14 @@ const JobDetail = () => {
     const internshipID = event.target.value;
     try {
       const response = await fetch(`http://localhost:3001/api/v1/internship/RequestReferal?internshipID=${internshipID}`, payloadHeader);
-      console.log(response, "response please");
       if (!response.ok) {
         toast.error('Resume does not exist. Please create one before proceeding.');
       }
-      toast.success('you have succesfully requested a referal!');
+      setShowConfetti(true);
+      // toast.success('you have succesfully requested a referal!');
 
     } catch (error) {
-      console.error('Error requesting referral:', error);
+     
       // Handle error
     }
   };
@@ -216,14 +207,17 @@ const JobDetail = () => {
   return (
     <>
       <AuthNavbar />
-      
+
       <Container fluid style={{ marginTop: '70px' }}>
-        <Row  className ="mx-2">
-          <Col xs={12}  className="mb-5">
+        <Row className="mx-2">
+          <Col xs={12} className="mb-5">
             {/* Filter Section */}
             <h5 s>Filters</h5>
             <Form>
-
+          {/*We wanted confetti to show up */}
+          {showConfetti && (
+                              <Confetti active={showConfetti} />
+                          )}
               {/* company */}
               <Form.Group className="mb-3">
                 <Form.Label>Company</Form.Label>
@@ -257,9 +251,13 @@ const JobDetail = () => {
                     </option>
                   ))}
 
-                
+
                 </Form.Control>
               </Form.Group>
+              {/*We wanted confetti to show up */}
+              {showConfetti && (
+                    <Confetti active={showConfetti} />
+                )}
 
               <Form.Group className="mb-3">
                 <Form.Label>Major</Form.Label>
@@ -293,11 +291,16 @@ const JobDetail = () => {
                     </option>
                   ))}
 
+                  {/*We wanted confetti to show up */}
+                {showConfetti && (
+                    <Confetti active={showConfetti} />
+                )}
+
 
                 </Form.Control>
 
               </Form.Group>
-              
+
               {<Button className="me-2" variant="primary" onClick={applyFilters}>Apply Filters</Button>}
               {<Button variant="secondary" onClick={resetFilters}> Reset Filters</Button>}
             </Form>
@@ -310,7 +313,7 @@ const JobDetail = () => {
                   <Card className="mb-3">
                     <Card.Body>
                       <Card.Title>{job.Title}</Card.Title>
-                      
+
 
                       <Card.Text><strong>Company:</strong> {job.Company}</Card.Text>
                       <Card.Text><strong>Location:</strong> {job.Location}</Card.Text>
@@ -325,7 +328,11 @@ const JobDetail = () => {
           </Col>
         </Row>
       </Container>
-   
+      {/*We wanted confetti to show up */}
+      {showConfetti && (
+                    <Confetti active={showConfetti} />
+                )}
+
       <Footer />
     </>
 

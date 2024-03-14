@@ -13,7 +13,6 @@ exports.addUser = async (data, res = null) => {
         const userID = data.uid;
         await UserRef.doc(userID).set(data);
 
-        console.log("Success- a new user has been added!");
         //res.status(200).json({ success: true, message: 'User added successfully' });
     } catch (error) {
         console.log("There was some error when adding user", error);
@@ -27,7 +26,6 @@ exports.queryUsers = async (req, res) => {
 
         queryDict = await queryCollection(UserRef, req.body);
 
-        console.log("Success- users have been found!");
         res.status(200).json({ success: true, message: 'Users have been found' });
         return queryDict;
 
@@ -44,7 +42,6 @@ exports.deleteUser = async (req, res) => {
         let userID = req.body.id;
 
         //const result = await deleteDocument(UserRef, userID);
-        console.log("Success- user deleted!");
         res.status(200).json({ success: true, message: 'User deleted successfully' });
     } catch (error) {
         console.log("There was some error when deleting user", error);
@@ -104,11 +101,11 @@ exports.getUserAndResume = async (req, res, next) => {
     let pathName = Constants.STORAGE_RESUME + userID;
     const resumeRef = ref(storage, pathName);
     let URL
-    try{
-     URL = await getDownloadURL(resumeRef);
+    try {
+        URL = await getDownloadURL(resumeRef);
     }
-    catch{
-     return res.status(500).json({message:" Upload a resume first before requesting a referal", resume:false});
+    catch {
+        return res.status(500).json({ message: " Upload a resume first before requesting a referal", resume: false });
 
     }
     //const user = await getDocument(UserRef, userID); cant use this because dont want to send USer UID back, secuirty hazard
@@ -187,7 +184,6 @@ exports.applyForInternship = async (req, res) => {
         updateUserData(userID);
         updateInternshipData(internshipID, InternshipRef, internshipData);
 
-        console.log("Success- user has applied to the internship");
         res.status(200).json({ success: true, message: 'User has applied successfully' });
     } catch (error) {
         console.log("There was some error when applying to the internship", error);
@@ -207,7 +203,6 @@ const updateUserData = async (userID) => {
                 TotalRefferalCount: userData.TotalRefferalCount + 1
             }
         );
-        console.log("User data is updated after application was submitted");
     } catch (error) {
         console.log("There was some error when updating user data", error);
     }
@@ -230,7 +225,6 @@ const updateInternshipData = async (internshipID, InternshipRef, internshipData)
                 Display: newDisplay
             }
         );
-        console.log("Internship data is updated after application was submitted");
     } catch (error) {
         console.log("There was some error when updating internship data", error);
     }
@@ -242,7 +236,7 @@ exports.CheckReferalStatus = async (req, res) => {
         const userNotificationsSnapshot = await MentorNotificationsRef.where('studentID', '==', studentID).get();
 
         if (userNotificationsSnapshot.empty) {
-           return res.status(200).json({ message: "currently no request made" });
+            return res.status(200).json({ message: "currently no request made" });
         }
 
         // Array to store notifications
@@ -250,8 +244,6 @@ exports.CheckReferalStatus = async (req, res) => {
 
         userNotificationsSnapshot.forEach(doc => {
             const data = doc.data();
-            console.log(doc.data());
-            console.log(doc.data(), "www");
             const notificationData = {
                 InternshipTitle: data.InternshipTitle,
                 Company: data.company,

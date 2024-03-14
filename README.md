@@ -8,16 +8,22 @@
 
 ## Installation Process:
     1. Clone from GitHub repo
-    2. Navigate to Backend directory and create the following files to store and initialize the Firebase API keys:
+    2. Navigate to the bigbyte/Backend directory and create the following files to store and initialize the Firebase API keys:
         - .env
         - FBAdmin.json
-    3. 'npm install' in both bigbyte and Backend directory
-    4. npm start in both bigbyte and Backend directory
+        - fb.js
+    3. Navigate to the bigbyte/src directory and create the following files to connect to the Backend:
+        - fb.js
+    4. Navigate to the bigbytes root directory and execute the start script start_app.sh which does the following: 
+    - installs all Firebase and Firebase Admin dependencies
+    - installs npm throughout the project
+    - navigates to the front end and back end folders, installs npm, and starts both servers to effectively launch the application
     5. A new React application host will startup in localhost:3000 with backend functionality in localhost:3001
 
 
 ## Backups:
-Assyming the project is installed and you navigate to the /Backend folder with proper admin access. Run the terminal command below 'export' to save your current data and 'import' to rewrite the exported data to the database
+Assuming the project is installed and you navigate to the /Backend folder with proper admin access. Run the terminal command below 'export' to save your current data and 'import' to rewrite the exported data to the database
+
 Naming convention: backup[x].json - backup1.json, backup2.json, etc
 1. export data (you can also specify a file path before your backup file name): npx -p node-firestore-import-export firestore-export -a FBAdmin.json -b backup[x].json
 2. import data (ensure the correct filepath is appended to backup file name): npx -p node-firestore-import-export firestore-import -a FBAdmin.json -b backup[x].json

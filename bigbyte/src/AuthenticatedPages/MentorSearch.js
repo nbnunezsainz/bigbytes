@@ -2,8 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { Container, Row, Col, Button, Card } from 'react-bootstrap';
 import AuthNavbar from './AuthenticatedNavBar';
 import auth from "../fb.js";
-import { Form, FormControl } from 'react-bootstrap';
-import Footer from '../pages/Footer';
+import { Modal, Form, FormControl } from 'react-bootstrap';
+
+import "../Styling/MentorSearch.css"
 
 const MentorSearch = () => {
   const [Mentors, setMentors] = useState([]); // State to store mentor data
@@ -13,7 +14,11 @@ const MentorSearch = () => {
   const [filterCompany, setFilterCompany] = useState('');
   const [filterIndustry, setFilterIndustry] = useState('');
 
-
+  //state variable for viewing an internship
+  const [showModal, setShowModal] = useState(false);
+  const [viewMentorProfile, setViewMentorProfile] = useState(false);
+  const [mentorProfileData, setMentorProfileData] = useState([]);
+  const [mentorInternshipData, setMentorInternshipData] = useState([]);
 
 
   const fetchData = async () => {
@@ -37,9 +42,6 @@ const MentorSearch = () => {
       }
 
       const data = await response.json();
-
-      console.log("mentor data: ");
-      console.log(data.mentorData);
 
       setMentors(data.mentorData); // Assuming the response JSON structure matches our state
 
@@ -105,9 +107,13 @@ const MentorSearch = () => {
       }
 
       const data = await response.json();
+      const messyMentorData = data.mentorData;
+      const cleanMentorData = Object.keys(messyMentorData).map(key => ({
+        id: key,
+        ...messyMentorData[key]
+      }));
 
-      console.log(data.mentorData)
-      setMentors(data.mentorData);
+      setMentors(Object.values(cleanMentorData));
     } catch (error) {
       console.error("Error fetching data:", error);
     } finally {
@@ -121,6 +127,90 @@ const MentorSearch = () => {
     // Call the fetchData function
     fetchData();
   }, []); // Empty dependency array means this effect runs once on mount
+
+  const viewProfile = async (mentorID) => {
+    setViewMentorProfile(true);
+    try {
+      const user = auth.currentUser;
+      const token = user && (await user.getIdToken());
+
+      let queryParams = new URLSearchParams({
+        id: mentorID,
+      }).toString();
+
+      const payloadHeader = {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      };
+
+      const response = await fetch(`http://localhost:3001/api/v1/mentor/ViewMentorProfile?${queryParams}`, payloadHeader);
+
+      if (!response.ok) {
+        throw new Error('Failed to fetch user data');
+      }
+      const data = await response.json()
+      setMentorProfileData(data.mentorData);
+      setMentorInternshipData(data.internshipData);
+
+      toggleModal();
+
+    } catch (error) {
+      console.error("Error fetching mentor data:", error);
+    }
+
+  }
+
+  const toggleModal = () => {
+    setShowModal(!showModal);
+  };
+
+  const MentorModal = () => {
+    return (
+      <Modal show={showModal} onHide={toggleModal}>
+        <Modal.Header closeButton>
+          <Modal.Title className="text-center"><strong>{mentorProfileData.FirstName} {mentorProfileData.LastName}'s</strong> Profile</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          {/* Mentor profile */}
+          <div className="profile-section">
+            <h5 className="text-center"><strong>Mentor Profile</strong></h5>
+            <p><strong>Company:</strong> {mentorProfileData.Company}</p>
+            <p><strong>Industry:</strong> {mentorProfileData.Industry}</p>
+            <p><strong>LinkedIn:</strong> {mentorProfileData.LinkedIn}</p>
+            <p><strong>Bio:</strong> {mentorProfileData.Bio}</p>
+          </div>
+
+          {/* Thick divider */}
+          <hr className="thick-divider" />
+
+          {/* Active internships */}
+          <div className="internship-section">
+            <h5 className="text-center"><strong>Active Internships</strong></h5>
+            {Object.values(mentorInternshipData).map((internship, index) => (
+              <div key={index}>
+                <p><strong>Name:</strong> {internship.Title}</p>
+                <p><strong>Company:</strong> {internship.Company}</p>
+                <p><strong>Location:</strong> {internship.Location}</p>
+                <p><strong>Category:</strong> {internship.Category}</p>
+                <p><strong>Pay:</strong> {internship.Pay}</p>
+                <p><strong>Description:</strong> {internship.Description}</p>
+                {/* Thin divider */}
+                {index !== Object.values(mentorInternshipData).length - 1 && <hr className="thin-divider" />}
+              </div>
+            ))}
+          </div>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={toggleModal}>
+            Close
+          </Button>
+        </Modal.Footer>
+      </Modal>
+    );
+  };
+
 
 
   if (loading) {
@@ -170,35 +260,34 @@ const MentorSearch = () => {
       </Form>
 
       {/*</Form>*/}
-      <div className='d-flex 100vw' style={{justifyContent: "center"}}>
-        <Row className="mt-5" style={{ paddingTop: "30px"}}>
-          {Object.entries(Mentors).map(([mentorID, mentor]) => (
-            <Col md={12}>
-              <Card className="mb-3">
-                <Card.Body>
-                  <Card.Text><strong>Company:</strong> {mentor.Company}</Card.Text>
-                  <Card.Text><strong>Name:</strong> {mentor.FirstName} {mentor.LastName}</Card.Text>
-                  <Card.Text><strong>Bio:</strong> {mentor.Bio} </Card.Text>
-                  <Card.Text>
-                    {/*<strong>LinkedIn:</strong>{" "}*/}
-                    {/*<a href={`https://${mentor.LinkedIn}`} target="_blank" rel="noopener noreferrer">*/}
-                    {/*  {mentor.LinkedIn}*/}
-                    {/*</a>*/}
-                  </Card.Text>
+      <Row className="mt-5" style={{ paddingTop: "30px" }}>
+        {Object.entries(Mentors).map(([mentorID, mentor]) => (
+          <Col md={12}>
+            <Card className="mb-3">
+              <Card.Body>
+                <Card.Text><strong>Company:</strong> {mentor.Company}</Card.Text>
+                <Card.Text><strong>Name:</strong> {mentor.FirstName} {mentor.LastName}</Card.Text>
+                <Card.Text><strong>Bio:</strong> {mentor.Bio} </Card.Text>
+                <Card.Text>
+                  {/*<strong>LinkedIn:</strong>{" "}*/}
+                  {/*<a href={`https://${mentor.LinkedIn}`} target="_blank" rel="noopener noreferrer">*/}
+                  {/*  {mentor.LinkedIn}*/}
+                  {/*</a>*/}
+                </Card.Text>
 
-                  <a href={`https://${mentor.LinkedIn}`} target="_blank" rel="noopener noreferrer">
-                    <Button variant="primary">Contact - LinkedIn</Button>
-                  </a>
+                <a href={`https://${mentor.LinkedIn}`} target="_blank" rel="noopener noreferrer">
+                  <Button variant="primary" className="me-4">Contact - LinkedIn</Button>
+                </a>
 
+                <Button variant="primary" onClick={() => viewProfile(mentor.id)}>View Mentor Profile</Button>
+              </Card.Body>
+            </Card>
+          </Col>
+        ))}
+      </Row>
 
+      <MentorModal />
 
-                </Card.Body>
-              </Card>
-            </Col>
-          ))}
-        </Row>
-      </div>
-      <Footer />
     </>
   );
 };
