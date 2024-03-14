@@ -451,12 +451,12 @@ const MentProfile = () => {
                                 {allInternships.map((internship, index) => (
                                     <div className='internship-item' key={index}>
                                         <div className='internship-title'>
-                                            <div className="divider divider-top"></div>
+                                            <div className="dividerr dividerr-top"></div>
                                             {internship.data.Company} - {internship.data.Title} - {internship.data.URL}
                                             {/* Delete button */}
                                             <Button onClick={() => handleDeleteInternship(internship.id)} className='ml-2 form-button left-button delete-button' variant="danger">Delete</Button>
                                             {/* Divider */}
-                                            <div className="divider "></div>
+                                            <div className="dividerr "></div>
                                         </div>
                                     </div>
                                 ))}
