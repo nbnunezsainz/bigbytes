@@ -146,7 +146,7 @@ if (redirectToUserData) {
           />
              {failedSignUp &&
                  <div className='mt-4'>
-                     <p style={{color: "red"}}>Incorrect email or password.</p>
+                     <p style={{color: "red"}}>An account with this email already exists.</p>
                  </div>
              }
           <button className = "signup-btn" onClick={SignUserUp} type="submit">Sign Up</button>
