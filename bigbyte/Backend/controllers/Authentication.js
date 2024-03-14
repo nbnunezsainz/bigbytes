@@ -17,49 +17,49 @@ const MentorRef = db.collection(Constants.COLLECTION_MENTORS);
 
 
 
-exports.SignUp = async (req, res, next) => {
-  const { email, password } = req.body;
-  if (!email || !password) {
-    res.status(500).json({ message: "Entor a valid email or password" });
-  }
-  const userRecord = await admin.auth().createUser({
-    email: email,
-    password: password
-  });
+// exports.SignUp = async (req, res, next) => {
+//   const { email, password } = req.body;
+//   if (!email || !password) {
+//     res.status(500).json({ message: "Entor a valid email or password" });
+//   }
+//   const userRecord = await admin.auth().createUser({
+//     email: email,
+//     password: password
+//   });
 
-  const frontendRedirectUrl = '/UserData';
-  if (userRecord) {
-    const customToken = await admin.auth().createCustomToken(userRecord.uid);
+//   const frontendRedirectUrl = '/UserData';
+//   if (userRecord) {
+//     const customToken = await admin.auth().createCustomToken(userRecord.uid);
 
-    const cookieOptions = {
-      httpOnly: true, // The cookie is not accessible to client-side scripts
-      secure: true,   // The cookie will be sent only over HTTPS
-      maxAge: 3600000 // The cookie will expire after 1 hour
-    };
+//     const cookieOptions = {
+//       httpOnly: true, // The cookie is not accessible to client-side scripts
+//       secure: true,   // The cookie will be sent only over HTTPS
+//       maxAge: 3600000 // The cookie will expire after 1 hour
+//     };
 
-    // Set the cookie
-    res.cookie('jwtToken', token, cookieOptions);
-    res.status(200).json({ success: true, customToken, redirectUrl: frontendRedirectUrl });
-    next();
-  }
-  else
-    res.status(500).json({ success: false, message: "error in signup, provide correct credintals" });
+//     // Set the cookie
+//     res.cookie('jwtToken', token, cookieOptions);
+//     res.status(200).json({ success: true, customToken, redirectUrl: frontendRedirectUrl });
+//     next();
+//   }
+//   else
+//     res.status(500).json({ success: false, message: "error in signup, provide correct credintals" });
 
 
-}
+// }
 
-exports.createCustomToken = async (req, res, next) => { //send token on signup/login
-  try {
-    // Create custom token with additional claims
-    const customToken = await admin.auth().createCustomToken(req.userRecord.uid);
-    res.status(200).json({ success: true, customToken });
-    next();
-  } catch (error) {
-    console.error('Error creating custom token:', error);
-    res.status(500).json({ success: false, message: 'Error creating custom token' });
+// exports.createCustomToken = async (req, res, next) => { //send token on signup/login
+//   try {
+//     // Create custom token with additional claims
+//     const customToken = await admin.auth().createCustomToken(req.userRecord.uid);
+//     res.status(200).json({ success: true, customToken });
+//     next();
+//   } catch (error) {
+//     console.error('Error creating custom token:', error);
+//     res.status(500).json({ success: false, message: 'Error creating custom token' });
 
-  }
-};
+//   }
+// };
 
 exports.verifyToken = async (req, res, next) => {
   try {

@@ -7,7 +7,7 @@ import '../Styling/Resume.css';
 import auth from "../fb.js";
 import Confetti from 'react-dom-confetti';
 import Footer from './Footer';
-
+import { toast, ToastContainer } from 'react-toastify';
 
 export default function Resume() {
     const [resumeFile, setResumeFile] = useState(null);
@@ -41,15 +41,27 @@ export default function Resume() {
             })
                 .then(response => response.json()) // Assuming the server responds with JSON
                 .then(data => {
+                    console.log(data,"data");
+                if(data.message ==="Not a Student")
+                {
+                    toast.error('Only Students can upload a Resume!');
+
+                }
+                if(data.success)
+                {
+                    setShowConfetti(true);
+                }
+            
                 })
                 .catch(error => {
                     console.error('Error:', error); // Handle error response
                 });
-            setShowConfetti(true);
+                
         }
     };
 
 
+    
     return (
         <>
             <AuthNavbar />
@@ -88,6 +100,7 @@ export default function Resume() {
                 {showConfetti && (
                     <Confetti active={showConfetti} />
                 )}
+                <ToastContainer />
             </Container>
             <Footer />
         </>
