@@ -2,7 +2,7 @@
 /* Filter section styles */
 
 /* Container styles */
-.container,.filter-container {
+.filter-container {
   margin-top: 200px;
   justify-content: center;
   position: center;
@@ -80,7 +80,7 @@
  
 }
 
-.label-i{
+.labell-i{
   font-family: 'Arial', sans-serif;
 font-weight: bold;
 font-size: 20px;
