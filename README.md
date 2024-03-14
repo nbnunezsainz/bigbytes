@@ -32,3 +32,6 @@ Naming convention: backup[x].json - backup1.json, backup2.json, etc
         Shivum Kapoor and Christian Gonzalez
     Full-stack team:
         Andres Enriquez
+
+    Frontend styling for Buttons, Forms, and Spacing accomplished by Bootstrap library by Mark Otto and Jacob Thornton
+    Bootstrap Documentation: https://getbootstrap.com/docs/5.3/getting-started/introduction/
