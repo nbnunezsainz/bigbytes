@@ -5,7 +5,8 @@ import { Container, Row, Col, Button, Form } from 'react-bootstrap';
 import AuthNavbar from './AuthenticatedNavBar';
 import auth from "../fb.js";
 import '../Styling/CreateInternship.css';
-import Confetti from 'react-dom-confetti';
+import { toast, ToastContainer } from 'react-toastify';
+
 import Footer from '../pages/Footer';
 
 
@@ -23,8 +24,6 @@ const CreateInternship = () => {
         // Assuming this will come from authenticated user context or similar
     });
     const [loading, setLoading] = useState(true); // State to manage loading status
-    const [showConfetti, setShowConfetti] = useState(false); // Want to add the js.confetti so when someone submits a posting, they are rewarded for it 
-    //const [successMessage, setSuccessMessage] = useState('');
 
     const SubmitInternship = async () => {
 
@@ -50,7 +49,7 @@ const CreateInternship = () => {
 
             const data = await response.json();
             setSuccess(data.success);
-            setShowConfetti(data.success);
+            toast.success('you have succesfully created an Internship!');
         } catch (error) {
         } finally {
             setLoading(false); // Ensure loading is set to false after the fetch operation completes
@@ -61,14 +60,7 @@ const CreateInternship = () => {
         setInternshipData({ ...internshipData, [e.target.name]: e.target.value });
     };
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        // Add your submit logic here, e.g., sending internshipData to your backend API
-        // setShowConfetti(true);
-        // setSuccessMessage('Successfully created internship!');
-
-    };
-
+  
     return (
 
         <div>
@@ -81,17 +73,17 @@ const CreateInternship = () => {
                         who otherwise wouldn't have had the chance. Here, at Refer a Bruin, we cannot thank you enough for providing a hand to students, yearning to find a place at your company. </p>
                 </div>
             </header>
-            <Confetti active={showConfetti} />
+          
             <Container className="create-internship-container" style={{ marginTop: '-220px' }}>
-                <Confetti active={showConfetti} />
+           
                 <Row className="justify-content-center">
                     <Col sm={12}>
                         <div className="create-internship-content">
                             {/* <h2>Create New Internship</h2> */}
                             {/* Form starts here */}
-                            <Form onSubmit={handleSubmit} className="internship-form">
+                            <Form  className="internship-form">
                                 <Form.Group className="mb-3" controlId="formTitle">
-                                    <Confetti active={showConfetti} />
+                                 
                                     <Form.Label>Title</Form.Label>
                                     <Form.Control
                                         type="text"
@@ -111,7 +103,7 @@ const CreateInternship = () => {
                                         placeholder="Enter company name"
                                     />
                                 </Form.Group>
-                                <Confetti active={showConfetti} />
+                               
                                 <Form.Group className="mb-3" controlId="formDescription">
                                     <Form.Label>Description</Form.Label>
                                     <Form.Control
@@ -123,7 +115,7 @@ const CreateInternship = () => {
                                         placeholder="Enter internship description"
                                     />
                                 </Form.Group>
-                                <Confetti active={showConfetti} />
+                             
                                 <Form.Group className="mb-3" controlId="formLocation">
                                     <Form.Label>Location</Form.Label>
                                     <Form.Control
@@ -134,7 +126,7 @@ const CreateInternship = () => {
                                         placeholder="Enter location"
                                     />
                                 </Form.Group>
-                                <Confetti active={showConfetti} />
+                                
                                 <Form.Group className="mb-3" controlId="formPay">
                                     <Form.Label>Hourly Pay (optional)</Form.Label>
                                     <Form.Control
@@ -145,7 +137,7 @@ const CreateInternship = () => {
                                         placeholder="Enter pay"
                                     />
                                 </Form.Group>
-                                <Confetti active={showConfetti} />
+                              
                                 <Form.Group className="mb-3" controlId="formCategory">
                                     <Form.Label>Category</Form.Label>
                                     <Form.Control
@@ -156,7 +148,7 @@ const CreateInternship = () => {
                                         placeholder="Enter category (e.g., Engineering, Marketing)"
                                     />
                                 </Form.Group>
-                                <Confetti active={showConfetti} />
+                                
                                 <Form.Group className="mb-3" controlId="formURL">
                                     <Form.Label>Application URL</Form.Label>
                                     <Form.Control
@@ -167,7 +159,7 @@ const CreateInternship = () => {
                                         placeholder="Enter application URL"
                                     />
                                 </Form.Group>
-                                <Confetti active={showConfetti} />
+                              
                                 <Form.Group className="mb-3" controlId="formReferralLimit">
                                     <Form.Label>Referral Limit (optional)</Form.Label>
                                     <Form.Control
@@ -182,21 +174,14 @@ const CreateInternship = () => {
                                 <Button onClick={SubmitInternship} variant="primary" type="submit">
                                     Submit
                                 </Button>
+                                <ToastContainer />
+                              
                             </Form>
                         </div>
                     </Col>
                 </Row>
             </Container>
-            {/* Once submitted, call active showConfetti */}
-
-            <Confetti active={showConfetti} />
-
-            {/*{successMessage && (*/}
-            {/*    <div className="success-message">*/}
-            {/*        <p>{successMessage}</p>*/}
-            {/*    </div>*/}
-            {/*)}*/}
-
+          
             <Footer />
         </div>
 
