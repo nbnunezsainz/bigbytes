@@ -354,27 +354,3 @@ req is empty (will not be read)
 //         res.status(500).json({ success: false, message: 'Error when getting all resumes' });
 //     }
 // }
-
-
-
-/*
-Below includes functions solely for testing. These will NOT be included 
-*/
-/*
-const userData = require('../TestDataGeneration/testUserData.js');
-exports.generateTestUsers = async (req, res) => {
-    try {
-        console.log("The length of the test data is: " + userData.users.length);
-
-        userData.users.forEach((user) => {
-            console.log("I am attempting to create a user");
-            this.addUser(user, "");
-        })
-
-        res.status(200).json({ success: true, message: 'Was able to do user testing correctly' });
-    } catch (error) {
-        console.log("oops something went wrong")
-        res.status(500).json({ success: false, message: 'Something went wrong when testing user data' });
-    }
-}
-*/
