@@ -125,7 +125,7 @@
 
 
 /* CSS for the divider */
-.divider, .divider-bottom {
+.dividerr, .divider-bottom {
     height: 5px;
     width: 700px; 
     /* Controls the length of the divider */
@@ -137,7 +137,7 @@
     /* margin below the divider */
     border-color: black;
 }
-.divider-top {
+.dividerr-top {
     box-shadow: 10px 5px 6px rgba(0, 0, 0, 0.554);
     margin-bottom: 25px;
 }
