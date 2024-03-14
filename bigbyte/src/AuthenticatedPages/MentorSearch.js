@@ -260,7 +260,7 @@ const MentorSearch = () => {
       </Form>
 
       {/*</Form>*/}
-      <Row className="mt-5" style={{ paddingTop: "30px" }}>
+      <Row  style={{ paddingTop: "30px" }}>
         {Object.entries(Mentors).map(([mentorID, mentor]) => (
           <Col md={12}>
             <Card className="mb-3">
