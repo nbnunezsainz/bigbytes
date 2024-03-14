@@ -6,6 +6,7 @@ import { Form, FormControl } from 'react-bootstrap';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Footer from '../pages/Footer';
+import "../Styling/Internships.css"
 
 const JobDetail = () => {
   const [jobs, setJobs] = useState([]); // State to store internship data
@@ -210,10 +211,9 @@ const JobDetail = () => {
 
       <Container fluid style={{ marginTop: '70px' }}>
         <Row className="mx-2">
-          <Col xs={12} className="mb-5">
-      
-            <h5 s>Filters</h5>
-            <Form>
+          <Col xs={12} className="mb-5 filter-container">
+            <h5 className='label-i'>Filters</h5>
+            <Form >
         
               <Form.Group className="mb-3">
                 <Form.Label>Company</Form.Label>
@@ -250,7 +250,6 @@ const JobDetail = () => {
 
                 </Form.Control>
               </Form.Group>
-             
 
               <Form.Group className="mb-3">
                 <Form.Label>Major</Form.Label>
@@ -289,8 +288,11 @@ const JobDetail = () => {
 
               </Form.Group>
 
-              {<Button className="me-2" variant="primary" onClick={applyFilters}>Apply Filters</Button>}
-              {<Button variant="secondary" onClick={resetFilters}> Reset Filters</Button>}
+              <Button className="me-2 intern-button" variant="primary" onClick={applyFilters}>
+              <img  className ="intern-icon "src="https://cdn-icons-png.flaticon.com/512/107/107799.png" alt="Filter Icon" />
+                 Apply Filters
+                  </Button>            
+                    {<Button variant="secondary intern-button" onClick={resetFilters}><img className = "intern-icon" src = "https://static.thenounproject.com/png/4800805-200.png" alt= "Reset-Icon"/> Reset Filters</Button>}
             </Form>
           </Col>
           <Col sm={12}>
@@ -300,13 +302,13 @@ const JobDetail = () => {
                 <Col md={12} key={internshipID}>
                   <Card className="mb-3">
                     <Card.Body>
-                      <Card.Title>{job.Title}</Card.Title>
+                      <Card.Title className='label-i'>{job.Title}</Card.Title>
 
 
                       <Card.Text><strong>Company:</strong> {job.Company}</Card.Text>
                       <Card.Text><strong>Location:</strong> {job.Location}</Card.Text>
-                      <Card.Text>{job.Description}</Card.Text>
-                      <Button variant="primary" value={internshipID} onClick={handleReferal}>Apply</Button>
+                      <Card.Text className='padding-job'>{job.Description}</Card.Text>
+                      <Button className="intern-button" value={internshipID} onClick={handleReferal}>Apply</Button>
                       <ToastContainer />
                     </Card.Body>
                   </Card>
@@ -327,3 +329,5 @@ const JobDetail = () => {
 
 
 export default JobDetail;
+
+

@@ -1,10 +1,28 @@
-/* internships.css */
+/* Internships.css */
 /* Filter section styles */
-/* JobDetail.css */
 
 /* Container styles */
-.container {
-  margin-top: 70px;
+.container,.filter-container {
+  margin-top: 200px;
+  justify-content: center;
+  position: center;
+  display: flex;
+  flex-direction: column;
+}
+
+
+.filter-container {
+  background-color: white;
+  border-radius: 8px;
+  padding: 20px;
+  margin: 0 auto; /* Center horizontally */
+  margin-bottom: 20px;
+  max-width: 550px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
+}
+
+.filter-container h5 {
+  margin-bottom: 15px;
 }
 
 /* Filter section styles */
@@ -46,4 +64,32 @@
 
 .job-card .btn {
   margin-top: auto;
+}
+
+
+.intern-icon{
+  width:20px;
+  height:20px;
+  padding-right: 5px;
+}
+.intern-button{
+  font-style: bold;
+}
+.intern-button:hover{
+  background-color: #0e59a9;
+ 
+}
+
+.label-i{
+  font-family: 'Arial', sans-serif;
+font-weight: bold;
+font-size: 20px;
+}
+
+.padding-job{
+  padding:40px;
+  border: 1px solid #ccc; /* Adjust border style and color as needed */
+  border-radius: 5px;
+  padding: 40px;
+  border-radius: 6px;
 }
