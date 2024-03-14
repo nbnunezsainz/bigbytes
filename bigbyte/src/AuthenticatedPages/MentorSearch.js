@@ -178,7 +178,12 @@ const MentorSearch = () => {
             <h5 className="text-center"><strong>Mentor Profile</strong></h5>
             <p><strong>Company:</strong> {mentorProfileData.Company}</p>
             <p><strong>Industry:</strong> {mentorProfileData.Industry}</p>
-            <p><strong>LinkedIn:</strong> {mentorProfileData.LinkedIn}</p>
+            <p>
+          <strong>LinkedIn:</strong> 
+          <a href={mentorProfileData.LinkedIn} target="_blank" rel="noopener noreferrer">
+            {mentorProfileData.LinkedIn}
+          </a>
+          </p>
             <p><strong>Bio:</strong> {mentorProfileData.Bio}</p>
           </div>
 
@@ -263,11 +268,11 @@ const MentorSearch = () => {
       <Row  style={{ paddingTop: "30px" }}>
         {Object.entries(Mentors).map(([mentorID, mentor]) => (
           <Col md={12}>
-            <Card className="mb-3">
+            <Card className="mb-3 mentor-card">
               <Card.Body>
-                <Card.Text><strong>Company:</strong> {mentor.Company}</Card.Text>
-                <Card.Text><strong>Name:</strong> {mentor.FirstName} {mentor.LastName}</Card.Text>
-                <Card.Text><strong>Bio:</strong> {mentor.Bio} </Card.Text>
+                <Card.Text><strong>Company:{ mentor.Company} </strong> </Card.Text>
+                <Card.Text className="company"><strong >Name:</strong> { mentor.FirstName} {mentor.LastName}</Card.Text>
+                <Card.Text className="bio"><strong>Bio:</strong> { mentor.Bio} </Card.Text>
                 <Card.Text>
                   {/*<strong>LinkedIn:</strong>{" "}*/}
                   {/*<a href={`https://${mentor.LinkedIn}`} target="_blank" rel="noopener noreferrer">*/}

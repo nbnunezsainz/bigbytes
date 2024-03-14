@@ -5,8 +5,6 @@ require('dotenv').config({ path: '../.env' });
 // const serviceAccount = require("./FBAdmin.json");
 //const { initializeApp, cert } = require('firebase-admin/app');
 
-
-console.log(process.env, "hi")
 const firebaseApp = admin.initializeApp({
   credential: admin.credential.cert({
     type: process.env.FIREBASE_TYPE,
