@@ -275,7 +275,7 @@ const MentorSearch = () => {
                   {/*</a>*/}
                 </Card.Text>
 
-                <a href={`https://${mentor.LinkedIn}`} target="_blank" rel="noopener noreferrer">
+                <a href={`${mentor.LinkedIn}`} target="_blank" rel="noopener noreferrer">
                   <Button variant="primary" className="me-4">Contact - LinkedIn</Button>
                 </a>
 
