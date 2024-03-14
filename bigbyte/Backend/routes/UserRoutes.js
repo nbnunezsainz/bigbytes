@@ -8,12 +8,8 @@ const ResumeController = require('../controllers/Resume');
 
 
 // AUTHENTICATION ROUTES
-// router.route('/SignUp').post(AuthenticationController.SignUp);
-// router.route('/userDetails').post(AuthenticationController.verifyToken,AuthenticationController.CreateDetailsAboutUser);
 router.route('/UserDetails').post(AuthenticationController.verifyToken, AuthenticationController.CreateDetailsAboutUser);
-// router.route('/login').post(AuthenticationController.Login);
-// router.route('/SignOut').post(AuthenticationController.SignOut, AuthenticationController.RedirectToStore); //later change redirect to login
-// router.route('/DeleteAccount').post(AuthenticationController.login ,AuthenticationController.RedirectToStorePage);
+
 
 
 // DATABASE ROUTES
@@ -26,13 +22,6 @@ router.route('/GetUserType').get(AuthenticationController.verifyToken, Authentic
 router.route('/ApplyToInternship').post(UserController.applyForInternship);
 router.route('/ReferalStatus').get(AuthenticationController.verifyToken, AuthenticationController.IsStudent, UserController.CheckReferalStatus);
 router.route('/UpdateUser').patch(AuthenticationController.verifyToken, UserController.updateUser);
-
-
-// // TO HANDLE RESUMES
-// router.route('/UploadResume').post(UserController.uploadResume);
-// router.route('/DeleteResume').delete(UserController.deleteResume);
-// router.route('/GetResume').get(UserController.getResume);
-// router.route('/GetAllResumes').get(UserController.getAllResumes);
 
 
 module.exports = router;

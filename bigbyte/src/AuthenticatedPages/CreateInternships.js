@@ -48,8 +48,9 @@ const CreateInternship = () => {
             }
 
             const data = await response.json();
+            console.log(data);
             setSuccess(data.success);
-            toast.success('you have succesfully created an Internship!');
+            toast.success('You have succesfully created an Internship!');
         } catch (error) {
         } finally {
             setLoading(false); // Ensure loading is set to false after the fetch operation completes
@@ -60,7 +61,7 @@ const CreateInternship = () => {
         setInternshipData({ ...internshipData, [e.target.name]: e.target.value });
     };
 
-  
+
     return (
 
         <div>
@@ -73,17 +74,17 @@ const CreateInternship = () => {
                         who otherwise wouldn't have had the chance. Here, at Refer a Bruin, we cannot thank you enough for providing a hand to students, yearning to find a place at your company. </p>
                 </div>
             </header>
-          
+
             <Container className="create-internship-container" style={{ marginTop: '-220px' }}>
-           
+
                 <Row className="justify-content-center">
                     <Col sm={12}>
                         <div className="create-internship-content">
                             {/* <h2>Create New Internship</h2> */}
                             {/* Form starts here */}
-                            <Form  className="internship-form">
+                            <Form className="internship-form">
                                 <Form.Group className="mb-3" controlId="formTitle">
-                                 
+
                                     <Form.Label>Title</Form.Label>
                                     <Form.Control
                                         type="text"
@@ -103,7 +104,7 @@ const CreateInternship = () => {
                                         placeholder="Enter company name"
                                     />
                                 </Form.Group>
-                               
+
                                 <Form.Group className="mb-3" controlId="formDescription">
                                     <Form.Label>Description</Form.Label>
                                     <Form.Control
@@ -115,7 +116,7 @@ const CreateInternship = () => {
                                         placeholder="Enter internship description"
                                     />
                                 </Form.Group>
-                             
+
                                 <Form.Group className="mb-3" controlId="formLocation">
                                     <Form.Label>Location</Form.Label>
                                     <Form.Control
@@ -126,7 +127,7 @@ const CreateInternship = () => {
                                         placeholder="Enter location"
                                     />
                                 </Form.Group>
-                                
+
                                 <Form.Group className="mb-3" controlId="formPay">
                                     <Form.Label>Hourly Pay (optional)</Form.Label>
                                     <Form.Control
@@ -137,7 +138,7 @@ const CreateInternship = () => {
                                         placeholder="Enter pay"
                                     />
                                 </Form.Group>
-                              
+
                                 <Form.Group className="mb-3" controlId="formCategory">
                                     <Form.Label>Category</Form.Label>
                                     <Form.Control
@@ -148,7 +149,7 @@ const CreateInternship = () => {
                                         placeholder="Enter category (e.g., Engineering, Marketing)"
                                     />
                                 </Form.Group>
-                                
+
                                 <Form.Group className="mb-3" controlId="formURL">
                                     <Form.Label>Application URL</Form.Label>
                                     <Form.Control
@@ -159,7 +160,7 @@ const CreateInternship = () => {
                                         placeholder="Enter application URL"
                                     />
                                 </Form.Group>
-                              
+
                                 <Form.Group className="mb-3" controlId="formReferralLimit">
                                     <Form.Label>Referral Limit (optional)</Form.Label>
                                     <Form.Control
@@ -175,13 +176,13 @@ const CreateInternship = () => {
                                     Submit
                                 </Button>
                                 <ToastContainer />
-                              
+
                             </Form>
                         </div>
                     </Col>
                 </Row>
             </Container>
-          
+
             <Footer />
         </div>
 

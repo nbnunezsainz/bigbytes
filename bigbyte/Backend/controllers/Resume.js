@@ -116,23 +116,6 @@ exports.uploadResume = async (req, res) => {
     }
 }
 
-//CHANGE THIS FUNCTION
-// exports.getAllResumesAndCorrespondingComments = async (req, res) => {
-//     try {
-//         let pathName = Constants.STORAGE_RESUME + req.body.userID;
-//         const resumeRef = ref(storage, pathName);
-//         const URL = await getDownloadURL(resumeRef);
-//
-//         res.status(200).json({ success: true, message: 'Success when getting resume' });
-//         return URL;
-//
-//     } catch (error) {
-//         console.log("an error happened:");
-//         console.log(error);
-//         res.status(500).json({ success: false, message: 'Error getting resume' });
-//     }
-// }
-
 
 //link 1 resume to list of all comments associated with it
 exports.getAllResumesWithComments = async (req, res) => {
@@ -169,128 +152,13 @@ exports.getAllResumesWithComments = async (req, res) => {
         let resumesWithComments = await Promise.all(resumeCommentsPromises);
         res.status(200).json({ success: true, resumesWithComments: resumesWithComments });
 
-
-        // // Get all resumes
-        // const resumeRef = ref(storage, Constants.STORAGE_RESUME); 
-        // const allResumes = await listAll(resumeRef);
-        // let resumes = [];
-        // for (const itemRef of allResumes.items) {
-        //     let url = await getDownloadURL(itemRef);
-        //     // Assuming doc.name or a portion of it can act as resumeID
-        //     const resumeID = itemRef.name; // or however you map this to your Firestore doc IDs
-        //     resumes.push({ userID: resumeID, URL: url }); // Store basic resume data first
-        // }
-        // let resumesWithComments = [];
-        // for (let resume of resumes) {
-        //     const commentsRef = Resume_CommentsRef.doc(resume.userID);
-        //     const commentsSnapshot = await commentsRef.get();
-
-        //     if (commentsSnapshot.exists) {
-        //         const commentIDs = commentsSnapshot.data().commentIDs || [];
-        //         const comments = [];
-
-        //         // Fetch each comment using its ID
-        //         for (let commentID of commentIDs) {
-        //             const commentDoc = await CommentRef.doc(commentID).get();
-        //             if (commentDoc.exists) {
-        //                 comments.push(commentDoc.data()); // Add full comment data
-        //             }
-        //         }
-
-        //         resumesWithComments.push({ ...resume, comments });
-        //     } else {
-        //         // If there are no comments, just add the resume info
-        //         resumesWithComments.push(resume);
-        //     }
-        // }
-
-        //console.log(resumesWithComments, "resumewithcommentss");
-
-        // Send back the data
-        //res.status(200).json({ success: true, resumesWithComments:resumesWithComments });
     } catch (error) {
         console.log("Error fetching resumes with comments:", error);
         res.status(500).json({ success: false, message: 'Error fetching resumes with comments', error: error.toString() });
     }
 
 
-
-    //const resumesSnapshot = await db.collection('ResumeWithComments').get();
-
-    //  console.log("testing");
-    /// console.log(resumesSnapshot);
-
-    // Array to store resumes with comments
-    //     const resumesWithComments = [];
-    //
-    //     // Iterate through each resume document
-    //     for (const resumeDoc of resumesSnapshot.docs) {
-    //         const resumeData = resumeDoc.data();
-    //         const resumeId = resumeDoc.id;
-    //
-    //         console.log(resumeId)
-    //
-    //         // Get comments for the current resume
-    //         const commentsSnapshot = await db
-    //             .collection('resume_comments')
-    //             .where('resumeId', '==', resumeId)
-    //             .get();
-    //
-    //         // Array to store comments for the current resume
-    //         const comments = [];
-    //
-    //         // Iterate through each comment document
-    //         commentsSnapshot.forEach((commentDoc) => {
-    //             const commentData = commentDoc.data();
-    //             comments.push({
-    //                 id: commentDoc.id,
-    //                 ...commentData,
-    //             });
-    //         });
-    //
-    //         // Add resume with comments to the array
-    //         resumesWithComments.push({
-    //             id: resumeId,
-    //             ...resumeData,
-    //             comments: comments,
-    //         });
-    //     }
-    //
-    //     // Return the array of resumes with comments
-    //     return resumesWithComments;
-    //  } //catch (error) {
-    //     console.error('Error retrieving resumes with comments:', error);
-    //     return [];
-    // }
-
-
 };
-
-//connect resume to all comments
-// exports.connectResumeToAllComments= async (req,res) => {
-//     try{
-//         //iterate through Comments collection
-//         // new resumes never seen before added to 'ResumeWithComments' collections
-//         // every time you see the same resume, keep adding to 'message' which is a list of all messages for
-//         // that specific resume
-//
-//         const newData = {
-//             comment: resumeComment,
-//             resume: "[would like to resume -- waiting for frontend uid]"
-//         };
-//         const resumeRef = db.collection('ResumeWithComments').doc();
-//
-//
-//
-//
-//     } catch (error) {
-//
-//     }
-// }
-//
-
-
-//const {dict, alreadyAdded} = true;
 
 //connect individual resume to allComments associated with it and publish on firebase
 //issues: can still add same data multiple times
@@ -301,8 +169,6 @@ exports.connectResumeToAllComments = async (req, res) => {
         const { whichResume } = req.body;
         const myDictionary = {};
         const comments = await db.collection("Comments").get();
-
-        //const [count, setCount] = useState(0);
 
 
         myDictionary[whichResume] = [];
@@ -322,9 +188,6 @@ exports.connectResumeToAllComments = async (req, res) => {
 
         //if(dict){
         db.collection("ResumeWithComments").add(newData);
-        //alreadyAdded(false);
-        // }
-
 
         res.json({ message: "success", mapping: myDictionary });
 
@@ -368,23 +231,6 @@ exports.commentOnAResume = async (req, res) => {
         res.status(200).json({ success: true, message: "Success adding comment" });
         return;
 
-
-
-
-
-
-        //data to add to collection
-        // //TO DO:  should add resume uid or whatever to collection
-        // const newData = {
-        //     comment: resumeComment,
-        //     resume: "[would like to resume -- waiting for frontend uid]"
-        // };
-
-        // db.collection("Comments").add(newData);
-
-        // res.status(200).json({success:true, message:"Success adding comment"})
-
-        //not needed: return URL
 
     } catch (error) {
         console.log("An Error Occurred:");

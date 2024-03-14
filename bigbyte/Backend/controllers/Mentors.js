@@ -1,5 +1,5 @@
 
-const { db} = require('../FireBaseSetUp.js');
+const { db } = require('../FireBaseSetUp.js');
 const Constants = require('./databaseConstant.js');
 const { filterHelper, getDocument, queryCollection } = require('./databaseFunctions.js');
 const { addInternship } = require('./Internships.js');
@@ -12,19 +12,6 @@ const MentorNotificationsRef = db.collection(Constants.COLLECTION_MENTORS_NOTIFI
 //add a Mentor --> takes mentorData in json format (FirstName: John, LastName: Smith)
 exports.addMentor = async (data, res = null) => {
   try {
-    /*const mentorData = req.body;
-    const mentorID = req.body.id;
-
-    const data = {
-      // Retrieve data from req.body
-      FirstName: mentorData.firstName,
-      LastName: mentorData.lastName,
-      Company: mentorData.company,
-      Bio: mentorData.bio || null,
-      LinkedIn: mentorData.linkedIn || null,
-      Industry: mentorData.industry
-    };
-    */
     const mentorID = data.uid;
     await MentorRef.doc(mentorID).set(data);
 
@@ -135,17 +122,6 @@ exports.UpdateReferalStatus = async (req, res) => {
     }
 
     await referralDocRef.update({ status });
-
-    // Array to store notifications
-    // const notifications = [];
-
-    // // Iterate over each notification document and add it to the notifications array
-    // mentorNotificationsSnapshot.forEach(doc => {
-    //   notifications.push({
-    //     ...doc.data() // All other fields of the notification document
-    //   });
-    // });
-
 
     res.status(200).json({ success: true, message: "updated referal status" });
   }
