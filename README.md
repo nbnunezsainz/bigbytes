@@ -36,7 +36,7 @@ Naming convention: backup[x].json - backup1.json, backup2.json, etc
     Bootstrap Documentation: https://getbootstrap.com/docs/5.3/getting-started/introduction/
 ## Credits:
     Front-end team:
-        Nicole Nunez-Sainz and Parkishit Sood
+        Nicole Nunez-Sainz and Parikshit Sood
     Back-end team:
         Shivum Kapoor and Christian Gonzalez
     Full-stack team:
