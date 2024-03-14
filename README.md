@@ -25,6 +25,9 @@ Naming convention: backup[x].json - backup1.json, backup2.json, etc
 ## Major Problems Solved Resources:
     Problem 1:How to render Pdfs, received CORS issue due to google permissions, how to solve below
     Solution 1: https://thehotcode.com/firebase-gcloud-fix-cors-issues/
+    
+    Frontend styling for Buttons, Forms, and Spacing accomplished by Bootstrap library by Mark Otto and Jacob Thornton
+    Bootstrap Documentation: https://getbootstrap.com/docs/5.3/getting-started/introduction/
 ## Credits:
     Front-end team:
         Nicole Nunez-Sainz and Parkishit Sood
@@ -32,6 +35,3 @@ Naming convention: backup[x].json - backup1.json, backup2.json, etc
         Shivum Kapoor and Christian Gonzalez
     Full-stack team:
         Andres Enriquez
-
-    Frontend styling for Buttons, Forms, and Spacing accomplished by Bootstrap library by Mark Otto and Jacob Thornton
-    Bootstrap Documentation: https://getbootstrap.com/docs/5.3/getting-started/introduction/
