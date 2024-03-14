@@ -50,6 +50,9 @@ function UserDetailsForm() {
         const user = auth.currentUser;
         const token = user && (await user.getIdToken());
 
+        console.log(user, "user");
+        console.log("tojen", token);
+
         // split organization string by commas into a list for Users
         if (userDetails && typeof userDetails.organizations === 'string') {
             // Split the organizations string and map each organization

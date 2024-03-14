@@ -5,13 +5,12 @@ import auth from "../fb.js";
 import { Form, FormControl } from 'react-bootstrap';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import Confetti from 'react-dom-confetti';
 import Footer from '../pages/Footer';
 
 const JobDetail = () => {
   const [jobs, setJobs] = useState([]); // State to store internship data
   const [loading, setLoading] = useState(true); // State to manage loading status
-  const [filteredJobs, setFilteredJobs] = useState([]); // State to store filtered internship data
+  // const [filteredJobs, setFilteredJobs] = useState([]); // State to store filtered internship data
   const [filterMajor, setFilterMajor] = useState('');
   const [filterPay, setFilterPay] = useState('');
   const [filterLocation, setFilterLocation] = useState('');
@@ -19,9 +18,6 @@ const JobDetail = () => {
   const [allCompany, setCompany] = useState('');
   const [allLocations, setAllLocations] = useState(new Set());
   const [allCategory, setCategory] = useState(new Set());
-  const [showConfetti, setShowConfetti] = useState(false);
-
-
 
   const [selectedCategory, setSelectedCategory] = useState('');
 
@@ -181,14 +177,13 @@ const JobDetail = () => {
       if (!response.ok) {
         toast.error('Resume does not exist. Please create one before proceeding.');
       }
-      setShowConfetti(true);
-      // toast.success('you have succesfully requested a referal!');
-
-    } catch (error) {
      
-      // Handle error
-    }
-  };
+      toast.success('you have succesfully requested a referal!');
+  } catch (error) {
+  } finally {
+      setLoading(false); // Ensure loading is set to false after the fetch operation completes
+  }
+};
 
 
   useEffect(() => {
@@ -211,14 +206,10 @@ const JobDetail = () => {
       <Container fluid style={{ marginTop: '70px' }}>
         <Row className="mx-2">
           <Col xs={12} className="mb-5">
-            {/* Filter Section */}
+      
             <h5 s>Filters</h5>
             <Form>
-          {/*We wanted confetti to show up */}
-          {showConfetti && (
-                              <Confetti active={showConfetti} />
-                          )}
-              {/* company */}
+        
               <Form.Group className="mb-3">
                 <Form.Label>Company</Form.Label>
                 <Form.Control
@@ -254,10 +245,7 @@ const JobDetail = () => {
 
                 </Form.Control>
               </Form.Group>
-              {/*We wanted confetti to show up */}
-              {showConfetti && (
-                    <Confetti active={showConfetti} />
-                )}
+             
 
               <Form.Group className="mb-3">
                 <Form.Label>Major</Form.Label>
@@ -290,11 +278,6 @@ const JobDetail = () => {
                       {location}
                     </option>
                   ))}
-
-                  {/*We wanted confetti to show up */}
-                {showConfetti && (
-                    <Confetti active={showConfetti} />
-                )}
 
 
                 </Form.Control>
@@ -329,9 +312,7 @@ const JobDetail = () => {
         </Row>
       </Container>
       {/*We wanted confetti to show up */}
-      {showConfetti && (
-                    <Confetti active={showConfetti} />
-                )}
+      
 
       <Footer />
     </>
