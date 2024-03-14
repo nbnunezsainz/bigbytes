@@ -1,12 +1,11 @@
-const { getFirestore, Timestamp, FieldValue, Filter, collection, getDocs } = require('firebase-admin/firestore');
-const { db, admin } = require('../FireBaseSetUp.js');
+
+const { db} = require('../FireBaseSetUp.js');
 const Constants = require('./databaseConstant.js');
-const { getDocument, filterHelper, queryCollection } = require('./databaseFunctions.js');
-const { query } = require('express');
+const { getDocument, filterHelper } = require('./databaseFunctions.js');
 
 // create and initialize a database reference to the "Internship" collection
 const InternshipRef = db.collection(Constants.COLLECTION_INTERNSHIP);
-const MentorRef = db.collection(Constants.COLLECTION_MENTORS);
+
 const MentorNotificationsRef = db.collection(Constants.COLLECTION_MENTORS_NOTIFICATIONS);
 const UserRef = db.collection(Constants.COLLECTION_USERS);
 

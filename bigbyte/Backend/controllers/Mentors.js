@@ -1,5 +1,5 @@
-const { getFirestore, Timestamp, FieldValue, Filter } = require('firebase-admin/firestore');
-const { db, admin } = require('../FireBaseSetUp.js');
+
+const { db} = require('../FireBaseSetUp.js');
 const Constants = require('./databaseConstant.js');
 const { filterHelper, getDocument, queryCollection } = require('./databaseFunctions.js');
 const { addInternship } = require('./Internships.js');
@@ -322,3 +322,4 @@ exports.generateInternship = async (req, res) => {
     res.status(500).json({ success: false, message: 'Error when generating an internship for the mentor' });
   }
 };
+

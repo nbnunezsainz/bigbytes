@@ -1,5 +1,3 @@
-const { getFirestore, Timestamp, FieldValue, Filter } = require('firebase-admin/firestore');
-const { db, admin } = require('../FireBaseSetUp.js');
 const Constants = require('./databaseConstant.js');
 
 /*

@@ -1,7 +1,7 @@
 const { uploadBytes, ref, deleteObject, getDownloadURL, listAll } = require('firebase/storage');
-const { db, admin, bucket, storage } = require('../FireBaseSetUp.js');
+const { db, storage } = require('../FireBaseSetUp.js');
 const Constants = require('./databaseConstant.js');
-const { queryCollection, deleteDocument, getDocument } = require('./databaseFunctions.js');
+const { queryCollection, getDocument } = require('./databaseFunctions.js');
 
 // create and initialize a database reference to the "Internship" collection
 const UserRef = db.collection(Constants.COLLECTION_USERS);
